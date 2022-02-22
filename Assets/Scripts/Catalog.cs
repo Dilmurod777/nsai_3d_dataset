@@ -60,4 +60,9 @@ public class Catalog : IGeneralCatalogInterface, IActionsCatalog3DInterface
 	{
 		_actionsCatalog3D.ResetHandler(obj, attributes, duration);
 	}
+
+	public void HighlightHandler(string state, string highlightWidthStr, string highlightColorStr)
+	{
+		_actionsCatalog3D.HighlightHandler(state, highlightWidthStr, highlightColorStr);
+	}
 }
