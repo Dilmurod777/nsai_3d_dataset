@@ -1,7 +1,5 @@
 using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 public class ScriptExecutor : MonoBehaviour
@@ -18,7 +16,7 @@ public class ScriptExecutor : MonoBehaviour
     
     public float cameraSpeed = 0.01f;
 
-    public Color highlightColor = Color.red;
+    public Color highlightColor = Color.magenta;
     public int highlightWidth = 4;
 
     public float minRotationAngle = -15;
@@ -29,25 +27,16 @@ public class ScriptExecutor : MonoBehaviour
     public float maxScale = 1.5f;
     public float scaleDuration = 1.0f;
 
-    public float resetDuration = 2.0f;
-    [FormerlySerializedAs("closeLookDuration")] public float zoomDuration = 1.0f;
+    public float zoomDuration = 1.0f;
     
     private bool _isModifying;
-    
-    private readonly Dictionary<string, Attributes> _initialAttributes = new Dictionary<string,Attributes>();
-    
+
     private void Start()
     {
         Context.Instance.Camera = Camera.main;
 
         _currentObjectId = "41";
-        
-        // _initialAttributes.Add(_currentObjectId, new Attributes
-        // {
-        //     rotation = _currentObject.transform.rotation,
-        //     scale = _currentObject.transform.localScale
-        // });
-        
+
         Context.Instance.CurrentTaskID = "1";
         Context.Instance.CurrentSubtaskID = "2";
         Context.Instance.CurrentInstructionOrder = "3";
@@ -59,8 +48,36 @@ public class ScriptExecutor : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.H))
         {
-            HighlightHandler();
+            var queryMeta = new QueryMeta
+            {
+                Query = $"Show highlight object {_currentObjectId}",
+                Programs = new[]
+                {
+                    $"FindObjectWithPartOfName {_currentObjectId}",
+                    $"HighlightHandler {State.On} {highlightWidth} {HelperFunctions.ConvertColorToString(highlightColor)}"
+                },
+                Reply = "highlight on"
+            };
+            var result = FunctionalProgramsExecutor.Instance.Execute(queryMeta);
+            print($"result: {result}");
         }
+
+        if (Input.GetKeyUp(KeyCode.H))
+        {
+            var queryMeta = new QueryMeta
+            {
+                Query = $"Show highlight object {_currentObjectId}",
+                Programs = new[]
+                {
+                    $"FindObjectWithPartOfName {_currentObjectId}",
+                    $"HighlightHandler {State.Off} {highlightWidth} {HelperFunctions.ConvertColorToString(highlightColor)}"
+                },
+                Reply = "highlight off"
+            };
+            var result = FunctionalProgramsExecutor.Instance.Execute(queryMeta);
+            print($"result: {result}");
+        }
+        
         if (Input.GetKeyDown(KeyCode.R))
         {
             RotateHandler();
@@ -89,17 +106,7 @@ public class ScriptExecutor : MonoBehaviour
             print($"result: {result}");
         }
     }
-    
-    private static void RemoveExtraObjectComponentsOnUpdate()
-    {
-        var outlineComponents = FindObjectsOfType<Outline>();
 
-        foreach (var component in outlineComponents)
-        {
-            Destroy(component);
-        }
-    }
-    
     // camera movements
     private void CameraMovements()
     {
@@ -122,28 +129,6 @@ public class ScriptExecutor : MonoBehaviour
     }
     
     // side
-    
-    // highlight
-    private void HighlightHandler()
-    {
-        // HighlightObject(_currentObject);
-        
-        var text = $"highlight object {_currentObjectId}";
-        print(text);
-    }
-
-    private void HighlightObject(GameObject obj)
-    {
-        var outlineComponent = obj.GetComponent<Outline>();
-        if (outlineComponent == null)
-        {
-            outlineComponent = obj.AddComponent<Outline>();
-        }
-
-        outlineComponent.OutlineMode = Outline.Mode.OutlineAll;
-        outlineComponent.OutlineWidth = highlightWidth;
-        outlineComponent.OutlineColor = highlightColor;
-    }
     
     // rotate
     private void RotateHandler()

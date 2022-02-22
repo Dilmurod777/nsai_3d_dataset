@@ -6,6 +6,7 @@ public interface IActionsCatalog3DInterface
 	GameObject FindObjectWithPartOfName(string partOfName);
 	void ZoomHandler(string duration = "1.0");
 	void ResetHandler(GameObject obj, Attributes attributes, float duration);
+	void HighlightHandler(string state, string highlightWidthStr, string highlightColorStr);
 }
 
 public class ActionsCatalog3D : MonoBehaviour, IActionsCatalog3DInterface
@@ -50,6 +51,39 @@ public class ActionsCatalog3D : MonoBehaviour, IActionsCatalog3DInterface
 		StartCoroutine(Reset(obj, attributes, duration));
 	}
 
+	// highlight
+	public void HighlightHandler(string state, string highlightWidthStr, string highlightColorStr)
+	{
+		var highlightWidth = float.Parse(highlightWidthStr);
+		var highlightColor = HelperFunctions.ConvertStringToColor(highlightColorStr);
+		
+		HighlightObject((GameObject) Context.Instance.Prev, state, highlightWidth, highlightColor);
+	}
+
+	private void HighlightObject(GameObject obj, string state, float highlightWidth, Color highlightColor)
+	{
+		var outlineComponent = obj.GetComponent<Outline>();
+		if (outlineComponent == null)
+		{
+			outlineComponent = obj.AddComponent<Outline>();
+		}
+		
+		switch (state)
+		{
+			case State.On:
+				outlineComponent.OutlineMode = Outline.Mode.OutlineAll;
+				outlineComponent.OutlineWidth = highlightWidth;
+				outlineComponent.OutlineColor = highlightColor;
+
+				outlineComponent.enabled = true;
+				break;
+			case State.Off:
+				outlineComponent.enabled = false;
+				break;
+		}
+	}
+
+	
 	private static IEnumerator Reset(GameObject obj, Attributes attributes, float duration)
 	{
 		if (ScriptExecutor.IsInAction)
