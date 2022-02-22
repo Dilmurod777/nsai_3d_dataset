@@ -5,12 +5,7 @@ using Random = UnityEngine.Random;
 public class ScriptExecutor : MonoBehaviour
 {
     public static bool IsInAction = false;
-    private enum Axis
-    {
-        X,
-        Y,
-        Z
-    }
+    
 
     private string _currentObjectId;
     
@@ -105,7 +100,21 @@ public class ScriptExecutor : MonoBehaviour
         
         if (Input.GetKeyDown(KeyCode.R))
         {
-            RotateHandler();
+            const int degree = 90;
+            const State.Axis axis = State.Axis.X;
+            
+            var queryMeta = new QueryMeta
+            {
+                Query = $"Rotate {_currentObjectId} by {degree} degrees in {axis} axis",
+                Programs = new[]
+                {
+                    $"FindObjectWithPartOfName {_currentObjectId}",
+                    $"RotateHandler {degree} {axis.ToString()} {rotationDuration}"
+                },
+                Reply = "rotate"
+            };
+            var result = FunctionalProgramsExecutor.Instance.Execute(queryMeta);
+            print($"result: {result}");
         }
         if (Input.GetKeyDown(KeyCode.S))
         {
@@ -165,46 +174,7 @@ public class ScriptExecutor : MonoBehaviour
     }
     
     // side
-    
-    // rotate
-    private void RotateHandler()
-    {
-        var degree = Random.Range(minRotationAngle, maxRotationAngle);
-        var axis = (Axis)Random.Range(0, 3); // x, y, z
 
-        var rotation = transform.rotation;
-        var rotationX = rotation.x + (axis == Axis.X ? degree : 0);
-        var rotationY = rotation.y + (axis == Axis.Y ? degree : 0);
-        var rotationZ = rotation.z + (axis == Axis.Z ? degree : 0);
-        
-        // HighlightObject(_currentObject);
-        var newRotation = Quaternion.Euler(rotationX, rotationY, rotationZ);
-        // StartCoroutine(RotateObject(_currentObject, newRotation));
-
-        var text = $"rotate object {_currentObjectId} by {degree} in {axis} axis";
-        print(text);
-    }
-
-    private IEnumerator RotateObject(GameObject obj, Quaternion newRotation)
-    {
-        if (_isModifying)
-        {
-            yield break;
-        }
-        _isModifying = true;
-
-        var currentRot = obj.transform.rotation;
-
-        float counter = 0;
-        while (counter < rotationDuration)
-        {
-            counter += Time.deltaTime;
-            obj.transform.rotation = Quaternion.Lerp(currentRot, newRotation, counter / rotationDuration);
-            yield return null;
-        }
-        _isModifying = false;
-    }
-    
     // annotate
     
     // scale

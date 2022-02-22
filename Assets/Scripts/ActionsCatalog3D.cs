@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -9,6 +10,7 @@ public interface IActionsCatalog3DInterface
 	void ZoomHandler(string duration = "1.0");
 	void ResetHandler(string id, string duration);
 	void HighlightHandler(string state, string highlightWidthStr, string highlightColorStr);
+	void RotateHandler(string degreeStr, string axisStr, string durationStr);
 }
 
 public class ActionsCatalog3D : MonoBehaviour, IActionsCatalog3DInterface
@@ -59,6 +61,24 @@ public class ActionsCatalog3D : MonoBehaviour, IActionsCatalog3DInterface
 		StartCoroutine(Sequence(coroutines));
 	}
 
+	// rotate
+	public void RotateHandler(string degreeStr, string axisStr, string durationStr)
+	{
+		var degree = float.Parse(degreeStr);
+		var duration = float.Parse(durationStr);
+		
+		Enum.TryParse(axisStr, out State.Axis axis);
+
+		var obj = (GameObject) Context.Instance.Prev;
+		var rotation = obj.transform.rotation;
+		var rotationX = rotation.eulerAngles.x + (axis == State.Axis.X ? degree : 0);
+		var rotationY = rotation.eulerAngles.y + (axis == State.Axis.Y ? degree : 0);
+		var rotationZ = rotation.eulerAngles.z + (axis == State.Axis.Z ? degree : 0);
+		
+		var newRotation = Quaternion.Euler(rotationX, rotationY, rotationZ);
+		StartCoroutine(RotateObject(obj, newRotation, duration));
+	}
+
 	// reset
 	public void ResetHandler(string id, string durationStr)
 	{
@@ -70,8 +90,8 @@ public class ActionsCatalog3D : MonoBehaviour, IActionsCatalog3DInterface
 		
 		var coroutines = new List<IEnumerator>();
 		
-		coroutines.Add(Reset(Context.Instance.Camera, cameraAttributes, duration));
 		coroutines.Add(Reset(obj, attributes, duration));
+		coroutines.Add(Reset(Context.Instance.Camera, cameraAttributes, duration));
     
     if (cameraAttributes.FoV != 0)
     {
@@ -90,14 +110,14 @@ public class ActionsCatalog3D : MonoBehaviour, IActionsCatalog3DInterface
 		HighlightObject((GameObject) Context.Instance.Prev, state, highlightWidth, highlightColor);
 	}
 
-	private void HighlightObject(GameObject obj, string state, float highlightWidth, Color highlightColor)
+	private void HighlightObject(GameObject obj, string state = State.On, float highlightWidth = 1.0f, Color highlightColor = default)
 	{
 		var outlineComponent = obj.GetComponent<Outline>();
 		if (outlineComponent == null)
 		{
 			outlineComponent = obj.AddComponent<Outline>();
 		}
-		
+
 		switch (state)
 		{
 			case State.On:
@@ -179,6 +199,26 @@ public class ActionsCatalog3D : MonoBehaviour, IActionsCatalog3DInterface
 			yield return null;
 		}
 
+		ScriptExecutor.IsInAction = false;
+	}
+	
+	private IEnumerator RotateObject(dynamic obj, Quaternion newRotation, float duration)
+	{
+		if (ScriptExecutor.IsInAction)
+		{
+			yield break;
+		}
+		ScriptExecutor.IsInAction = true;
+
+		var currentRot = obj.transform.rotation;
+
+		float counter = 0;
+		while (counter < duration)
+		{
+			counter += Time.deltaTime;
+			obj.transform.rotation = Quaternion.Lerp(currentRot, newRotation, counter / duration);
+			yield return null;
+		}
 		ScriptExecutor.IsInAction = false;
 	}
 }
