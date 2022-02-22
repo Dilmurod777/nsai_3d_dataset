@@ -2,6 +2,8 @@
 
 public struct Attributes
 {
-	public Quaternion rotation;
-	public Vector3 scale;
+	public Vector3 Position;
+	public Quaternion Rotation;
+	public Vector3 Scale;
+	public float FoV;
 }

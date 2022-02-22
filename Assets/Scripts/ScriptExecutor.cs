@@ -28,14 +28,39 @@ public class ScriptExecutor : MonoBehaviour
     public float scaleDuration = 1.0f;
 
     public float zoomDuration = 1.0f;
+    public float resetDuration = 1.0f;
     
     private bool _isModifying;
 
     private void Start()
     {
-        Context.Instance.Camera = Camera.main;
-
         _currentObjectId = "41";
+        
+        var mainCamera = Camera.main;
+        Context.Instance.Camera = mainCamera;
+        if (mainCamera != null)
+        {
+            var cameraTransform = mainCamera.transform;
+            Context.Instance.InitialAttributes.Add("camera", new Attributes
+            {
+                Position =  cameraTransform.position,
+                Rotation = cameraTransform.rotation,
+                Scale = cameraTransform.localScale,
+                FoV =  mainCamera.fieldOfView
+            });
+        }
+
+        var allObjects = GameObject.FindGameObjectsWithTag("Object");
+
+        foreach (var obj in allObjects)
+        {
+            var id = obj.name.Split('[', ']')[1];
+            Context.Instance.InitialAttributes[id] = new Attributes
+            {
+                Rotation = obj.transform.rotation,
+                Scale = obj.transform.localScale
+            };
+        }
 
         Context.Instance.CurrentTaskID = "1";
         Context.Instance.CurrentSubtaskID = "2";
@@ -88,7 +113,18 @@ public class ScriptExecutor : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.P))
         {
-            // Catalog.Instance.ResetHandler(_currentObject, _initialAttributes[_currentObjectId], resetDuration);
+            var queryMeta = new QueryMeta
+            {
+                Query = $"Reset {_currentObjectId}",
+                Programs = new[]
+                {
+                    $"FindObjectWithPartOfName {_currentObjectId}",
+                    $"ResetHandler {_currentObjectId} {resetDuration}"
+                },
+                Reply = "reset"
+            };
+            var result = FunctionalProgramsExecutor.Instance.Execute(queryMeta);
+            print($"result: {result}");
         }
         if (Input.GetKeyDown(KeyCode.Z))
         {

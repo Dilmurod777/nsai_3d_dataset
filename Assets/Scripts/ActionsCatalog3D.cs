@@ -1,16 +1,26 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public interface IActionsCatalog3DInterface
 {
 	GameObject FindObjectWithPartOfName(string partOfName);
 	void ZoomHandler(string duration = "1.0");
-	void ResetHandler(GameObject obj, Attributes attributes, float duration);
+	void ResetHandler(string id, string duration);
 	void HighlightHandler(string state, string highlightWidthStr, string highlightColorStr);
 }
 
 public class ActionsCatalog3D : MonoBehaviour, IActionsCatalog3DInterface
 {
+	private IEnumerator Sequence(List<IEnumerator> coroutines)
+	{
+		foreach (var c in coroutines)
+		{
+			yield return StartCoroutine(c);
+		}
+	}
+	
 	// find object with part of name
 	public GameObject FindObjectWithPartOfName(string partOfName)
 	{
@@ -35,20 +45,40 @@ public class ActionsCatalog3D : MonoBehaviour, IActionsCatalog3DInterface
 		
 		var finalFieldOfView = Context.Instance.Camera.fieldOfView + changeFieldOfView;
 		var cameraTransform = Context.Instance.Camera.transform;
-		
+
+		var coroutines = new List<IEnumerator>();
+
 		if (!Physics.Raycast(Context.Instance.Camera.transform.position, Context.Instance.Camera.transform.TransformDirection(Vector3.forward), Mathf.Infinity))
 		{
 			var finalRotation = Quaternion.LookRotation(((GameObject) Context.Instance.Prev).transform.position - cameraTransform.position);
 		
-			StartCoroutine(ChangeRotation(Context.Instance.Camera, finalRotation, duration));
+			coroutines.Add(ChangeRotation(Context.Instance.Camera, finalRotation, duration));
 		}
-		StartCoroutine(ChangeFieldOfViewByValue(Context.Instance.Camera, finalFieldOfView, duration));
+		coroutines.Add(ChangeFieldOfViewByValue(Context.Instance.Camera, finalFieldOfView, duration));
+
+		StartCoroutine(Sequence(coroutines));
 	}
 
 	// reset
-	public void ResetHandler(GameObject obj, Attributes attributes, float duration)
+	public void ResetHandler(string id, string durationStr)
 	{
-		StartCoroutine(Reset(obj, attributes, duration));
+		var obj = (GameObject) Context.Instance.Prev;
+		var attributes = Context.Instance.InitialAttributes[id];
+		var duration = float.Parse(durationStr);
+
+		var cameraAttributes = Context.Instance.InitialAttributes["camera"];
+		
+		var coroutines = new List<IEnumerator>();
+		
+		coroutines.Add(Reset(Context.Instance.Camera, cameraAttributes, duration));
+		coroutines.Add(Reset(obj, attributes, duration));
+    
+    if (cameraAttributes.FoV != 0)
+    {
+	    coroutines.Add(ChangeFieldOfViewByValue(Context.Instance.Camera, cameraAttributes.FoV, duration));
+    }
+
+    StartCoroutine(Sequence(coroutines));
 	}
 
 	// highlight
@@ -84,7 +114,7 @@ public class ActionsCatalog3D : MonoBehaviour, IActionsCatalog3DInterface
 	}
 
 	
-	private static IEnumerator Reset(GameObject obj, Attributes attributes, float duration)
+	private static IEnumerator Reset(dynamic obj, Attributes attributes, float duration)
 	{
 		if (ScriptExecutor.IsInAction)
 		{
@@ -99,9 +129,10 @@ public class ActionsCatalog3D : MonoBehaviour, IActionsCatalog3DInterface
 		{
 			counter += Time.deltaTime;
 
-			obj.transform.rotation = Quaternion.Lerp(currentRot, attributes.rotation, counter / duration);
-			obj.transform.localScale = Vector3.Lerp(obj.transform.localScale, attributes.scale, counter / duration);
-            
+			obj.transform.rotation = Quaternion.Lerp(currentRot, attributes.Rotation, counter / duration);
+			obj.transform.localScale = Vector3.Lerp(obj.transform.localScale, attributes.Scale, counter / duration);
+			obj.transform.position = Vector3.Lerp(obj.transform.position, attributes.Position, counter / duration);
+
 			yield return null;
 		}
 		
