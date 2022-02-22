@@ -21,6 +21,31 @@ public class Catalog : IGeneralCatalogInterface, IActionsCatalog3DInterface
 		return _generalCatalog.SaveVal2Var(value, varName);
 	}
 
+  public int Count(object[] objects)
+  {
+	  return _generalCatalog.Count(objects);
+  }
+
+  public bool Exist(object[] objects)
+  {
+	  return _generalCatalog.Exist(objects);
+  }
+
+  public object Unique(object[] objects)
+  {
+	  return _generalCatalog.Unique(objects);
+  }
+
+  public string[] ExtractNumbers(string value)
+  {
+	  return _generalCatalog.ExtractNumbers(value);
+  }
+
+  public string ExtractID(string attrId, string query)
+  {
+	  return _generalCatalog.ExtractID(attrId, query);
+  }
+
   public GameObject FindObjectWithPartOfName(string partOfName)
   {
 	  return _actionsCatalog3D.FindObjectWithPartOfName(partOfName);
