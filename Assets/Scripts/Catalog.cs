@@ -65,4 +65,9 @@ public class Catalog : IGeneralCatalogInterface, IActionsCatalog3DInterface
 	{
 		_actionsCatalog3D.HighlightHandler(state, highlightWidthStr, highlightColorStr);
 	}
+
+	public void RotateHandler(string degreeStr, string axisStr, string durationStr)
+	{
+		_actionsCatalog3D.RotateHandler(degreeStr, axisStr, durationStr);
+	}
 }

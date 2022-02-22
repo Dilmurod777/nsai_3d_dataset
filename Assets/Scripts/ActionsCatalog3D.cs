@@ -1,6 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public interface IActionsCatalog3DInterface
@@ -9,6 +9,7 @@ public interface IActionsCatalog3DInterface
 	void ZoomHandler(string duration = "1.0");
 	void ResetHandler(string id, string duration);
 	void HighlightHandler(string state, string highlightWidthStr, string highlightColorStr);
+	void RotateHandler(string degreeStr, string axisStr, string durationStr);
 }
 
 public class ActionsCatalog3D : MonoBehaviour, IActionsCatalog3DInterface
@@ -52,11 +53,29 @@ public class ActionsCatalog3D : MonoBehaviour, IActionsCatalog3DInterface
 		{
 			var finalRotation = Quaternion.LookRotation(((GameObject) Context.Instance.Prev).transform.position - cameraTransform.position);
 		
-			coroutines.Add(ChangeRotation(Context.Instance.Camera, finalRotation, duration));
+			coroutines.Add(RotateObject(Context.Instance.Camera, finalRotation, duration));
 		}
 		coroutines.Add(ChangeFieldOfViewByValue(Context.Instance.Camera, finalFieldOfView, duration));
 
 		StartCoroutine(Sequence(coroutines));
+	}
+
+	// rotate
+	public void RotateHandler(string degreeStr, string axisStr, string durationStr)
+	{
+		var degree = float.Parse(degreeStr);
+		var duration = float.Parse(durationStr);
+		
+		Enum.TryParse(axisStr, out State.Axis axis);
+
+		var obj = (GameObject) Context.Instance.Prev;
+		var rotation = obj.transform.rotation;
+		var rotationX = axis == State.Axis.X ? degree : 0;
+		var rotationY = axis == State.Axis.Y ? degree : 0;
+		var rotationZ = axis == State.Axis.Z ? degree : 0;
+		
+		var newRotation = rotation * Quaternion.Euler(rotationX, rotationY,rotationZ);
+		StartCoroutine(RotateObject(obj, newRotation, duration));
 	}
 
 	// reset
@@ -70,8 +89,8 @@ public class ActionsCatalog3D : MonoBehaviour, IActionsCatalog3DInterface
 		
 		var coroutines = new List<IEnumerator>();
 		
-		coroutines.Add(Reset(Context.Instance.Camera, cameraAttributes, duration));
 		coroutines.Add(Reset(obj, attributes, duration));
+		coroutines.Add(Reset(Context.Instance.Camera, cameraAttributes, duration));
     
     if (cameraAttributes.FoV != 0)
     {
@@ -90,14 +109,14 @@ public class ActionsCatalog3D : MonoBehaviour, IActionsCatalog3DInterface
 		HighlightObject((GameObject) Context.Instance.Prev, state, highlightWidth, highlightColor);
 	}
 
-	private void HighlightObject(GameObject obj, string state, float highlightWidth, Color highlightColor)
+	private void HighlightObject(GameObject obj, string state = State.On, float highlightWidth = 1.0f, Color highlightColor = default)
 	{
 		var outlineComponent = obj.GetComponent<Outline>();
 		if (outlineComponent == null)
 		{
 			outlineComponent = obj.AddComponent<Outline>();
 		}
-		
+
 		switch (state)
 		{
 			case State.On:
@@ -140,7 +159,7 @@ public class ActionsCatalog3D : MonoBehaviour, IActionsCatalog3DInterface
 	}
 	
 	// smoothly change rotation of camera
-	private static IEnumerator ChangeRotation(Component camera, Quaternion finalRotation, float duration)
+	private static IEnumerator RotateObject(dynamic obj, Quaternion finalRotation, float duration)
 	{
 		if (ScriptExecutor.IsInAction)
 		{
@@ -154,7 +173,7 @@ public class ActionsCatalog3D : MonoBehaviour, IActionsCatalog3DInterface
 			counter += Time.deltaTime;
 
 			yield return null;
-			camera.transform.rotation = Quaternion.Slerp(camera.transform.rotation, finalRotation, Time.deltaTime);
+			obj.transform.rotation = Quaternion.Slerp(obj.transform.rotation, finalRotation, counter/duration);
 		}
 		
 		ScriptExecutor.IsInAction = false;
