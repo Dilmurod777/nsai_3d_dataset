@@ -100,8 +100,8 @@ public class ScriptExecutor : MonoBehaviour
         
         if (Input.GetKeyDown(KeyCode.R))
         {
-            const int degree = 90;
-            const State.Axis axis = State.Axis.X;
+            const int degree = 45;
+            const State.Axis axis = State.Axis.Y;
             
             var queryMeta = new QueryMeta
             {

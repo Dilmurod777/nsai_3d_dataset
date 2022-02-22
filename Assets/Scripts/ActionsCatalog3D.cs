@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public interface IActionsCatalog3DInterface
@@ -54,7 +53,7 @@ public class ActionsCatalog3D : MonoBehaviour, IActionsCatalog3DInterface
 		{
 			var finalRotation = Quaternion.LookRotation(((GameObject) Context.Instance.Prev).transform.position - cameraTransform.position);
 		
-			coroutines.Add(ChangeRotation(Context.Instance.Camera, finalRotation, duration));
+			coroutines.Add(RotateObject(Context.Instance.Camera, finalRotation, duration));
 		}
 		coroutines.Add(ChangeFieldOfViewByValue(Context.Instance.Camera, finalFieldOfView, duration));
 
@@ -71,11 +70,11 @@ public class ActionsCatalog3D : MonoBehaviour, IActionsCatalog3DInterface
 
 		var obj = (GameObject) Context.Instance.Prev;
 		var rotation = obj.transform.rotation;
-		var rotationX = rotation.eulerAngles.x + (axis == State.Axis.X ? degree : 0);
-		var rotationY = rotation.eulerAngles.y + (axis == State.Axis.Y ? degree : 0);
-		var rotationZ = rotation.eulerAngles.z + (axis == State.Axis.Z ? degree : 0);
+		var rotationX = axis == State.Axis.X ? degree : 0;
+		var rotationY = axis == State.Axis.Y ? degree : 0;
+		var rotationZ = axis == State.Axis.Z ? degree : 0;
 		
-		var newRotation = Quaternion.Euler(rotationX, rotationY, rotationZ);
+		var newRotation = rotation * Quaternion.Euler(rotationX, rotationY,rotationZ);
 		StartCoroutine(RotateObject(obj, newRotation, duration));
 	}
 
@@ -160,7 +159,7 @@ public class ActionsCatalog3D : MonoBehaviour, IActionsCatalog3DInterface
 	}
 	
 	// smoothly change rotation of camera
-	private static IEnumerator ChangeRotation(Component camera, Quaternion finalRotation, float duration)
+	private static IEnumerator RotateObject(dynamic obj, Quaternion finalRotation, float duration)
 	{
 		if (ScriptExecutor.IsInAction)
 		{
@@ -174,7 +173,7 @@ public class ActionsCatalog3D : MonoBehaviour, IActionsCatalog3DInterface
 			counter += Time.deltaTime;
 
 			yield return null;
-			camera.transform.rotation = Quaternion.Slerp(camera.transform.rotation, finalRotation, Time.deltaTime);
+			obj.transform.rotation = Quaternion.Slerp(obj.transform.rotation, finalRotation, counter/duration);
 		}
 		
 		ScriptExecutor.IsInAction = false;
@@ -199,26 +198,6 @@ public class ActionsCatalog3D : MonoBehaviour, IActionsCatalog3DInterface
 			yield return null;
 		}
 
-		ScriptExecutor.IsInAction = false;
-	}
-	
-	private IEnumerator RotateObject(dynamic obj, Quaternion newRotation, float duration)
-	{
-		if (ScriptExecutor.IsInAction)
-		{
-			yield break;
-		}
-		ScriptExecutor.IsInAction = true;
-
-		var currentRot = obj.transform.rotation;
-
-		float counter = 0;
-		while (counter < duration)
-		{
-			counter += Time.deltaTime;
-			obj.transform.rotation = Quaternion.Lerp(currentRot, newRotation, counter / duration);
-			yield return null;
-		}
 		ScriptExecutor.IsInAction = false;
 	}
 }
