@@ -56,9 +56,9 @@ public class Catalog : IGeneralCatalogInterface, IActionsCatalog3DInterface
 		_actionsCatalog3D.ZoomHandler(duration);
 	}
 
-	public void ResetHandler(GameObject obj, Attributes attributes, float duration)
+	public void ResetHandler(string id, string duration)
 	{
-		_actionsCatalog3D.ResetHandler(obj, attributes, duration);
+		_actionsCatalog3D.ResetHandler(id, duration);
 	}
 
 	public void HighlightHandler(string state, string highlightWidthStr, string highlightColorStr)

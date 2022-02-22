@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
-public class HelperFunctions
+public class HelperFunctions : MonoBehaviour
 {
 	public static string ConvertColorToString(Color color)
 	{
