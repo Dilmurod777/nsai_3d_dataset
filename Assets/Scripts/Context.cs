@@ -12,6 +12,7 @@ public class Context
 	public string CurrentTaskID;
 	public string CurrentSubtaskID;
 	public string CurrentInstructionOrder;
+	public string CurrentFigureID;
 	public dynamic Prev;
 	public object Var1;
 	public object Var2;

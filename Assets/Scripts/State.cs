@@ -9,4 +9,11 @@
 		Y,
 		Z
 	}
+
+	public enum FigureSide
+	{
+		Right, Left, Front, Back, Top, Bottom
+	}
+	
+	public delegate void VoidFunction(); 
 }
