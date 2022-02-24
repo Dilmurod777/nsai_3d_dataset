@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using Random = UnityEngine.Random;
 
 public class ScriptExecutor : MonoBehaviour
@@ -7,7 +8,8 @@ public class ScriptExecutor : MonoBehaviour
     public static bool IsInAction = false;
     
 
-    private string _currentObjectId;
+    private List<string> _currentObjectIds;
+    private string _currentFigureId;
     
     public float cameraSpeed = 0.01f;
 
@@ -18,18 +20,25 @@ public class ScriptExecutor : MonoBehaviour
     public float maxRotationAngle = 15;
     public float rotationDuration = 1.0f;
 
-    public float minScale = 0.001f;
-    public float maxScale = 1.5f;
+    public float scaleRatio = 0.1f;
     public float scaleDuration = 1.0f;
 
     public float zoomDuration = 1.0f;
     public float resetDuration = 1.0f;
+
+    public State.FigureSide figureSide;
+    public float figureSideDuration = 1.0f;
+
+    public float closeLookDuration = 1.0f;
+
+    public float infiniteRotationSpeed = 15.0f;
     
     private bool _isModifying;
 
     private void Start()
     {
-        _currentObjectId = "41";
+        _currentObjectIds = new List<string> {"41", "46"};
+        _currentFigureId = "402-32-11-61-990-802-A";
         
         var mainCamera = Camera.main;
         Context.Instance.Camera = mainCamera;
@@ -45,15 +54,14 @@ public class ScriptExecutor : MonoBehaviour
             });
         }
 
-        var allObjects = GameObject.FindGameObjectsWithTag("Object");
+        var allFigures = GameObject.FindGameObjectsWithTag("Figure");
 
-        foreach (var obj in allObjects)
+        foreach (var fig in allFigures)
         {
-            var id = obj.name.Split('[', ']')[1];
-            Context.Instance.InitialAttributes[id] = new Attributes
+            Context.Instance.InitialAttributes[fig.name] = new Attributes
             {
-                Rotation = obj.transform.rotation,
-                Scale = obj.transform.localScale
+                Rotation = fig.transform.rotation,
+                Scale = fig.transform.localScale
             };
         }
 
@@ -66,14 +74,15 @@ public class ScriptExecutor : MonoBehaviour
     {
         CameraMovements();
 
+        // show highlight
         if (Input.GetKeyDown(KeyCode.H))
         {
             var queryMeta = new QueryMeta
             {
-                Query = $"Show highlight object {_currentObjectId}",
+                Query = $"Show highlight object {HelperFunctions.JoinListIntoString(_currentObjectIds)}",
                 Programs = new[]
                 {
-                    $"FindObjectWithPartOfName {_currentObjectId}",
+                    $"FindObjectsWithIds {HelperFunctions.JoinListIntoString(_currentObjectIds)}",
                     $"HighlightHandler {State.On} {highlightWidth} {HelperFunctions.ConvertColorToString(highlightColor)}"
                 },
                 Reply = "highlight on"
@@ -82,14 +91,15 @@ public class ScriptExecutor : MonoBehaviour
             print($"result: {result}");
         }
 
-        if (Input.GetKeyUp(KeyCode.H))
+        // hide highlight
+        if (Input.GetKeyDown(KeyCode.J))
         {
             var queryMeta = new QueryMeta
             {
-                Query = $"Show highlight object {_currentObjectId}",
+                Query = $"Show highlight object {HelperFunctions.JoinListIntoString(_currentObjectIds)}",
                 Programs = new[]
                 {
-                    $"FindObjectWithPartOfName {_currentObjectId}",
+                    $"FindObjectsWithIds {HelperFunctions.JoinListIntoString(_currentObjectIds)}",
                     $"HighlightHandler {State.Off} {highlightWidth} {HelperFunctions.ConvertColorToString(highlightColor)}"
                 },
                 Reply = "highlight off"
@@ -98,6 +108,7 @@ public class ScriptExecutor : MonoBehaviour
             print($"result: {result}");
         }
         
+        // rotate
         if (Input.GetKeyDown(KeyCode.R))
         {
             const int degree = 45;
@@ -105,10 +116,10 @@ public class ScriptExecutor : MonoBehaviour
             
             var queryMeta = new QueryMeta
             {
-                Query = $"Rotate {_currentObjectId} by {degree} degrees in {axis} axis",
+                Query = $"Rotate {_currentFigureId} by {degree} degrees in {axis} axis",
                 Programs = new[]
                 {
-                    $"FindObjectWithPartOfName {_currentObjectId}",
+                    $"FindFigureWithId {_currentFigureId}",
                     $"RotateHandler {degree} {axis.ToString()} {rotationDuration}"
                 },
                 Reply = "rotate"
@@ -116,36 +127,118 @@ public class ScriptExecutor : MonoBehaviour
             var result = FunctionalProgramsExecutor.Instance.Execute(queryMeta);
             print($"result: {result}");
         }
+        
+        // scale up
         if (Input.GetKeyDown(KeyCode.S))
         {
-            ScaleHandler();
+            var queryMeta = new QueryMeta
+            {
+                Query = $"Scale up {_currentFigureId}",
+                Programs = new[]
+                {
+                    $"FindFigureWithId {_currentFigureId}",
+                    $"ScaleHandler {State.On} {scaleRatio} {scaleDuration}"
+                },
+                Reply = "scale up"
+            };
+            var result = FunctionalProgramsExecutor.Instance.Execute(queryMeta);
+            print($"result: {result}");
         }
+        
+        // scale down
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            var queryMeta = new QueryMeta
+            {
+                Query = $"Scale down {_currentFigureId}",
+                Programs = new[]
+                {
+                    $"FindFigureWithId {_currentFigureId}",
+                    $"ScaleHandler {State.Off} {scaleRatio} {scaleDuration}"
+                },
+                Reply = "scale down"
+            };
+            var result = FunctionalProgramsExecutor.Instance.Execute(queryMeta);
+            print($"result: {result}");
+        }
+        
+        // reset
         if (Input.GetKeyDown(KeyCode.P))
         {
             var queryMeta = new QueryMeta
             {
-                Query = $"Reset {_currentObjectId}",
+                Query = $"Reset {_currentFigureId}",
                 Programs = new[]
                 {
-                    $"FindObjectWithPartOfName {_currentObjectId}",
-                    $"ResetHandler {_currentObjectId} {resetDuration}"
+                    $"FindFigureWithId {_currentFigureId}",
+                    $"ResetHandler {_currentFigureId} {resetDuration}"
                 },
                 Reply = "reset"
             };
             var result = FunctionalProgramsExecutor.Instance.Execute(queryMeta);
             print($"result: {result}");
         }
+        
+        // zoom in
         if (Input.GetKeyDown(KeyCode.Z))
         {
             var queryMeta = new QueryMeta
             {
-                Query = $"Zoom object {_currentObjectId}",
+                Query = $"Zoom object {_currentObjectIds[0]}",
                 Programs = new[]
                 {
-                    $"FindObjectWithPartOfName {_currentObjectId}",
+                    $"FindObjectsWithIds {_currentObjectIds[0]}",
                     $"ZoomHandler {zoomDuration}"
                 },
                 Reply = "zoom"
+            };
+            var result = FunctionalProgramsExecutor.Instance.Execute(queryMeta);
+            print($"result: {result}");
+        }
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            var queryMeta = new QueryMeta
+            {
+                Query = $"Show {figureSide} side of {_currentFigureId}",
+                Programs = new[]
+                {
+                    $"FindFigureWithId {_currentFigureId}",
+                    $"ShowFigureSideHandler {figureSide} {figureSideDuration}"
+                },
+                Reply = "show side"
+            };
+            var result = FunctionalProgramsExecutor.Instance.Execute(queryMeta);
+            print($"result: {result}");
+        }
+
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            var queryMeta = new QueryMeta
+            {
+                Query = $"Show close look of {HelperFunctions.JoinListIntoString(_currentObjectIds)}",
+                Programs = new[]
+                {
+                    $"FindObjectsWithIds {HelperFunctions.JoinListIntoString(_currentObjectIds)}",
+                    $"CloseLookHandler {_currentFigureId} {closeLookDuration}"
+                },
+                Reply = "show side"
+            };
+            var result = FunctionalProgramsExecutor.Instance.Execute(queryMeta);
+            print($"result: {result}");
+        }
+
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            var queryMeta = new QueryMeta
+            {
+                Query = $"Animate {_currentFigureId}",
+                Programs = new[]
+                {
+                    $"FindFigureWithId {_currentFigureId}",
+                    $"AnimateFigureHandler {infiniteRotationSpeed}"
+                },
+                Reply = "animate figure"
             };
             var result = FunctionalProgramsExecutor.Instance.Execute(queryMeta);
             print($"result: {result}");
@@ -171,41 +264,5 @@ public class ScriptExecutor : MonoBehaviour
         {
             Context.Instance.Camera.transform.position += cameraSpeed*Vector3.right;
         }
-    }
-    
-    // side
-
-    // annotate
-    
-    // scale
-    private void ScaleHandler()
-    {
-        var value = Random.Range(minScale, maxScale);
-
-        // _currentObject.transform.localScale *= value;
-        // HighlightObject(_currentObject);
-        // StartCoroutine(ScaleObject(_currentObject, _currentObject.transform.localScale * value));
-        
-        var text = $"scale object {_currentObjectId} by {value}";
-        print(text);
-    }
-    
-    private IEnumerator ScaleObject(GameObject obj, Vector3 newScale)
-    {
-        if (_isModifying)
-        {
-            yield break;
-        }
-        _isModifying = true;
-
-        float counter = 0;
-        while (counter < scaleDuration)
-        {
-            counter += Time.deltaTime;
-            
-            obj.transform.localScale = Vector3.Lerp(obj.transform.localScale, newScale, counter / scaleDuration);;
-            yield return null;
-        }
-        _isModifying = false;
     }
 }
