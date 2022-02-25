@@ -11,13 +11,12 @@ public class ScriptExecutor : MonoBehaviour
     private List<string> _currentObjectIds;
     private string _currentFigureId;
     
-    public float cameraSpeed = 0.01f;
+    public float cameraSpeed = 0.1f;
 
     public Color highlightColor = Color.magenta;
     public int highlightWidth = 4;
 
-    public float minRotationAngle = -15;
-    public float maxRotationAngle = 15;
+    public float rotationAngle = 30;
     public float rotationDuration = 1.0f;
 
     public float scaleRatio = 0.1f;
@@ -37,7 +36,7 @@ public class ScriptExecutor : MonoBehaviour
 
     private void Start()
     {
-        _currentObjectIds = new List<string> {"41", "46"};
+        _currentObjectIds = new List<string> {"46"};
         _currentFigureId = "402-32-11-61-990-802-A";
         
         var mainCamera = Camera.main;
@@ -111,16 +110,15 @@ public class ScriptExecutor : MonoBehaviour
         // rotate
         if (Input.GetKeyDown(KeyCode.R))
         {
-            const int degree = 45;
             const State.Axis axis = State.Axis.Y;
             
             var queryMeta = new QueryMeta
             {
-                Query = $"Rotate {_currentFigureId} by {degree} degrees in {axis} axis",
+                Query = $"Rotate {_currentFigureId} by {rotationAngle} degrees in {axis} axis",
                 Programs = new[]
                 {
                     $"FindFigureWithId {_currentFigureId}",
-                    $"RotateHandler {degree} {axis.ToString()} {rotationDuration}"
+                    $"RotateHandler {rotationAngle} {axis.ToString()} {rotationDuration}"
                 },
                 Reply = "rotate"
             };
@@ -222,7 +220,7 @@ public class ScriptExecutor : MonoBehaviour
                     $"FindObjectsWithIds {HelperFunctions.JoinListIntoString(_currentObjectIds)}",
                     $"CloseLookHandler {_currentFigureId} {closeLookDuration}"
                 },
-                Reply = "show side"
+                Reply = "show close look"
             };
             var result = FunctionalProgramsExecutor.Instance.Execute(queryMeta);
             print($"result: {result}");
@@ -232,13 +230,61 @@ public class ScriptExecutor : MonoBehaviour
         {
             var queryMeta = new QueryMeta
             {
-                Query = $"Animate {_currentFigureId}",
+                Query = $"Animate on {_currentFigureId}",
                 Programs = new[]
                 {
                     $"FindFigureWithId {_currentFigureId}",
-                    $"AnimateFigureHandler {infiniteRotationSpeed}"
+                    $"AnimateFigureHandler {State.On} {infiniteRotationSpeed}"
                 },
                 Reply = "animate figure"
+            };
+            var result = FunctionalProgramsExecutor.Instance.Execute(queryMeta);
+            print($"result: {result}");
+        }
+        
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            var queryMeta = new QueryMeta
+            {
+                Query = $"Animate off {_currentFigureId}",
+                Programs = new[]
+                {
+                    $"FindFigureWithId {_currentFigureId}",
+                    $"AnimateFigureHandler {State.Off} {infiniteRotationSpeed}"
+                },
+                Reply = "animate figure"
+            };
+            var result = FunctionalProgramsExecutor.Instance.Execute(queryMeta);
+            print($"result: {result}");
+        }
+        
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            var queryMeta = new QueryMeta
+            {
+                Query = $"Make visible objects {HelperFunctions.JoinListIntoString(_currentObjectIds)}",
+                Programs = new[]
+                {
+                    $"FindObjectsWithIds {HelperFunctions.JoinListIntoString(_currentObjectIds)}",
+                    $"VisibilityHandler {State.On}"
+                },
+                Reply = "hide"
+            };
+            var result = FunctionalProgramsExecutor.Instance.Execute(queryMeta);
+            print($"result: {result}");
+        }
+        
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            var queryMeta = new QueryMeta
+            {
+                Query = $"Hide objects {HelperFunctions.JoinListIntoString(_currentObjectIds)}",
+                Programs = new[]
+                {
+                    $"FindObjectsWithIds {HelperFunctions.JoinListIntoString(_currentObjectIds)}",
+                    $"VisibilityHandler {State.Off}"
+                },
+                Reply = "hide"
             };
             var result = FunctionalProgramsExecutor.Instance.Execute(queryMeta);
             print($"result: {result}");

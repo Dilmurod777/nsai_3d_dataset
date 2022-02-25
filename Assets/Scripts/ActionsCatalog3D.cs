@@ -15,6 +15,7 @@ public interface IActionsCatalog3DInterface
     void ShowFigureSideHandler(string args);
     void CloseLookHandler(string args);
     void AnimateFigureHandler(string args);
+    void VisibilityHandler(string args);
 }
 
 public class ActionsCatalog3D : MonoBehaviour, IActionsCatalog3DInterface
@@ -166,7 +167,10 @@ public class ActionsCatalog3D : MonoBehaviour, IActionsCatalog3DInterface
         var highlightWidth = float.Parse(argsList[1]);
         var highlightColor = HelperFunctions.ConvertStringToColor(argsList[2]);
 
-        HighlightObject((List<GameObject>) Context.Instance.Prev, state, highlightWidth, highlightColor);
+        var objs = (List<GameObject>) Context.Instance.Prev;
+        if (objs.Count == 0) return;
+        
+        HighlightObject(objs, state, highlightWidth, highlightColor);
     }
 
     private void HighlightObject(List<GameObject> objs, string state = State.On, float highlightWidth = 1.0f, Color highlightColor = default)
@@ -286,6 +290,7 @@ public class ActionsCatalog3D : MonoBehaviour, IActionsCatalog3DInterface
             {
                 var cloneObj = Instantiate(objs[i]);
                 cloneObj.transform.position = cloneSpawnPosition + new Vector3(5.0f * i, 0, 0);
+                cloneObj.tag = "CloneObject";
             }
         }
         
@@ -302,7 +307,8 @@ public class ActionsCatalog3D : MonoBehaviour, IActionsCatalog3DInterface
         var attributes = Context.Instance.InitialAttributes[currentFigureID];
 
         var argsList = args.Split('#');
-        var animationSpeed = float.Parse(argsList[0]);
+        var state = argsList[0];
+        var animationSpeed = float.Parse(argsList[1]);
         
         void StartAnimatingFigure()
         {
@@ -312,11 +318,35 @@ public class ActionsCatalog3D : MonoBehaviour, IActionsCatalog3DInterface
             infiniteRotationComponent.SetSpeed(animationSpeed);
         }
 
-        var infiniteRotationComponent = fig.GetComponent<InfiniteRotation>();
-        if (infiniteRotationComponent == null)
+        void StopAnimatingFigure()
         {
-            StartCoroutine(Reset(fig, attributes, 1.0f));
-            StartCoroutine(Delay(1.0f, StartAnimatingFigure));
+            var infiniteRotationComponent = fig.GetComponent<InfiniteRotation>();
+            if (infiniteRotationComponent != null)
+            {
+                Destroy(infiniteRotationComponent);
+            }
+        }
+
+        StartCoroutine(Reset(fig, attributes, 1.0f));
+        
+        var infiniteRotationComponent = fig.GetComponent<InfiniteRotation>();
+        StartCoroutine(infiniteRotationComponent == null
+            ? Delay(1.0f, StartAnimatingFigure)
+            : Delay(1.0f, StopAnimatingFigure));
+    }
+
+    public void VisibilityHandler(string args)
+    {
+        var objs = (List<GameObject>) Context.Instance.Prev;
+        if (objs.Count == 0) return;
+
+        var argsList = args.Split('#');
+        var state = argsList[0];
+        
+
+        foreach (var obj in objs)
+        {
+            obj.GetComponent<MeshRenderer>().enabled = state == State.On;
         }
     }
 
@@ -333,10 +363,17 @@ public class ActionsCatalog3D : MonoBehaviour, IActionsCatalog3DInterface
 
         var currentRot = obj.transform.rotation;
 
-        var infiniteRotationComponent = ((GameObject) obj).GetComponent<InfiniteRotation>();
-        if (infiniteRotationComponent)
+        var infiniteRotationComponent = obj.GetComponent<InfiniteRotation>();
+        if (infiniteRotationComponent != null)
         {
             Destroy(infiniteRotationComponent);
+        }
+
+        var cloneObjects = GameObject.FindGameObjectsWithTag("CloneObject");
+
+        foreach (var cloneObj in cloneObjects)
+        {
+            Destroy(cloneObj);
         }
 
         float counter = 0;

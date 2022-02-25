@@ -64,6 +64,11 @@ public class Catalog : IGeneralCatalogInterface, IActionsCatalog3DInterface
         _actionsCatalog3D.AnimateFigureHandler(args);
     }
 
+    public void VisibilityHandler(string args)
+    {
+        _actionsCatalog3D.VisibilityHandler(args);
+    }
+
     public List<GameObject> FindObjectsWithIds(string ids)
     {
         // Debug.Log($"catalog {ids0} {ids1}");
