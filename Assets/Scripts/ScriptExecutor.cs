@@ -6,13 +6,10 @@ using Random = UnityEngine.Random;
 public class ScriptExecutor : MonoBehaviour
 {
     public static bool IsInAction = false;
-    
 
     private List<string> _currentObjectIds;
     private string _currentFigureId;
     
-    public float cameraSpeed = 0.1f;
-
     public Color highlightColor = Color.magenta;
     public int highlightWidth = 4;
 
@@ -31,8 +28,6 @@ public class ScriptExecutor : MonoBehaviour
     public float closeLookDuration = 1.0f;
 
     public float infiniteRotationSpeed = 15.0f;
-    
-    private bool _isModifying;
 
     private void Start()
     {
@@ -71,8 +66,6 @@ public class ScriptExecutor : MonoBehaviour
 
     private void Update()
     {
-        CameraMovements();
-
         // show highlight
         if (Input.GetKeyDown(KeyCode.H))
         {
@@ -288,27 +281,6 @@ public class ScriptExecutor : MonoBehaviour
             };
             var result = FunctionalProgramsExecutor.Instance.Execute(queryMeta);
             print($"result: {result}");
-        }
-    }
-
-    // camera movements
-    private void CameraMovements()
-    {
-        if (Input.GetKey(KeyCode.UpArrow))
-        {
-            Context.Instance.Camera.transform.position += cameraSpeed*Vector3.forward;
-        }
-        if (Input.GetKey(KeyCode.DownArrow))
-        {
-            Context.Instance.Camera.transform.position += cameraSpeed*Vector3.back;
-        }
-        if (Input.GetKey(KeyCode.LeftArrow))
-        {
-            Context.Instance.Camera.transform.position += cameraSpeed*Vector3.left;
-        }
-        if (Input.GetKey(KeyCode.RightArrow))
-        {
-            Context.Instance.Camera.transform.position += cameraSpeed*Vector3.right;
         }
     }
 }
