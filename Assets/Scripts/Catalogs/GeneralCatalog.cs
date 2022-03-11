@@ -1,72 +1,86 @@
-﻿using System.Text.RegularExpressions;
-public interface IGeneralCatalogInterface
+﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
+
+namespace Catalogs
 {
-	object SaveVal2Var(object value, string varName);
-	int Count(object[] objects);
-	bool Exist(object[] objects);
-	object Unique(object[] objects);
-	string[] ExtractNumbers(string value);
-	string ExtractID(string attrId, string query);
-}
-
-public class GeneralCatalog : IGeneralCatalogInterface
-{
-	public object SaveVal2Var(object value, string varName)
+	public interface IGeneralCatalogInterface
 	{
-		switch (varName)
+		object SaveVal2Var(string args);
+		int Count(object[] objects);
+		bool Exist(object[] objects);
+		object Unique(string args);
+		string[] ExtractNumbers(string args);
+		string ExtractID(string attrId, string query);
+	}
+
+	public class GeneralCatalog : IGeneralCatalogInterface
+	{
+		public object SaveVal2Var(string args)
 		{
-			case "v_1":
-				Context.Instance.Var1 = value;
-				break;
-			case "v_2":
-				Context.Instance.Var2 = value;
-				break;
+			var argsList = args.Split('#');
+			var prev = Context.GetAttribute(argsList[0]);
+			var varName = argsList[1];
+		
+			switch (varName)
+			{
+				case "var1":
+					Context.Instance.Var1 = prev;
+					break;
+				case "var2":
+					Context.Instance.Var2 = prev;
+					break;
+			}
+			return prev;
 		}
-		return value;
-	}
 
-	public int Count(object[] objects)
-	{
-		return objects.Length;
-	}
-
-	public bool Exist(object[] objects)
-	{
-		return (objects.Length > 0);
-	}
-
-	public object Unique(object[] objects)
-	{
-		return objects.Length > 0 ? objects[0] : null;
-	}
-
-	public string[] ExtractNumbers(string value)
-	{
-		MatchCollection numbers = Regex.Matches(value, @"\d+");
-		string[] result = new string[numbers.Count];
-		for (int i = 0; i < numbers.Count; i++)
+		public int Count(object[] objects)
 		{
-			result[i] = numbers[i].ToString();
+			return objects.Length;
 		}
-		return result;
-	}
 
-	public string ExtractID(string attrId, string query)
-	{
-		string result = "";
-		switch (attrId)
+		public bool Exist(object[] objects)
 		{
-			case "subtask_id":
-			case  "task_id":
-				result = Regex.Match(query, @"[\d-]+$").Value;
-				break;
-			case "title":
-				result = Regex.Match(query, @"[\d-]+[A-Z]$").Value;
-				break;
-			default:
-				result = Regex.Match(query, @"\d+$").Value;
-				break;
+			return (objects.Length > 0);
 		}
-		return result;
+
+		public object Unique(string args)
+		{
+			var argsList = args.Split('#');
+			var prev = Context.GetAttribute(argsList[0]);
+			return prev.Count > 0 ? prev[0] : null;
+		}
+
+		public string[] ExtractNumbers(string args)
+		{
+			var argsList = args.Split('#');
+			var query = Context.GetAttribute(argsList[0]);
+		
+			var numbers = Regex.Matches(query, @"((\d|-)+[A-Z]+)|(([0-9]*[.])?[0-9]+)|(\[\d+\])");
+			var result = new string[numbers.Count];
+			for (var i = 0; i < numbers.Count; i++)
+			{
+				result[i] = numbers[i].ToString();
+			}
+			return result;
+		}
+
+		public string ExtractID(string attrId, string query)
+		{
+			string result;
+			switch (attrId)
+			{
+				case "subtask_id":
+				case  "task_id":
+					result = Regex.Match(query, @"[\d-]+$").Value;
+					break;
+				case "title":
+					result = Regex.Match(query, @"[\d-]+[A-Z]$").Value;
+					break;
+				default:
+					result = Regex.Match(query, @"\d+$").Value;
+					break;
+			}
+			return result;
+		}
 	}
 }

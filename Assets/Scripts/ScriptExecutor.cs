@@ -1,7 +1,6 @@
 using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
-using Random = UnityEngine.Random;
+using UnityEngine.UI;
 
 public class ScriptExecutor : MonoBehaviour
 {
@@ -12,10 +11,7 @@ public class ScriptExecutor : MonoBehaviour
     
     public Color highlightColor = Color.magenta;
     public int highlightWidth = 4;
-
-    public float rotationAngle = 30;
-    public float rotationDuration = 1.0f;
-
+    
     public float scaleRatio = 0.1f;
     public float scaleDuration = 1.0f;
 
@@ -29,11 +25,119 @@ public class ScriptExecutor : MonoBehaviour
 
     public float infiniteRotationSpeed = 15.0f;
 
+    private static Text _queryText;
+    private static Text _replyText;
+    private static Text _programsText;
+
+    private static List<QueryMeta> _queryMetas;
+    private static int _currentQueryMetaId;
+
     private void Start()
     {
-        _currentObjectIds = new List<string> {"46"};
-        _currentFigureId = "402-32-11-61-990-802-A";
+        var textObjects = FindObjectsOfType<Text>();
+
+        foreach (var textObj in textObjects)
+        {
+            switch (textObj.name)
+            {
+                case "QueryText":
+                    _queryText = textObj;
+                    break;
+                case "ProgramsText":
+                    _programsText = textObj;
+                    break;
+                case "ReplyText":
+                    _replyText = textObj;
+                    break;
+            }
+        }
         
+        _queryMetas = new List<QueryMeta>
+        {
+            new QueryMeta
+            {
+                Query = "Rotate 402-32-11-61-990-802-A by 35 degrees in Y axis",
+                Programs = new[]
+                {
+                    "ExtractNumbers query",
+                    "FilterIds prev var1",
+                    "Filter3DAttr name prev root",
+                    "Filter3DAttr type figure prev",
+                    "Unique prev",
+                    "RotateHandler prev var1"
+                },
+                Reply = "402-32-11-61-990-802-A"
+            },
+            new QueryMeta
+            {
+                Query = "Rotate 402-32-11-61-990-802-A by 90 degrees in X axis",
+                Programs = new[]
+                {
+                    "ExtractNumbers query",
+                    "FilterIds prev var1",
+                    "Filter3DAttr name prev root",
+                    "Filter3DAttr type figure prev",
+                    "Unique prev",
+                    "RotateHandler prev var1"
+                },
+                Reply = "402-32-11-61-990-802-A"
+            },
+            new QueryMeta
+            {
+                Query = "Scale up 402-32-11-61-990-802-A by 0.5",
+                Programs = new[]
+                {
+                    "ExtractNumbers query",
+                    "FilterIds prev var1",
+                    "Filter3DAttr name prev root",
+                    "Filter3DAttr type figure prev",
+                    "Unique prev",
+                    "ScaleHandler on prev var1"
+                },
+                Reply = "402-32-11-61-990-802-A"
+            },
+            new QueryMeta
+            {
+                Query = "Scale down 402-32-11-61-990-802-A by 2",
+                Programs = new[]
+                {
+                    "ExtractNumbers query",
+                    "FilterIds prev var1",
+                    "Filter3DAttr name prev root",
+                    "Filter3DAttr type figure prev",
+                    "Unique prev",
+                    "ScaleHandler off prev var1"
+                },
+                Reply = "402-32-11-61-990-802-A"
+            },
+            new QueryMeta
+            {
+                Query = "Show highlight [41], [46]",
+                Programs = new[]
+                {
+                    "ExtractNumbers query",
+                    "FilterIds prev var1",
+                    "Filter3DAttr name prev root",
+                    "HighlightHandler on prev"
+                },
+                Reply = "[41], [46]"
+            },
+            new QueryMeta
+            {
+                Query = "Remove highlight [41], [46]",
+                Programs = new[]
+                {
+                    "ExtractNumbers query",
+                    "FilterIds prev var1",
+                    "Filter3DAttr name prev root",
+                    "HighlightHandler off prev"
+                },
+                Reply = "[41], [46]"
+            }
+        };
+        
+        _queryText.text = _queryMetas[_currentQueryMetaId].Query;
+
         var mainCamera = Camera.main;
         Context.Instance.Camera = mainCamera;
         if (mainCamera != null)
@@ -66,108 +170,17 @@ public class ScriptExecutor : MonoBehaviour
 
     private void Update()
     {
-        // show highlight
-        if (Input.GetKeyDown(KeyCode.H))
+        // execute
+        if (Input.GetKeyDown(KeyCode.E))
         {
-            var queryMeta = new QueryMeta
-            {
-                Query = $"Show highlight object {HelperFunctions.JoinListIntoString(_currentObjectIds)}",
-                Programs = new[]
-                {
-                    $"FindObjectsWithIds {HelperFunctions.JoinListIntoString(_currentObjectIds)}",
-                    $"HighlightHandler {State.On} {highlightWidth} {HelperFunctions.ConvertColorToString(highlightColor)}"
-                },
-                Reply = "highlight on"
-            };
-            var result = FunctionalProgramsExecutor.Instance.Execute(queryMeta);
-            print($"result: {result}");
-        }
-
-        // hide highlight
-        if (Input.GetKeyDown(KeyCode.J))
-        {
-            var queryMeta = new QueryMeta
-            {
-                Query = $"Show highlight object {HelperFunctions.JoinListIntoString(_currentObjectIds)}",
-                Programs = new[]
-                {
-                    $"FindObjectsWithIds {HelperFunctions.JoinListIntoString(_currentObjectIds)}",
-                    $"HighlightHandler {State.Off} {highlightWidth} {HelperFunctions.ConvertColorToString(highlightColor)}"
-                },
-                Reply = "highlight off"
-            };
-            var result = FunctionalProgramsExecutor.Instance.Execute(queryMeta);
-            print($"result: {result}");
-        }
-        
-        // rotate
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            const State.Axis axis = State.Axis.Y;
+            var currentQueryMeta = _queryMetas[_currentQueryMetaId];
             
-            var queryMeta = new QueryMeta
-            {
-                Query = $"Rotate {_currentFigureId} by {rotationAngle} degrees in {axis} axis",
-                Programs = new[]
-                {
-                    $"FindFigureWithId {_currentFigureId}",
-                    $"RotateHandler {rotationAngle} {axis.ToString()} {rotationDuration}"
-                },
-                Reply = "rotate"
-            };
-            var result = FunctionalProgramsExecutor.Instance.Execute(queryMeta);
+            _queryText.text = currentQueryMeta.Query;
+            _programsText.text = string.Join("\n", currentQueryMeta.Programs);
+
+            var result = FunctionalProgramsExecutor.Instance.Execute(currentQueryMeta);
             print($"result: {result}");
-        }
-        
-        // scale up
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            var queryMeta = new QueryMeta
-            {
-                Query = $"Scale up {_currentFigureId}",
-                Programs = new[]
-                {
-                    $"FindFigureWithId {_currentFigureId}",
-                    $"ScaleHandler {State.On} {scaleRatio} {scaleDuration}"
-                },
-                Reply = "scale up"
-            };
-            var result = FunctionalProgramsExecutor.Instance.Execute(queryMeta);
-            print($"result: {result}");
-        }
-        
-        // scale down
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            var queryMeta = new QueryMeta
-            {
-                Query = $"Scale down {_currentFigureId}",
-                Programs = new[]
-                {
-                    $"FindFigureWithId {_currentFigureId}",
-                    $"ScaleHandler {State.Off} {scaleRatio} {scaleDuration}"
-                },
-                Reply = "scale down"
-            };
-            var result = FunctionalProgramsExecutor.Instance.Execute(queryMeta);
-            print($"result: {result}");
-        }
-        
-        // reset
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            var queryMeta = new QueryMeta
-            {
-                Query = $"Reset {_currentFigureId}",
-                Programs = new[]
-                {
-                    $"FindFigureWithId {_currentFigureId}",
-                    $"ResetHandler {_currentFigureId} {resetDuration}"
-                },
-                Reply = "reset"
-            };
-            var result = FunctionalProgramsExecutor.Instance.Execute(queryMeta);
-            print($"result: {result}");
+            _replyText.text = result;
         }
         
         // zoom in
@@ -282,5 +295,33 @@ public class ScriptExecutor : MonoBehaviour
             var result = FunctionalProgramsExecutor.Instance.Execute(queryMeta);
             print($"result: {result}");
         }
+    }
+
+    public static void NextInstruction()
+    {
+        _currentQueryMetaId += 1;
+
+        if (_currentQueryMetaId >= _queryMetas.Count)
+        {
+            _currentQueryMetaId = 0;
+        }
+
+        _queryText.text = _queryMetas[_currentQueryMetaId].Query;
+        _programsText.text = "";
+        _replyText.text = "";
+    }
+    
+    public static void PreviousInstruction()
+    {
+        _currentQueryMetaId -= 1;
+
+        if (_currentQueryMetaId < 0)
+        {
+            _currentQueryMetaId = _queryMetas.Count - 1;
+        }
+
+        _queryText.text = _queryMetas[_currentQueryMetaId].Query;
+        _programsText.text = "";
+        _replyText.text = "";
     }
 }

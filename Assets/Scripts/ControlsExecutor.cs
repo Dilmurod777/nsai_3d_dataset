@@ -2,13 +2,13 @@
 
 public class ControlsExecutor: MonoBehaviour
 {
-	public void leftButtonClickHandler()
+	public void LeftButtonClickHandler()
 	{
-		Debug.Log("left button click");
+		ScriptExecutor.PreviousInstruction();
 	}
 
-	public void rightButtonClickHandler()
+	public void RightButtonClickHandler()
 	{
-		Debug.Log("right button click");
+		ScriptExecutor.NextInstruction();
 	}
 }

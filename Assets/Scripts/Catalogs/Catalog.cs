@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Catalogs;
 using UnityEngine;
 
 public class Catalog : IGeneralCatalogInterface, IActionsCatalog3DInterface
@@ -19,10 +20,6 @@ public class Catalog : IGeneralCatalogInterface, IActionsCatalog3DInterface
 
     public static Catalog Instance => _instance ??= new Catalog();
 
-    public GameObject FindFigureWithId(string id)
-    {
-        return _actionsCatalog3D.FindFigureWithId(id);
-    }
 
     public void ZoomHandler(string args)
     {
@@ -34,24 +31,24 @@ public class Catalog : IGeneralCatalogInterface, IActionsCatalog3DInterface
         _actionsCatalog3D.ResetHandler(args);
     }
 
-    public void HighlightHandler(string args)
+    public List<GameObject> HighlightHandler(string args)
     {
-        _actionsCatalog3D.HighlightHandler(args);
+        return _actionsCatalog3D.HighlightHandler(args);
     }
 
-    public void RotateHandler(string args)
+    public GameObject RotateHandler(string args)
     {
-        _actionsCatalog3D.RotateHandler(args);
+        return _actionsCatalog3D.RotateHandler(args);
     }
 
-    public void ScaleHandler(string args)
+    public GameObject ScaleHandler(string args)
     {
-        _actionsCatalog3D.ScaleHandler(args);
+        return _actionsCatalog3D.ScaleHandler(args);
     }
 
-    public void ShowFigureSideHandler(string args)
+    public GameObject ShowFigureSideHandler(string args)
     {
-        _actionsCatalog3D.ShowFigureSideHandler(args);
+        return _actionsCatalog3D.ShowFigureSideHandler(args);
     }
 
     public void CloseLookHandler(string args)
@@ -69,15 +66,19 @@ public class Catalog : IGeneralCatalogInterface, IActionsCatalog3DInterface
         _actionsCatalog3D.VisibilityHandler(args);
     }
 
-    public List<GameObject> FindObjectsWithIds(string ids)
+    public List<string> FilterIds(string args)
     {
-        // Debug.Log($"catalog {ids0} {ids1}");
-        return _actionsCatalog3D.FindObjectsWithIds(ids);
+        return _actionsCatalog3D.FilterIds(args);
     }
 
-    public object SaveVal2Var(object value, string varName)
+    public List<GameObject> Filter3DAttr(string args)
     {
-        return _generalCatalog.SaveVal2Var(value, varName);
+        return _actionsCatalog3D.Filter3DAttr(args);
+    }
+
+    public object SaveVal2Var(string args)
+    {
+        return _generalCatalog.SaveVal2Var(args);
     }
 
     public int Count(object[] objects)
@@ -90,9 +91,9 @@ public class Catalog : IGeneralCatalogInterface, IActionsCatalog3DInterface
         return _generalCatalog.Exist(objects);
     }
 
-    public object Unique(object[] objects)
+    public object Unique(string args)
     {
-        return _generalCatalog.Unique(objects);
+        return _generalCatalog.Unique(args);
     }
 
     public string[] ExtractNumbers(string value)
