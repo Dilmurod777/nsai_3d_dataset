@@ -19,7 +19,7 @@ namespace Catalogs
         GameObject ShowSide(string args);
         void CloseLook(string args);
         GameObject Animate(string args);
-        void Visibility(string args);
+        List<GameObject> Visibility(string args);
     }
 
     public class ActionsCatalog3D : MonoBehaviour, IActionsCatalog3DInterface
@@ -34,17 +34,20 @@ namespace Catalogs
             var positiveSuffixes = new[]{"up", "on"};
             var negativeSuffixes = new[]{"down", "off"};
             var positivePrefixes = new[] {"show"};
-            var negativePrefixes = new[] {"remove"};
+            var negativePrefixes = new[] {"remove", "hide"};
+            var positiveInnerWords = new[] {"visible"};
+            var negativeInnerWords = new[] {"invisible"};
+
+            var words = query.Split(' ');
+            var stateSuffix = words[1].ToLower();
+            var statePrefix = words[0].ToLower();
             
-            var stateSuffix = query.Split(' ')[1].ToLower();
-            var statePrefix = query.Split(' ')[0].ToLower();
-            
-            if (positiveSuffixes.Contains(stateSuffix) || positivePrefixes.Contains(statePrefix))
+            if (positiveSuffixes.Contains(stateSuffix) || positivePrefixes.Contains(statePrefix) || words.Any(x => positiveInnerWords.Any(y => y == x)))
             {
                 return true;
             }
 
-            if (negativeSuffixes.Contains(stateSuffix) || negativePrefixes.Contains(statePrefix))
+            if (negativeSuffixes.Contains(stateSuffix) || negativePrefixes.Contains(statePrefix) || words.Any(x => negativeInnerWords.Any(y => y == x)))
             {
                 return false;
             }
@@ -426,11 +429,11 @@ namespace Catalogs
             return fig;
         }
 
-        public void Visibility(string args)
+        public List<GameObject> Visibility(string args)
         {
             var argsList = args.Split('#');
-            GameObject[] objs = Context.GetAttribute(argsList[0]);;
-            if (objs.Length == 0) return;
+            List<GameObject> objs = Context.GetAttribute(argsList[0]);
+            if (objs.Count == 0) return null;
             
             var state = ExtractState(Context.Instance.Query);
             
@@ -438,6 +441,8 @@ namespace Catalogs
             {
                 obj.GetComponent<MeshRenderer>().enabled = state;
             }
+
+            return objs;
         }
 
         private static IEnumerator IDelay(float duration, State.VoidFunction method = null)

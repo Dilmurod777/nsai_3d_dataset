@@ -62,9 +62,9 @@ namespace Catalogs
             return _actionsCatalog3D.Animate(args);
         }
 
-        public void Visibility(string args)
+        public List<GameObject> Visibility(string args)
         {
-            _actionsCatalog3D.Visibility(args);
+            return _actionsCatalog3D.Visibility(args);
         }
 
         public List<string> FilterIds(string args)

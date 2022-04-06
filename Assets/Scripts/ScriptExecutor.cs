@@ -212,6 +212,30 @@ public class ScriptExecutor : MonoBehaviour
             },
             new QueryMeta
             {
+                Query = "Make visible objects [41], [46] in this figure",
+                Programs = new[]
+                {
+                    "ExtractNumbers query",
+                    "FilterIds prev var1",
+                    "Filter3DAttr name prev root",
+                    "Visibility prev"
+                },
+                Reply = "[41], [46]"
+            },
+            new QueryMeta
+            {
+                Query = "Hide objects [41], [46] in this figure",
+                Programs = new[]
+                {
+                    "ExtractNumbers query",
+                    "FilterIds prev var1",
+                    "Filter3DAttr name prev root",
+                    "Visibility prev"
+                },
+                Reply = "[41], [46]"
+            },
+            new QueryMeta
+            {
                 Query = "Reset 402-32-11-61-990-802-A",
                 Programs = new[]
                 {
