@@ -11,15 +11,15 @@ namespace Catalogs
     {
         List<string> FilterIds(string args);
         List<GameObject> Filter3DAttr(string args);
-        void ZoomHandler(string args);
-        void ResetHandler(string args);
-        List<GameObject> HighlightHandler(string args);
-        GameObject RotateHandler(string args);
-        GameObject ScaleHandler(string args);
-        GameObject ShowFigureSideHandler(string args);
-        void CloseLookHandler(string args);
-        void AnimateFigureHandler(string args);
-        void VisibilityHandler(string args);
+        void Zoom(string args);
+        GameObject Reset(string args);
+        List<GameObject> Highlight(string args);
+        GameObject Rotate(string args);
+        GameObject Scale(string args);
+        GameObject ShowFigureSide(string args);
+        void CloseLook(string args);
+        GameObject Animate(string args);
+        void Visibility(string args);
     }
 
     public class ActionsCatalog3D : MonoBehaviour, IActionsCatalog3DInterface
@@ -29,6 +29,7 @@ namespace Catalogs
             foreach (var c in coroutines) yield return StartCoroutine(c);
         }
 
+        
         public List<string> FilterIds(string args)
         {
             var argsList = args.Split('#');
@@ -136,7 +137,7 @@ namespace Catalogs
             return foundFigs;
         }
 
-        public void ZoomHandler(string args)
+        public void Zoom(string args)
         {
             var argsList = args.Split('#');
 
@@ -155,16 +156,16 @@ namespace Catalogs
                     Quaternion.LookRotation(((GameObject) Context.Instance.Prev[0]).transform.position -
                                             cameraTransform.position);
 
-                coroutines.Add(RotateObject(Context.Instance.Camera, finalRotation, duration));
+                coroutines.Add(IRotate(Context.Instance.Camera, finalRotation, duration));
             }
 
-            coroutines.Add(ChangeFieldOfViewByValue(Context.Instance.Camera, finalFieldOfView, duration));
+            coroutines.Add(IChangeFieldOfViewByValue(Context.Instance.Camera, finalFieldOfView, duration));
 
             StartCoroutine(Sequence(coroutines));
         }
 
         // rotate
-        public GameObject RotateHandler(string args) 
+        public GameObject Rotate(string args) 
         {
             var argsList = args.Split('#');
             GameObject obj = Context.GetAttribute(argsList[0]);
@@ -181,12 +182,12 @@ namespace Catalogs
             var rotationZ = axis.StartsWith("Z") ? degree : 0;
 
             var newRotation = rotation * Quaternion.Euler(rotationX, rotationY, rotationZ);
-            StartCoroutine(RotateObject(obj, newRotation, duration));
+            StartCoroutine(IRotate(obj, newRotation, duration));
 
             return obj;
         }
 
-        public GameObject ScaleHandler(string args)
+        public GameObject Scale(string args)
         {
             var argsList = args.Split('#');
             GameObject obj = Context.GetAttribute(argsList[1]);
@@ -206,39 +207,38 @@ namespace Catalogs
         
             var finalScale = new Vector3(currentLocalScaleX * change, currentLocalScaleY * change, currentLocalScaleZ * change);
         
-            StartCoroutine(ScaleObject(obj, finalScale, 1.0f));
+            StartCoroutine(IScale(obj, finalScale, 1.0f));
 
             return obj;
         }
     
         // reset
-        public void ResetHandler(string args)
+        public GameObject Reset(string args)
         {
             var argsList = args.Split('#');
 
-            var id = argsList[0];
+            GameObject obj = Context.GetAttribute(argsList[0]);
+            if (obj == null) return null;
         
-            var obj = (GameObject) Context.Instance.Prev;
-            if (obj == null) return;
-        
-            var attributes = Context.Instance.InitialAttributes[id];
-            var duration = float.Parse(argsList[1]);
-
+            Attributes attributes = Context.Instance.InitialAttributes[obj.name];
             var cameraAttributes = Context.Instance.InitialAttributes["camera"];
 
-            var coroutines = new List<IEnumerator>();
-
-            coroutines.Add(Reset(obj, attributes, duration));
-            coroutines.Add(Reset(Context.Instance.Camera, cameraAttributes, duration));
+            var coroutines = new List<IEnumerator>
+            {
+                IReset(obj, attributes, 1.0f),
+                IReset(Context.Instance.Camera, cameraAttributes, 1.0f)
+            };
 
             if (cameraAttributes.FoV != 0)
-                coroutines.Add(ChangeFieldOfViewByValue(Context.Instance.Camera, cameraAttributes.FoV, duration));
+                coroutines.Add(IChangeFieldOfViewByValue(Context.Instance.Camera, cameraAttributes.FoV, 1.0f));
 
             StartCoroutine(Sequence(coroutines));
+
+            return obj;
         }
     
         // highlight
-        public List<GameObject> HighlightHandler(string args)
+        public List<GameObject> Highlight(string args)
         {
             var argsList = args.Split('#');
         
@@ -275,7 +275,7 @@ namespace Catalogs
             }
         }
 
-        public GameObject ShowFigureSideHandler(string args)
+        public GameObject ShowFigureSide(string args)
         {
             var obj = (GameObject) Context.Instance.Prev;
             if (obj == null) return null;
@@ -298,19 +298,19 @@ namespace Catalogs
 
             var coroutines = new List<IEnumerator>
             {
-                RotateObject(obj, sideRotation, duration)
+                IRotate(obj, sideRotation, duration)
             };
 
             var finalScale = new Vector3(0.7f, 0.7f, 0.7f);
             if (obj.transform.localScale != finalScale)
             {
-                coroutines.Add(ScaleObject(obj, finalScale, 1.0f));
+                coroutines.Add(IScale(obj, finalScale, 1.0f));
             }
 
             const int finalFoV = 70;
             if (Math.Abs(Context.Instance.Camera.fieldOfView - finalFoV) > 0.00001f)
             {
-                coroutines.Add(ChangeFieldOfViewByValue(Context.Instance.Camera, finalFoV, 1.0f));
+                coroutines.Add(IChangeFieldOfViewByValue(Context.Instance.Camera, finalFoV, 1.0f));
             }
 
             StartCoroutine(Sequence(coroutines));
@@ -318,7 +318,7 @@ namespace Catalogs
             return obj;
         }
 
-        public void CloseLookHandler(string args)
+        public void CloseLook(string args)
         {
             // var argsList = args.Split('#');
             // var currentFigure = FindFigureWithId(argsList[0]);
@@ -364,24 +364,23 @@ namespace Catalogs
             // StartCoroutine(Delay(waitTime, ChangeCloneObjectsPosition));
         }
 
-        public void AnimateFigureHandler(string args)
+        public GameObject Animate(string args)
         {
-            var fig = (GameObject) Context.Instance.Prev;
-            if (fig == null) return;
-
-            var currentFigureID = Context.Instance.CurrentFigureID;
-            var attributes = Context.Instance.InitialAttributes[currentFigureID];
-
             var argsList = args.Split('#');
+            GameObject fig = Context.GetAttribute(argsList[1]);
+            if (fig == null) return null;
+            
             var state = argsList[0];
-            var animationSpeed = float.Parse(argsList[1]);
+            Attributes attributes = Context.Instance.InitialAttributes[fig.name];
         
             void StartAnimatingFigure()
             {
-                fig.AddComponent<InfiniteRotation>();
-                
                 var infiniteRotationComponent = fig.GetComponent<InfiniteRotation>();
-                infiniteRotationComponent.SetSpeed(animationSpeed);
+                if (infiniteRotationComponent == null)
+                {
+                    infiniteRotationComponent = fig.AddComponent<InfiniteRotation>();
+                    infiniteRotationComponent.SetSpeed(25.0f);
+                }
             }
 
             void StopAnimatingFigure()
@@ -391,17 +390,24 @@ namespace Catalogs
                 {
                     Destroy(infiniteRotationComponent);
                 }
+                
+                StartCoroutine(IReset(fig, attributes, 1.0f));
             }
-
-            StartCoroutine(Reset(fig, attributes, 1.0f));
-        
+            
             var infiniteRotationComponent = fig.GetComponent<InfiniteRotation>();
-            StartCoroutine(infiniteRotationComponent == null
-                ? Delay(1.0f, StartAnimatingFigure)
-                : Delay(1.0f, StopAnimatingFigure));
+            if (infiniteRotationComponent == null && state == "on")
+            {
+                StartCoroutine(IReset(fig, attributes, 1.0f));
+            }
+        
+            StartCoroutine(state == "on"
+                ? IDelay(1.0f, StartAnimatingFigure)
+                : IDelay(1.0f, StopAnimatingFigure));
+
+            return fig;
         }
 
-        public void VisibilityHandler(string args)
+        public void Visibility(string args)
         {
             var objs = (List<GameObject>) Context.Instance.Prev;
             if (objs.Count == 0) return;
@@ -416,18 +422,19 @@ namespace Catalogs
             }
         }
 
-        private static IEnumerator Delay(float duration, State.VoidFunction method = null)
+        private static IEnumerator IDelay(float duration, State.VoidFunction method = null)
         {
             yield return new WaitForSeconds(duration);
             method?.Invoke();
         }
     
-        private static IEnumerator Reset(dynamic obj, Attributes attributes, float duration)
+        private static IEnumerator IReset(dynamic obj, Attributes attributes, float duration)
         {
             if (ScriptExecutor.IsInAction) yield break;
             ScriptExecutor.IsInAction = true;
 
             var currentRot = obj.transform.rotation;
+            var currentScale = obj.transform.localScale;
 
             var infiniteRotationComponent = obj.GetComponent<InfiniteRotation>();
             if (infiniteRotationComponent != null)
@@ -448,8 +455,8 @@ namespace Catalogs
                 counter += Time.deltaTime;
 
                 obj.transform.rotation = Quaternion.Lerp(currentRot, attributes.Rotation, counter / duration);
-                obj.transform.localScale = Vector3.Lerp(obj.transform.localScale, attributes.Scale, counter / duration);
-                obj.transform.position = Vector3.Lerp(obj.transform.position, attributes.Position, counter / duration);
+                obj.transform.localScale = Vector3.Lerp(currentScale, attributes.Scale, counter / duration);
+                // obj.transform.position = Vector3.Lerp(obj.transform.position, attributes.Position, counter / duration);
 
                 yield return null;
             }
@@ -458,7 +465,7 @@ namespace Catalogs
         }
     
         // smoothly move object
-        private static IEnumerator MoveObject(dynamic obj, Vector3 finalPosition, float duration)
+        private static IEnumerator IMoveObject(dynamic obj, Vector3 finalPosition, float duration)
         {
             if (ScriptExecutor.IsInAction) yield break;
             ScriptExecutor.IsInAction = true;
@@ -476,7 +483,7 @@ namespace Catalogs
         }
     
         // smoothly change rotation of camera
-        private static IEnumerator RotateObject(dynamic obj, Quaternion finalRotation, float duration)
+        private static IEnumerator IRotate(dynamic obj, Quaternion finalRotation, float duration)
         {
             if (ScriptExecutor.IsInAction) yield break;
             ScriptExecutor.IsInAction = true;
@@ -493,7 +500,7 @@ namespace Catalogs
             ScriptExecutor.IsInAction = false;
         }
     
-        private static IEnumerator ScaleObject(dynamic obj, Vector3 finalScale, float duration)
+        private static IEnumerator IScale(dynamic obj, Vector3 finalScale, float duration)
         {
             if (ScriptExecutor.IsInAction) yield break;
             ScriptExecutor.IsInAction = true;
@@ -511,7 +518,7 @@ namespace Catalogs
         }
 
         // smoothly change FoV of camera
-        private static IEnumerator ChangeFieldOfViewByValue(Camera camera, float finalFoV, float duration)
+        private static IEnumerator IChangeFieldOfViewByValue(Camera camera, float finalFoV, float duration)
         {
             if (ScriptExecutor.IsInAction) yield break;
 

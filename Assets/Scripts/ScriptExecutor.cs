@@ -8,12 +8,6 @@ public class ScriptExecutor : MonoBehaviour
 
     private List<string> _currentObjectIds;
     private string _currentFigureId;
-    
-    public Color highlightColor = Color.magenta;
-    public int highlightWidth = 4;
-    
-    public float scaleRatio = 0.1f;
-    public float scaleDuration = 1.0f;
 
     public float zoomDuration = 1.0f;
     public float resetDuration = 1.0f;
@@ -22,8 +16,6 @@ public class ScriptExecutor : MonoBehaviour
     public float figureSideDuration = 1.0f;
 
     public float closeLookDuration = 1.0f;
-
-    public float infiniteRotationSpeed = 15.0f;
 
     private static Text _queryText;
     private static Text _replyText;
@@ -64,7 +56,7 @@ public class ScriptExecutor : MonoBehaviour
                     "Filter3DAttr name prev root",
                     "Filter3DAttr type figure prev",
                     "Unique prev",
-                    "RotateHandler prev var1"
+                    "Rotate prev var1"
                 },
                 Reply = "402-32-11-61-990-802-A"
             },
@@ -78,7 +70,7 @@ public class ScriptExecutor : MonoBehaviour
                     "Filter3DAttr name prev root",
                     "Filter3DAttr type figure prev",
                     "Unique prev",
-                    "RotateHandler prev var1"
+                    "Rotate prev var1"
                 },
                 Reply = "402-32-11-61-990-802-A"
             },
@@ -92,7 +84,7 @@ public class ScriptExecutor : MonoBehaviour
                     "Filter3DAttr name prev root",
                     "Filter3DAttr type figure prev",
                     "Unique prev",
-                    "ScaleHandler on prev var1"
+                    "Scale on prev var1"
                 },
                 Reply = "402-32-11-61-990-802-A"
             },
@@ -106,7 +98,7 @@ public class ScriptExecutor : MonoBehaviour
                     "Filter3DAttr name prev root",
                     "Filter3DAttr type figure prev",
                     "Unique prev",
-                    "ScaleHandler off prev var1"
+                    "Scale off prev var1"
                 },
                 Reply = "402-32-11-61-990-802-A"
             },
@@ -118,7 +110,7 @@ public class ScriptExecutor : MonoBehaviour
                     "ExtractNumbers query",
                     "FilterIds prev var1",
                     "Filter3DAttr name prev root",
-                    "HighlightHandler on prev"
+                    "Highlight on prev"
                 },
                 Reply = "[41], [46]"
             },
@@ -130,9 +122,51 @@ public class ScriptExecutor : MonoBehaviour
                     "ExtractNumbers query",
                     "FilterIds prev var1",
                     "Filter3DAttr name prev root",
-                    "HighlightHandler off prev"
+                    "Highlight off prev"
                 },
                 Reply = "[41], [46]"
+            },
+            new QueryMeta
+            {
+                Query = "Animate on 402-32-11-61-990-802-A",
+                Programs = new[]
+                {
+                    "ExtractNumbers query",
+                    "FilterIds prev var1",
+                    "Filter3DAttr name prev root",
+                    "Filter3DAttr type figure prev",
+                    "Unique prev",
+                    "Animate on prev"
+                },
+                Reply = "402-32-11-61-990-802-A"
+            },
+            new QueryMeta
+            {
+                Query = "Animate off 402-32-11-61-990-802-A",
+                Programs = new[]
+                {
+                    "ExtractNumbers query",
+                    "FilterIds prev var1",
+                    "Filter3DAttr name prev root",
+                    "Filter3DAttr type figure prev",
+                    "Unique prev",
+                    "Animate off prev"
+                },
+                Reply = "402-32-11-61-990-802-A"
+            },
+            new QueryMeta
+            {
+                Query = "Reset 402-32-11-61-990-802-A",
+                Programs = new[]
+                {
+                    "ExtractNumbers query",
+                    "FilterIds prev var1",
+                    "Filter3DAttr name prev root",
+                    "Filter3DAttr type figure prev",
+                    "Unique prev",
+                    "Reset prev"
+                },
+                Reply = "402-32-11-61-990-802-A"
             }
         };
         
@@ -151,7 +185,7 @@ public class ScriptExecutor : MonoBehaviour
                 FoV =  mainCamera.fieldOfView
             });
         }
-
+        
         var allFigures = GameObject.FindGameObjectsWithTag("Figure");
 
         foreach (var fig in allFigures)
@@ -181,119 +215,6 @@ public class ScriptExecutor : MonoBehaviour
             var result = FunctionalProgramsExecutor.Instance.Execute(currentQueryMeta);
             print($"result: {result}");
             _replyText.text = result;
-        }
-        
-        // zoom in
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            var queryMeta = new QueryMeta
-            {
-                Query = $"Zoom object {_currentObjectIds[0]}",
-                Programs = new[]
-                {
-                    $"FindObjectsWithIds {_currentObjectIds[0]}",
-                    $"ZoomHandler {zoomDuration}"
-                },
-                Reply = "zoom"
-            };
-            var result = FunctionalProgramsExecutor.Instance.Execute(queryMeta);
-            print($"result: {result}");
-        }
-
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            var queryMeta = new QueryMeta
-            {
-                Query = $"Show {figureSide} side of {_currentFigureId}",
-                Programs = new[]
-                {
-                    $"FindFigureWithId {_currentFigureId}",
-                    $"ShowFigureSideHandler {figureSide} {figureSideDuration}"
-                },
-                Reply = "show side"
-            };
-            var result = FunctionalProgramsExecutor.Instance.Execute(queryMeta);
-            print($"result: {result}");
-        }
-
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            var queryMeta = new QueryMeta
-            {
-                Query = $"Show close look of {HelperFunctions.JoinListIntoString(_currentObjectIds)}",
-                Programs = new[]
-                {
-                    $"FindObjectsWithIds {HelperFunctions.JoinListIntoString(_currentObjectIds)}",
-                    $"CloseLookHandler {_currentFigureId} {closeLookDuration}"
-                },
-                Reply = "show close look"
-            };
-            var result = FunctionalProgramsExecutor.Instance.Execute(queryMeta);
-            print($"result: {result}");
-        }
-
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            var queryMeta = new QueryMeta
-            {
-                Query = $"Animate on {_currentFigureId}",
-                Programs = new[]
-                {
-                    $"FindFigureWithId {_currentFigureId}",
-                    $"AnimateFigureHandler {State.On} {infiniteRotationSpeed}"
-                },
-                Reply = "animate figure"
-            };
-            var result = FunctionalProgramsExecutor.Instance.Execute(queryMeta);
-            print($"result: {result}");
-        }
-        
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            var queryMeta = new QueryMeta
-            {
-                Query = $"Animate off {_currentFigureId}",
-                Programs = new[]
-                {
-                    $"FindFigureWithId {_currentFigureId}",
-                    $"AnimateFigureHandler {State.Off} {infiniteRotationSpeed}"
-                },
-                Reply = "animate figure"
-            };
-            var result = FunctionalProgramsExecutor.Instance.Execute(queryMeta);
-            print($"result: {result}");
-        }
-        
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            var queryMeta = new QueryMeta
-            {
-                Query = $"Make visible objects {HelperFunctions.JoinListIntoString(_currentObjectIds)}",
-                Programs = new[]
-                {
-                    $"FindObjectsWithIds {HelperFunctions.JoinListIntoString(_currentObjectIds)}",
-                    $"VisibilityHandler {State.On}"
-                },
-                Reply = "hide"
-            };
-            var result = FunctionalProgramsExecutor.Instance.Execute(queryMeta);
-            print($"result: {result}");
-        }
-        
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            var queryMeta = new QueryMeta
-            {
-                Query = $"Hide objects {HelperFunctions.JoinListIntoString(_currentObjectIds)}",
-                Programs = new[]
-                {
-                    $"FindObjectsWithIds {HelperFunctions.JoinListIntoString(_currentObjectIds)}",
-                    $"VisibilityHandler {State.Off}"
-                },
-                Reply = "hide"
-            };
-            var result = FunctionalProgramsExecutor.Instance.Execute(queryMeta);
-            print($"result: {result}");
         }
     }
 

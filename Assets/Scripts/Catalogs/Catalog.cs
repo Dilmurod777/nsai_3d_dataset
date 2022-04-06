@@ -1,108 +1,110 @@
 ﻿using System.Collections.Generic;
-using Catalogs;
 using UnityEngine;
 
-public class Catalog : IGeneralCatalogInterface, IActionsCatalog3DInterface
+namespace Catalogs
 {
-    private static Catalog _instance;
-    private readonly ActionsCatalog3D _actionsCatalog3D;
-    private readonly GeneralCatalog _generalCatalog;
-
-    private Catalog()
+    public class Catalog : IGeneralCatalogInterface, IActionsCatalog3DInterface
     {
-        var gameObject = Object.FindObjectOfType<ScriptExecutor>().gameObject;
+        private static Catalog _instance;
+        private readonly ActionsCatalog3D _actionsCatalog3D;
+        private readonly GeneralCatalog _generalCatalog;
 
-        _generalCatalog = new GeneralCatalog();
-        _actionsCatalog3D = gameObject.GetComponent<ActionsCatalog3D>()
-            ? gameObject.GetComponent<ActionsCatalog3D>()
-            : gameObject.AddComponent<ActionsCatalog3D>();
-    }
+        private Catalog()
+        {
+            var gameObject = Object.FindObjectOfType<ScriptExecutor>().gameObject;
 
-    public static Catalog Instance => _instance ??= new Catalog();
+            _generalCatalog = new GeneralCatalog();
+            _actionsCatalog3D = gameObject.GetComponent<ActionsCatalog3D>()
+                ? gameObject.GetComponent<ActionsCatalog3D>()
+                : gameObject.AddComponent<ActionsCatalog3D>();
+        }
+
+        public static Catalog Instance => _instance ??= new Catalog();
 
 
-    public void ZoomHandler(string args)
-    {
-        _actionsCatalog3D.ZoomHandler(args);
-    }
+        public void Zoom(string args)
+        {
+            _actionsCatalog3D.Zoom(args);
+        }
 
-    public void ResetHandler(string args)
-    {
-        _actionsCatalog3D.ResetHandler(args);
-    }
+        public GameObject Reset(string args)
+        {
+            return _actionsCatalog3D.Reset(args);
+        }
 
-    public List<GameObject> HighlightHandler(string args)
-    {
-        return _actionsCatalog3D.HighlightHandler(args);
-    }
+        public List<GameObject> Highlight(string args)
+        {
+            return _actionsCatalog3D.Highlight(args);
+        }
 
-    public GameObject RotateHandler(string args)
-    {
-        return _actionsCatalog3D.RotateHandler(args);
-    }
+        public GameObject Rotate(string args)
+        {
+            return _actionsCatalog3D.Rotate(args);
+        }
 
-    public GameObject ScaleHandler(string args)
-    {
-        return _actionsCatalog3D.ScaleHandler(args);
-    }
+        public GameObject Scale(string args)
+        {
+            return _actionsCatalog3D.Scale(args);
+        }
 
-    public GameObject ShowFigureSideHandler(string args)
-    {
-        return _actionsCatalog3D.ShowFigureSideHandler(args);
-    }
+        public GameObject ShowFigureSide(string args)
+        {
+            return _actionsCatalog3D.ShowFigureSide(args);
+        }
 
-    public void CloseLookHandler(string args)
-    {
-        _actionsCatalog3D.CloseLookHandler(args);
-    }
+        public void CloseLook(string args)
+        {
+            _actionsCatalog3D.CloseLook(args);
+        }
 
-    public void AnimateFigureHandler(string args)
-    {
-        _actionsCatalog3D.AnimateFigureHandler(args);
-    }
+        public GameObject Animate(string args)
+        {
+            return _actionsCatalog3D.Animate(args);
+        }
 
-    public void VisibilityHandler(string args)
-    {
-        _actionsCatalog3D.VisibilityHandler(args);
-    }
+        public void Visibility(string args)
+        {
+            _actionsCatalog3D.Visibility(args);
+        }
 
-    public List<string> FilterIds(string args)
-    {
-        return _actionsCatalog3D.FilterIds(args);
-    }
+        public List<string> FilterIds(string args)
+        {
+            return _actionsCatalog3D.FilterIds(args);
+        }
 
-    public List<GameObject> Filter3DAttr(string args)
-    {
-        return _actionsCatalog3D.Filter3DAttr(args);
-    }
+        public List<GameObject> Filter3DAttr(string args)
+        {
+            return _actionsCatalog3D.Filter3DAttr(args);
+        }
 
-    public object SaveVal2Var(string args)
-    {
-        return _generalCatalog.SaveVal2Var(args);
-    }
+        public object SaveVal2Var(string args)
+        {
+            return _generalCatalog.SaveVal2Var(args);
+        }
 
-    public int Count(object[] objects)
-    {
-        return _generalCatalog.Count(objects);
-    }
+        public int Count(object[] objects)
+        {
+            return _generalCatalog.Count(objects);
+        }
 
-    public bool Exist(object[] objects)
-    {
-        return _generalCatalog.Exist(objects);
-    }
+        public bool Exist(object[] objects)
+        {
+            return _generalCatalog.Exist(objects);
+        }
 
-    public object Unique(string args)
-    {
-        return _generalCatalog.Unique(args);
-    }
+        public object Unique(string args)
+        {
+            return _generalCatalog.Unique(args);
+        }
 
-    public string[] ExtractNumbers(string value)
-    {
-        return _generalCatalog.ExtractNumbers(value);
-    }
+        public string[] ExtractNumbers(string value)
+        {
+            return _generalCatalog.ExtractNumbers(value);
+        }
 
-    public string ExtractID(string attrId, string query)
-    {
-        return _generalCatalog.ExtractID(attrId, query);
+        public string ExtractID(string attrId, string query)
+        {
+            return _generalCatalog.ExtractID(attrId, query);
+        }
     }
 }
