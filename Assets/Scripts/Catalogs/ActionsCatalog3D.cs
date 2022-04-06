@@ -16,7 +16,7 @@ namespace Catalogs
         List<GameObject> Highlight(string args);
         GameObject Rotate(string args);
         GameObject Scale(string args);
-        GameObject ShowFigureSide(string args);
+        GameObject ShowSide(string args);
         void CloseLook(string args);
         GameObject Animate(string args);
         void Visibility(string args);
@@ -29,7 +29,37 @@ namespace Catalogs
             foreach (var c in coroutines) yield return StartCoroutine(c);
         }
 
-        
+        private bool ExtractState(string query)
+        {
+            var positiveSuffixes = new[]{"up", "on"};
+            var negativeSuffixes = new[]{"down", "off"};
+            var positivePrefixes = new[] {"show"};
+            var negativePrefixes = new[] {"remove"};
+            
+            var stateSuffix = query.Split(' ')[1].ToLower();
+            var statePrefix = query.Split(' ')[0].ToLower();
+            
+            if (positiveSuffixes.Contains(stateSuffix) || positivePrefixes.Contains(statePrefix))
+            {
+                return true;
+            }
+
+            if (negativeSuffixes.Contains(stateSuffix) || negativePrefixes.Contains(statePrefix))
+            {
+                return false;
+            }
+
+            return false;
+        }
+
+        private string ExtractSide(string query)
+        {
+            var words = query.Split(' ').ToList();
+            var sideIndex = words.IndexOf("side") - 1;
+
+            return words[sideIndex].ToLower();
+        }
+
         public List<string> FilterIds(string args)
         {
             var argsList = args.Split('#');
@@ -190,11 +220,11 @@ namespace Catalogs
         public GameObject Scale(string args)
         {
             var argsList = args.Split('#');
-            GameObject obj = Context.GetAttribute(argsList[1]);
+            GameObject obj = Context.GetAttribute(argsList[0]);
             if (obj == null) return null;
             
-            List<string> restArgs = Context.GetAttribute(argsList[2]);
-            var state = argsList[0];
+            List<string> restArgs = Context.GetAttribute(argsList[1]);
+            var state = ExtractState(Context.Instance.Query);
             var scaleRatio = float.Parse(restArgs[0]);
 
             var currentLocalScale = obj.transform.localScale;
@@ -202,8 +232,8 @@ namespace Catalogs
             var currentLocalScaleY = currentLocalScale.y;
             var currentLocalScaleZ = currentLocalScale.z;
             var change = scaleRatio < 1 
-                ? state == State.On ? 1 + scaleRatio : 1 - scaleRatio
-                : state == State.On ? scaleRatio : Mathf.Round(100f / scaleRatio) / 100f;
+                ? state ? 1 + scaleRatio : 1 - scaleRatio
+                : state ? scaleRatio : Mathf.Round(100f / scaleRatio) / 100f;
         
             var finalScale = new Vector3(currentLocalScaleX * change, currentLocalScaleY * change, currentLocalScaleZ * change);
         
@@ -242,9 +272,9 @@ namespace Catalogs
         {
             var argsList = args.Split('#');
         
-            var state = argsList[0];
+            var state = ExtractState(Context.Instance.Query);
 
-            List<GameObject> objs = Context.GetAttribute(argsList[1]);
+            List<GameObject> objs = Context.GetAttribute(argsList[0]);
             if (objs.Count == 0) return null;
         
             HighlightObject(objs, state, 5.0f, Color.blue);
@@ -252,7 +282,7 @@ namespace Catalogs
             return objs;
         }
 
-        private void HighlightObject(List<GameObject> objs, string state = State.On, float highlightWidth = 1.0f, Color highlightColor = default)
+        private void HighlightObject(List<GameObject> objs, bool state = true, float highlightWidth = 1.0f, Color highlightColor = default)
         {
             foreach (var obj in objs)
             {
@@ -261,58 +291,47 @@ namespace Catalogs
 
                 switch (state)
                 {
-                    case State.On:
+                    case true:
                         outlineComponent.OutlineMode = Outline.Mode.OutlineAll;
                         outlineComponent.OutlineWidth = highlightWidth;
                         outlineComponent.OutlineColor = highlightColor;
 
                         outlineComponent.enabled = true;
                         break;
-                    case State.Off:
+                    case false:
                         outlineComponent.enabled = false;
                         break;
                 }
             }
         }
 
-        public GameObject ShowFigureSide(string args)
+        public GameObject ShowSide(string args)
         {
-            var obj = (GameObject) Context.Instance.Prev;
-            if (obj == null) return null;
-
             var argsList = args.Split('#');
-        
-            Enum.TryParse(argsList[0], out State.FigureSide figureSide);
-            var duration = float.Parse(argsList[1]);
+            
+            GameObject obj = Context.GetAttribute(argsList[0]);
+            if (obj == null) return null;
+            
+            var figureSide = ExtractSide(Context.Instance.Query);
 
             var sideRotation = figureSide switch
             {
-                State.FigureSide.Front => Quaternion.Euler(0, -90, -45),
-                State.FigureSide.Back => Quaternion.Euler(0, 90, 0),
-                State.FigureSide.Right => Quaternion.Euler(0, 0, 0),
-                State.FigureSide.Left => Quaternion.Euler(0, 180, 0),
-                State.FigureSide.Top => Quaternion.Euler(-45, 0, 0),
-                State.FigureSide.Bottom => Quaternion.Euler(135, 0, 0),
+                "front" => Quaternion.Euler(0, -90, -45),
+                "back" => Quaternion.Euler(0, 90, 0),
+                "right" => Quaternion.Euler(0, 0, 0),
+                "left" => Quaternion.Euler(0, 180, 0),
+                "top" => Quaternion.Euler(-45, 0, 0),
+                "bottom" => Quaternion.Euler(135, 0, 0),
                 _ => Quaternion.Euler(0, 0, 0)
             };
+            
+            Attributes attributes = Context.Instance.InitialAttributes[obj.name];
 
             var coroutines = new List<IEnumerator>
             {
-                IRotate(obj, sideRotation, duration)
+                IRotate(obj, sideRotation, 1.0f)
             };
-
-            var finalScale = new Vector3(0.7f, 0.7f, 0.7f);
-            if (obj.transform.localScale != finalScale)
-            {
-                coroutines.Add(IScale(obj, finalScale, 1.0f));
-            }
-
-            const int finalFoV = 70;
-            if (Math.Abs(Context.Instance.Camera.fieldOfView - finalFoV) > 0.00001f)
-            {
-                coroutines.Add(IChangeFieldOfViewByValue(Context.Instance.Camera, finalFoV, 1.0f));
-            }
-
+            
             StartCoroutine(Sequence(coroutines));
 
             return obj;
@@ -367,10 +386,10 @@ namespace Catalogs
         public GameObject Animate(string args)
         {
             var argsList = args.Split('#');
-            GameObject fig = Context.GetAttribute(argsList[1]);
+            GameObject fig = Context.GetAttribute(argsList[0]);
             if (fig == null) return null;
             
-            var state = argsList[0];
+            var state = ExtractState(Context.Instance.Query);
             Attributes attributes = Context.Instance.InitialAttributes[fig.name];
         
             void StartAnimatingFigure()
@@ -395,12 +414,12 @@ namespace Catalogs
             }
             
             var infiniteRotationComponent = fig.GetComponent<InfiniteRotation>();
-            if (infiniteRotationComponent == null && state == "on")
+            if (infiniteRotationComponent == null && state)
             {
                 StartCoroutine(IReset(fig, attributes, 1.0f));
             }
         
-            StartCoroutine(state == "on"
+            StartCoroutine(state
                 ? IDelay(1.0f, StartAnimatingFigure)
                 : IDelay(1.0f, StopAnimatingFigure));
 
@@ -409,16 +428,15 @@ namespace Catalogs
 
         public void Visibility(string args)
         {
-            var objs = (List<GameObject>) Context.Instance.Prev;
-            if (objs.Count == 0) return;
-
             var argsList = args.Split('#');
-            var state = argsList[0];
-        
-
+            GameObject[] objs = Context.GetAttribute(argsList[0]);;
+            if (objs.Length == 0) return;
+            
+            var state = ExtractState(Context.Instance.Query);
+            
             foreach (var obj in objs)
             {
-                obj.GetComponent<MeshRenderer>().enabled = state == State.On;
+                obj.GetComponent<MeshRenderer>().enabled = state;
             }
         }
 

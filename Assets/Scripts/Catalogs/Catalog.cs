@@ -47,9 +47,9 @@ namespace Catalogs
             return _actionsCatalog3D.Scale(args);
         }
 
-        public GameObject ShowFigureSide(string args)
+        public GameObject ShowSide(string args)
         {
-            return _actionsCatalog3D.ShowFigureSide(args);
+            return _actionsCatalog3D.ShowSide(args);
         }
 
         public void CloseLook(string args)

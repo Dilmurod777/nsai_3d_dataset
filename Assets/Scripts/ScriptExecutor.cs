@@ -84,7 +84,7 @@ public class ScriptExecutor : MonoBehaviour
                     "Filter3DAttr name prev root",
                     "Filter3DAttr type figure prev",
                     "Unique prev",
-                    "Scale on prev var1"
+                    "Scale prev var1"
                 },
                 Reply = "402-32-11-61-990-802-A"
             },
@@ -98,7 +98,7 @@ public class ScriptExecutor : MonoBehaviour
                     "Filter3DAttr name prev root",
                     "Filter3DAttr type figure prev",
                     "Unique prev",
-                    "Scale off prev var1"
+                    "Scale prev var1"
                 },
                 Reply = "402-32-11-61-990-802-A"
             },
@@ -110,7 +110,7 @@ public class ScriptExecutor : MonoBehaviour
                     "ExtractNumbers query",
                     "FilterIds prev var1",
                     "Filter3DAttr name prev root",
-                    "Highlight on prev"
+                    "Highlight prev"
                 },
                 Reply = "[41], [46]"
             },
@@ -122,7 +122,7 @@ public class ScriptExecutor : MonoBehaviour
                     "ExtractNumbers query",
                     "FilterIds prev var1",
                     "Filter3DAttr name prev root",
-                    "Highlight off prev"
+                    "Highlight prev"
                 },
                 Reply = "[41], [46]"
             },
@@ -136,7 +136,7 @@ public class ScriptExecutor : MonoBehaviour
                     "Filter3DAttr name prev root",
                     "Filter3DAttr type figure prev",
                     "Unique prev",
-                    "Animate on prev"
+                    "Animate prev"
                 },
                 Reply = "402-32-11-61-990-802-A"
             },
@@ -150,7 +150,63 @@ public class ScriptExecutor : MonoBehaviour
                     "Filter3DAttr name prev root",
                     "Filter3DAttr type figure prev",
                     "Unique prev",
-                    "Animate off prev"
+                    "Animate prev"
+                },
+                Reply = "402-32-11-61-990-802-A"
+            },
+            new QueryMeta
+            {
+                Query = "Show left side of figure 402-32-11-61-990-802-A",
+                Programs = new[]
+                {
+                    "ExtractNumbers query",
+                    "FilterIds prev var1",
+                    "Filter3DAttr name prev root",
+                    "Filter3DAttr type figure prev",
+                    "Unique prev",
+                    "ShowSide prev"
+                },
+                Reply = "402-32-11-61-990-802-A"
+            },
+            new QueryMeta
+            {
+                Query = "Show top side of figure 402-32-11-61-990-802-A",
+                Programs = new[]
+                {
+                    "ExtractNumbers query",
+                    "FilterIds prev var1",
+                    "Filter3DAttr name prev root",
+                    "Filter3DAttr type figure prev",
+                    "Unique prev",
+                    "ShowSide prev"
+                },
+                Reply = "402-32-11-61-990-802-A"
+            },
+            new QueryMeta
+            {
+                Query = "Show bottom side of figure 402-32-11-61-990-802-A",
+                Programs = new[]
+                {
+                    "ExtractNumbers query",
+                    "FilterIds prev var1",
+                    "Filter3DAttr name prev root",
+                    "Filter3DAttr type figure prev",
+                    "Unique prev",
+                    "ShowSide prev"
+                },
+                Reply = "402-32-11-61-990-802-A"
+            },
+            new QueryMeta
+            {
+                Query = "Show back side of figure 402-32-11-61-990-802-A",
+                Programs = new[]
+                {
+                    "ExtractNumbers query",
+                    "FilterIds prev var1",
+                    "Filter3DAttr name prev root",
+                    "Filter3DAttr type figure prev",
+                    "Unique prev",
+                    "ShowSide prev"
                 },
                 Reply = "402-32-11-61-990-802-A"
             },
