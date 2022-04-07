@@ -21,12 +21,6 @@ namespace Catalogs
 
         public static Catalog Instance => _instance ??= new Catalog();
 
-
-        public void Zoom(string args)
-        {
-            _actionsCatalog3D.Zoom(args);
-        }
-
         public GameObject Reset(string args)
         {
             return _actionsCatalog3D.Reset(args);
@@ -52,9 +46,14 @@ namespace Catalogs
             return _actionsCatalog3D.ShowSide(args);
         }
 
-        public void CloseLook(string args)
+        public GameObject SideBySideLook(string args)
         {
-            _actionsCatalog3D.CloseLook(args);
+            return _actionsCatalog3D.SideBySideLook(args);
+        }
+
+        public List<GameObject> CloseLook(string args)
+        {
+            return _actionsCatalog3D.CloseLook(args);
         }
 
         public GameObject Animate(string args)

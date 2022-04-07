@@ -11,13 +11,13 @@ namespace Catalogs
     {
         List<string> FilterIds(string args);
         List<GameObject> Filter3DAttr(string args);
-        void Zoom(string args);
         GameObject Reset(string args);
         List<GameObject> Highlight(string args);
         GameObject Rotate(string args);
         GameObject Scale(string args);
         GameObject ShowSide(string args);
-        void CloseLook(string args);
+        GameObject SideBySideLook(string args);
+        List<GameObject> CloseLook(string args);
         GameObject Animate(string args);
         List<GameObject> Visibility(string args);
     }
@@ -63,6 +63,16 @@ namespace Catalogs
             return words[sideIndex].ToLower();
         }
 
+        private static void DestroyCloneObjects()
+        {
+            var cloneObjects = GameObject.FindGameObjectsWithTag("CloneObject");
+
+            foreach (var cloneObj in cloneObjects)
+            {
+                Destroy(cloneObj);
+            }
+        }
+        
         public List<string> FilterIds(string args)
         {
             var argsList = args.Split('#');
@@ -169,34 +179,7 @@ namespace Catalogs
             
             return foundFigs;
         }
-
-        public void Zoom(string args)
-        {
-            var argsList = args.Split('#');
-
-            const float changeFieldOfView = -5;
-            var duration = float.Parse(argsList[0]);
-
-            var finalFieldOfView = Context.Instance.Camera.fieldOfView + changeFieldOfView;
-            var cameraTransform = Context.Instance.Camera.transform;
-
-            var coroutines = new List<IEnumerator>();
-
-            if (!Physics.Raycast(Context.Instance.Camera.transform.position,
-                    Context.Instance.Camera.transform.TransformDirection(Vector3.forward), Mathf.Infinity))
-            {
-                var finalRotation =
-                    Quaternion.LookRotation(((GameObject) Context.Instance.Prev[0]).transform.position -
-                                            cameraTransform.position);
-
-                coroutines.Add(IRotate(Context.Instance.Camera, finalRotation, duration));
-            }
-
-            coroutines.Add(IChangeFieldOfViewByValue(Context.Instance.Camera, finalFieldOfView, duration));
-
-            StartCoroutine(Sequence(coroutines));
-        }
-
+        
         // rotate
         public GameObject Rotate(string args) 
         {
@@ -215,7 +198,7 @@ namespace Catalogs
             var rotationZ = axis.StartsWith("Z") ? degree : 0;
 
             var newRotation = rotation * Quaternion.Euler(rotationX, rotationY, rotationZ);
-            StartCoroutine(IRotate(obj, newRotation, duration));
+            StartCoroutine(IRotateObject(obj, newRotation, duration));
 
             return obj;
         }
@@ -240,7 +223,7 @@ namespace Catalogs
         
             var finalScale = new Vector3(currentLocalScaleX * change, currentLocalScaleY * change, currentLocalScaleZ * change);
         
-            StartCoroutine(IScale(obj, finalScale, 1.0f));
+            StartCoroutine(IScaleObject(obj, finalScale, 1.0f));
 
             return obj;
         }
@@ -258,8 +241,8 @@ namespace Catalogs
 
             var coroutines = new List<IEnumerator>
             {
-                IReset(obj, attributes, 1.0f),
-                IReset(Context.Instance.Camera, cameraAttributes, 1.0f)
+                IResetObject(obj, attributes, 1.0f),
+                IResetObject(Context.Instance.Camera, cameraAttributes, 1.0f)
             };
 
             if (cameraAttributes.FoV != 0)
@@ -332,7 +315,7 @@ namespace Catalogs
 
             var coroutines = new List<IEnumerator>
             {
-                IRotate(obj, sideRotation, 1.0f)
+                IRotateObject(obj, sideRotation, 1.0f)
             };
             
             StartCoroutine(Sequence(coroutines));
@@ -340,50 +323,91 @@ namespace Catalogs
             return obj;
         }
 
-        public void CloseLook(string args)
+        public GameObject SideBySideLook(string args)
         {
-            // var argsList = args.Split('#');
-            // var currentFigure = FindFigureWithId(argsList[0]);
-            // var duration = float.Parse(argsList[1]);
+            var argsList = args.Split(' ');
+            var fig = Context.GetAttribute(argsList[0]);
+            if (fig == null) return null;
             //
-            // var objs = (List<GameObject>) Context.Instance.Prev;
-            // if (objs.Count == 0) return;
+            // var figObjects = 
             //
-            // var coroutines = new List<IEnumerator>();
-            // var waitTime = 0.0f;
-            //
-            // var finalPosition = currentFigure.transform.position + new Vector3(0, 0, 10.0f);
-            // coroutines.Add(MoveObject(currentFigure, finalPosition, 1.0f));
-            // waitTime += 1.0f;
-            //
-            // var finalScale = new Vector3(0.5f, 0.5f, 0.5f);
-            // if (currentFigure.transform.localScale != finalScale)
+            // void MoveObjects()
             // {
-            //     coroutines.Add(ScaleObject(currentFigure, finalScale, 0.5f));
-            //     waitTime += 0.5f;
-            // }
-            //
-            // float finalFoV = Context.Instance.Camera.fieldOfView + 5.0f;
-            // if (Context.Instance.Camera.fieldOfView != finalFoV)
-            // {
-            //     coroutines.Add(ChangeFieldOfViewByValue(Context.Instance.Camera, finalFoV, 0.5f));
-            //     waitTime += 0.5f;
-            // }
-            //
-            // var cloneSpawnPosition = currentFigure.transform.position + new Vector3(-5.0f, 0, -3.0f);
-            //
-            // void ChangeCloneObjectsPosition()
-            // {
-            //     for (var i = 0; i < objs.Count; i++)
+            //     var coroutines = new List<IEnumerator>();
+            //     var width = Math.Max(20, 5 * cloneObjects.Count);
+            //     for (var i = 0; i < cloneObjects.Count; i++)
             //     {
-            //         var cloneObj = Instantiate(objs[i]);
-            //         cloneObj.transform.position = cloneSpawnPosition + new Vector3(5.0f * i, 0, 0);
-            //         cloneObj.tag = "CloneObject";
+            //         coroutines.Add(IMoveObject(cloneObjects[i], new Vector3((i+1) * width / (cloneObjects.Count + 1) - width / 2, 5.0f, 0), 0.2f));
             //     }
+            //
+            //     StartCoroutine(Sequence(coroutines));
             // }
+            //
+            // Attributes attributes = Context.Instance.InitialAttributes[fig.name];
+            // var coroutines = new List<IEnumerator>
+            // {
+            //     IResetObject(fig, attributes, 0.2f),
+            //     IDelay(0.2f, MoveObjects)
+            // };
             //
             // StartCoroutine(Sequence(coroutines));
-            // StartCoroutine(Delay(waitTime, ChangeCloneObjectsPosition));
+            //
+            //
+            return fig;
+        }
+        
+        public List<GameObject> CloseLook(string args)
+        {
+            var argsList = args.Split('#');
+
+            List<GameObject> objs = Context.GetAttribute(argsList[0]);
+            if (objs.Count == 0) return null;
+            
+            var parentFigure = objs[0].transform.parent.gameObject;
+            var cloneObjects = new List<GameObject>();
+            
+            void CreateCloneObjects()
+            {
+                for (var i = 0; i < parentFigure.transform.childCount; i++)
+                {
+                    var child = parentFigure.transform.GetChild(i);
+                    child.GetComponent<MeshRenderer>().enabled = false;
+                }
+                
+                foreach (var obj in objs)
+                {
+                    var cloneObject = Instantiate(obj);
+                    cloneObject.tag = "CloneObject";
+                    cloneObject.GetComponent<MeshRenderer>().enabled = true;
+                    cloneObject.transform.rotation = parentFigure.transform.rotation;
+                    cloneObject.transform.position = parentFigure.transform.position;
+                    cloneObjects.Add(cloneObject);
+                }
+            }
+
+            void MoveCloneObjects()
+            {
+                var coroutines = new List<IEnumerator>();
+                var width = Math.Max(20, 5 * cloneObjects.Count);
+                for (var i = 0; i < cloneObjects.Count; i++)
+                {
+                    coroutines.Add(IMoveObject(cloneObjects[i], new Vector3((i+1) * width / (cloneObjects.Count + 1) - width / 2, 5.0f, 0), 0.2f));
+                }
+
+                StartCoroutine(Sequence(coroutines));
+            }
+            
+            Attributes attributes = Context.Instance.InitialAttributes[parentFigure.name];
+            var coroutines = new List<IEnumerator>
+            {
+                IResetObject(parentFigure, attributes, 0.2f),
+                IDelay(0.2f, CreateCloneObjects),
+                IDelay(0.2f, MoveCloneObjects)
+            };
+
+            StartCoroutine(Sequence(coroutines));
+            
+            return objs;
         }
 
         public GameObject Animate(string args)
@@ -413,13 +437,13 @@ namespace Catalogs
                     Destroy(infiniteRotationComponent);
                 }
                 
-                StartCoroutine(IReset(fig, attributes, 1.0f));
+                StartCoroutine(IResetObject(fig, attributes, 1.0f));
             }
             
             var infiniteRotationComponent = fig.GetComponent<InfiniteRotation>();
             if (infiniteRotationComponent == null && state)
             {
-                StartCoroutine(IReset(fig, attributes, 1.0f));
+                StartCoroutine(IResetObject(fig, attributes, 1.0f));
             }
         
             StartCoroutine(state
@@ -451,7 +475,7 @@ namespace Catalogs
             method?.Invoke();
         }
     
-        private static IEnumerator IReset(dynamic obj, Attributes attributes, float duration)
+        private static IEnumerator IResetObject(dynamic obj, Attributes attributes, float duration)
         {
             if (ScriptExecutor.IsInAction) yield break;
             ScriptExecutor.IsInAction = true;
@@ -465,11 +489,12 @@ namespace Catalogs
                 Destroy(infiniteRotationComponent);
             }
 
-            var cloneObjects = GameObject.FindGameObjectsWithTag("CloneObject");
+            DestroyCloneObjects();
 
-            foreach (var cloneObj in cloneObjects)
+            var objs = GameObject.FindGameObjectsWithTag("Object");
+            foreach (var o in objs)
             {
-                Destroy(cloneObj);
+                o.GetComponent<MeshRenderer>().enabled = true;
             }
 
             float counter = 0;
@@ -506,7 +531,7 @@ namespace Catalogs
         }
     
         // smoothly change rotation of camera
-        private static IEnumerator IRotate(dynamic obj, Quaternion finalRotation, float duration)
+        private static IEnumerator IRotateObject(dynamic obj, Quaternion finalRotation, float duration)
         {
             if (ScriptExecutor.IsInAction) yield break;
             ScriptExecutor.IsInAction = true;
@@ -523,7 +548,7 @@ namespace Catalogs
             ScriptExecutor.IsInAction = false;
         }
     
-        private static IEnumerator IScale(dynamic obj, Vector3 finalScale, float duration)
+        private static IEnumerator IScaleObject(dynamic obj, Vector3 finalScale, float duration)
         {
             if (ScriptExecutor.IsInAction) yield break;
             ScriptExecutor.IsInAction = true;

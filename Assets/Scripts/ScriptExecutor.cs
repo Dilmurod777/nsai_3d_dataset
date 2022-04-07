@@ -6,17 +6,6 @@ public class ScriptExecutor : MonoBehaviour
 {
     public static bool IsInAction = false;
 
-    private List<string> _currentObjectIds;
-    private string _currentFigureId;
-
-    public float zoomDuration = 1.0f;
-    public float resetDuration = 1.0f;
-
-    public State.FigureSide figureSide;
-    public float figureSideDuration = 1.0f;
-
-    public float closeLookDuration = 1.0f;
-
     private static Text _queryText;
     private static Text _replyText;
     private static Text _programsText;
@@ -233,6 +222,44 @@ public class ScriptExecutor : MonoBehaviour
                     "Visibility prev"
                 },
                 Reply = "[41], [46]"
+            },
+            new QueryMeta
+            {
+                Query = "Show close look of objects [41], [46]",
+                Programs = new[]
+                {
+                    "ExtractNumbers query",
+                    "FilterIds prev var1",
+                    "Filter3DAttr name prev root",
+                    "CloseLook prev"
+                },
+                Reply = "[41], [46]"
+            },
+            new QueryMeta
+            {
+                Query = "Show close look of objects [8], [43], [44], [46]",
+                Programs = new[]
+                {
+                    "ExtractNumbers query",
+                    "FilterIds prev var1",
+                    "Filter3DAttr name prev root",
+                    "CloseLook prev"
+                },
+                Reply = "[8], [44]"
+            },
+            new QueryMeta
+            {
+                Query = "Show Side By Side view of items in figure 402-32-11-61-990-802-A",
+                Programs = new[]
+                {
+                    "ExtractNumbers query",
+                    "FilterIds prev var1",
+                    "Filter3DAttr name prev root",
+                    "Filter3DAttr type figure prev",
+                    "Unique prev",
+                    "SideBySideLook prev"
+                },
+                Reply = "402-32-11-61-990-802-A"
             },
             new QueryMeta
             {
