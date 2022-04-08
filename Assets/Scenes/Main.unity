@@ -1120,11 +1120,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e74d63555613df47b5fb04d40bca643, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  zoomDuration: 1
-  resetDuration: 1
-  figureSide: 0
-  figureSideDuration: 1
-  closeLookDuration: 1
 --- !u!4 &707816134
 Transform:
   m_ObjectHideFlags: 0
@@ -2806,6 +2801,22 @@ PrefabInstance:
     - target: {fileID: -8608234613827704998, guid: d877662139cf37c47be3792aa70ba948, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8608234613827704998, guid: d877662139cf37c47be3792aa70ba948, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8608234613827704998, guid: d877662139cf37c47be3792aa70ba948, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8608234613827704998, guid: d877662139cf37c47be3792aa70ba948, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8608234613827704998, guid: d877662139cf37c47be3792aa70ba948, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8320435798982483735, guid: d877662139cf37c47be3792aa70ba948, type: 3}
       propertyPath: m_TagString

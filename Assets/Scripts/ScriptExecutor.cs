@@ -73,7 +73,7 @@ public class ScriptExecutor : MonoBehaviour
                     "Filter3DAttr name prev root",
                     "Filter3DAttr type figure prev",
                     "Unique prev",
-                    "Scale prev var1"
+                    "Scale up prev var1"
                 },
                 Reply = "402-32-11-61-990-802-A"
             },
@@ -87,7 +87,7 @@ public class ScriptExecutor : MonoBehaviour
                     "Filter3DAttr name prev root",
                     "Filter3DAttr type figure prev",
                     "Unique prev",
-                    "Scale prev var1"
+                    "Scale down prev var1"
                 },
                 Reply = "402-32-11-61-990-802-A"
             },
@@ -99,7 +99,7 @@ public class ScriptExecutor : MonoBehaviour
                     "ExtractNumbers query",
                     "FilterIds prev var1",
                     "Filter3DAttr name prev root",
-                    "Highlight prev"
+                    "Highlight on prev"
                 },
                 Reply = "[41], [46]"
             },
@@ -111,7 +111,7 @@ public class ScriptExecutor : MonoBehaviour
                     "ExtractNumbers query",
                     "FilterIds prev var1",
                     "Filter3DAttr name prev root",
-                    "Highlight prev"
+                    "Highlight off prev"
                 },
                 Reply = "[41], [46]"
             },
@@ -125,7 +125,7 @@ public class ScriptExecutor : MonoBehaviour
                     "Filter3DAttr name prev root",
                     "Filter3DAttr type figure prev",
                     "Unique prev",
-                    "Animate prev"
+                    "Animate on prev"
                 },
                 Reply = "402-32-11-61-990-802-A"
             },
@@ -139,7 +139,7 @@ public class ScriptExecutor : MonoBehaviour
                     "Filter3DAttr name prev root",
                     "Filter3DAttr type figure prev",
                     "Unique prev",
-                    "Animate prev"
+                    "Animate off prev"
                 },
                 Reply = "402-32-11-61-990-802-A"
             },
@@ -153,7 +153,7 @@ public class ScriptExecutor : MonoBehaviour
                     "Filter3DAttr name prev root",
                     "Filter3DAttr type figure prev",
                     "Unique prev",
-                    "ShowSide prev"
+                    "ShowSide left prev"
                 },
                 Reply = "402-32-11-61-990-802-A"
             },
@@ -167,7 +167,7 @@ public class ScriptExecutor : MonoBehaviour
                     "Filter3DAttr name prev root",
                     "Filter3DAttr type figure prev",
                     "Unique prev",
-                    "ShowSide prev"
+                    "ShowSide top prev"
                 },
                 Reply = "402-32-11-61-990-802-A"
             },
@@ -181,7 +181,7 @@ public class ScriptExecutor : MonoBehaviour
                     "Filter3DAttr name prev root",
                     "Filter3DAttr type figure prev",
                     "Unique prev",
-                    "ShowSide prev"
+                    "ShowSide bottom prev"
                 },
                 Reply = "402-32-11-61-990-802-A"
             },
@@ -195,21 +195,9 @@ public class ScriptExecutor : MonoBehaviour
                     "Filter3DAttr name prev root",
                     "Filter3DAttr type figure prev",
                     "Unique prev",
-                    "ShowSide prev"
+                    "ShowSide back prev"
                 },
                 Reply = "402-32-11-61-990-802-A"
-            },
-            new QueryMeta
-            {
-                Query = "Make visible objects [41], [46] in this figure",
-                Programs = new[]
-                {
-                    "ExtractNumbers query",
-                    "FilterIds prev var1",
-                    "Filter3DAttr name prev root",
-                    "Visibility prev"
-                },
-                Reply = "[41], [46]"
             },
             new QueryMeta
             {
@@ -219,7 +207,19 @@ public class ScriptExecutor : MonoBehaviour
                     "ExtractNumbers query",
                     "FilterIds prev var1",
                     "Filter3DAttr name prev root",
-                    "Visibility prev"
+                    "Visibility off prev"
+                },
+                Reply = "[41], [46]"
+            },
+            new QueryMeta
+            {
+                Query = "Make visible objects [41], [46] in this figure",
+                Programs = new[]
+                {
+                    "ExtractNumbers query",
+                    "FilterIds prev var1",
+                    "Filter3DAttr name prev root",
+                    "Visibility on prev"
                 },
                 Reply = "[41], [46]"
             },

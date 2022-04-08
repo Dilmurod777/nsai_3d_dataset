@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
+using UnityEngine.Experimental.Playables;
 
 namespace Catalogs
 {
@@ -27,40 +28,6 @@ namespace Catalogs
         private IEnumerator Sequence(List<IEnumerator> coroutines)
         {
             foreach (var c in coroutines) yield return StartCoroutine(c);
-        }
-
-        private bool ExtractState(string query)
-        {
-            var positiveSuffixes = new[]{"up", "on"};
-            var negativeSuffixes = new[]{"down", "off"};
-            var positivePrefixes = new[] {"show"};
-            var negativePrefixes = new[] {"remove", "hide"};
-            var positiveInnerWords = new[] {"visible"};
-            var negativeInnerWords = new[] {"invisible"};
-
-            var words = query.Split(' ');
-            var stateSuffix = words[1].ToLower();
-            var statePrefix = words[0].ToLower();
-            
-            if (positiveSuffixes.Contains(stateSuffix) || positivePrefixes.Contains(statePrefix) || words.Any(x => positiveInnerWords.Any(y => y == x)))
-            {
-                return true;
-            }
-
-            if (negativeSuffixes.Contains(stateSuffix) || negativePrefixes.Contains(statePrefix) || words.Any(x => negativeInnerWords.Any(y => y == x)))
-            {
-                return false;
-            }
-
-            return false;
-        }
-
-        private string ExtractSide(string query)
-        {
-            var words = query.Split(' ').ToList();
-            var sideIndex = words.IndexOf("side") - 1;
-
-            return words[sideIndex].ToLower();
         }
 
         private static void DestroyCloneObjects()
@@ -206,11 +173,11 @@ namespace Catalogs
         public GameObject Scale(string args)
         {
             var argsList = args.Split('#');
-            GameObject obj = Context.GetAttribute(argsList[0]);
+            GameObject obj = Context.GetAttribute(argsList[1]);
             if (obj == null) return null;
             
-            List<string> restArgs = Context.GetAttribute(argsList[1]);
-            var state = ExtractState(Context.Instance.Query);
+            List<string> restArgs = Context.GetAttribute(argsList[2]);
+            var state = argsList[0];
             var scaleRatio = float.Parse(restArgs[0]);
 
             var currentLocalScale = obj.transform.localScale;
@@ -218,8 +185,8 @@ namespace Catalogs
             var currentLocalScaleY = currentLocalScale.y;
             var currentLocalScaleZ = currentLocalScale.z;
             var change = scaleRatio < 1 
-                ? state ? 1 + scaleRatio : 1 - scaleRatio
-                : state ? scaleRatio : Mathf.Round(100f / scaleRatio) / 100f;
+                ? state == "up" ? 1 + scaleRatio : 1 - scaleRatio
+                : state == "up" ? scaleRatio : Mathf.Round(100f / scaleRatio) / 100f;
         
             var finalScale = new Vector3(currentLocalScaleX * change, currentLocalScaleY * change, currentLocalScaleZ * change);
         
@@ -258,18 +225,11 @@ namespace Catalogs
         {
             var argsList = args.Split('#');
         
-            var state = ExtractState(Context.Instance.Query);
+            var state = argsList[0];
 
-            List<GameObject> objs = Context.GetAttribute(argsList[0]);
+            List<GameObject> objs = Context.GetAttribute(argsList[1]);
             if (objs.Count == 0) return null;
-        
-            HighlightObject(objs, state, 5.0f, Color.blue);
 
-            return objs;
-        }
-
-        private void HighlightObject(List<GameObject> objs, bool state = true, float highlightWidth = 1.0f, Color highlightColor = default)
-        {
             foreach (var obj in objs)
             {
                 var outlineComponent = obj.GetComponent<Outline>();
@@ -277,28 +237,29 @@ namespace Catalogs
 
                 switch (state)
                 {
-                    case true:
+                    case "on":
                         outlineComponent.OutlineMode = Outline.Mode.OutlineAll;
-                        outlineComponent.OutlineWidth = highlightWidth;
-                        outlineComponent.OutlineColor = highlightColor;
+                        outlineComponent.OutlineWidth = 5.0f;
+                        outlineComponent.OutlineColor = Color.blue;
 
                         outlineComponent.enabled = true;
                         break;
-                    case false:
+                    case "off":
                         outlineComponent.enabled = false;
                         break;
                 }
             }
+            
+            return objs;
         }
-
         public GameObject ShowSide(string args)
         {
             var argsList = args.Split('#');
             
-            GameObject obj = Context.GetAttribute(argsList[0]);
+            GameObject obj = Context.GetAttribute(argsList[1]);
             if (obj == null) return null;
             
-            var figureSide = ExtractSide(Context.Instance.Query);
+            var figureSide = argsList[0];
 
             var sideRotation = figureSide switch
             {
@@ -310,8 +271,6 @@ namespace Catalogs
                 "bottom" => Quaternion.Euler(135, 0, 0),
                 _ => Quaternion.Euler(0, 0, 0)
             };
-            
-            Attributes attributes = Context.Instance.InitialAttributes[obj.name];
 
             var coroutines = new List<IEnumerator>
             {
@@ -413,10 +372,10 @@ namespace Catalogs
         public GameObject Animate(string args)
         {
             var argsList = args.Split('#');
-            GameObject fig = Context.GetAttribute(argsList[0]);
+            GameObject fig = Context.GetAttribute(argsList[1]);
             if (fig == null) return null;
             
-            var state = ExtractState(Context.Instance.Query);
+            var state = argsList[0];
             Attributes attributes = Context.Instance.InitialAttributes[fig.name];
         
             void StartAnimatingFigure()
@@ -441,12 +400,12 @@ namespace Catalogs
             }
             
             var infiniteRotationComponent = fig.GetComponent<InfiniteRotation>();
-            if (infiniteRotationComponent == null && state)
+            if (infiniteRotationComponent == null && state == "on")
             {
                 StartCoroutine(IResetObject(fig, attributes, 1.0f));
             }
         
-            StartCoroutine(state
+            StartCoroutine(state == "on"
                 ? IDelay(1.0f, StartAnimatingFigure)
                 : IDelay(1.0f, StopAnimatingFigure));
 
@@ -456,14 +415,14 @@ namespace Catalogs
         public List<GameObject> Visibility(string args)
         {
             var argsList = args.Split('#');
-            List<GameObject> objs = Context.GetAttribute(argsList[0]);
+            List<GameObject> objs = Context.GetAttribute(argsList[1]);
             if (objs.Count == 0) return null;
             
-            var state = ExtractState(Context.Instance.Query);
+            var state = argsList[0];
             
             foreach (var obj in objs)
             {
-                obj.GetComponent<MeshRenderer>().enabled = state;
+                obj.GetComponent<MeshRenderer>().enabled = state == "on";
             }
 
             return objs;
