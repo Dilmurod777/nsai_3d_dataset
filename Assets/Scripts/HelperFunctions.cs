@@ -33,4 +33,39 @@ public class HelperFunctions : MonoBehaviour
     {
         return str.Split(delimiter).ToList();
     }
+
+    public static string GetOperationForResponse(string operation, string extra = null)
+    {
+        switch (operation)
+        {
+            case "rotate":
+                return "Rotating";
+            case "scale":
+                if (extra == "on") return "Scaling up";
+                if (extra == "down") return "Scaling down";
+                return "Scaling";
+            case "reset":
+                return "Resetting";
+            case "highlight":
+                if (extra == "on") return "Showing highlight of";
+                if (extra == "off") return "Removing highlight from";
+                return "Highlighting";
+            case "show side":
+                return "Showing " + extra + " side of";
+            case "animate":
+                if (extra == "on") return "Starting animation of";
+                if (extra == "off") return "Stopping animation of";
+                return "Animating";
+            case "visibility":
+                if (extra == "on") return "Showing";
+                if (extra == "off") return "Hiding";
+                return "Showing";
+            case "close look":
+                return "Showing close look of ";
+            case "side by side look":
+                return "Showing side by side look of";
+            default:
+                return "Doing";
+        }
+    }
 }

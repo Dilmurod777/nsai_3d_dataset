@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Constants;
 using UnityEngine;
 
 namespace Catalogs
@@ -21,47 +22,47 @@ namespace Catalogs
 
         public static Catalog Instance => _instance ??= new Catalog();
 
-        public GameObject Reset(string args)
+        public Response Reset(string args)
         {
             return _actionsCatalog3D.Reset(args);
         }
 
-        public List<GameObject> Highlight(string args)
+        public Response Highlight(string args)
         {
             return _actionsCatalog3D.Highlight(args);
         }
 
-        public GameObject Rotate(string args)
+        public Response Rotate(string args)
         {
             return _actionsCatalog3D.Rotate(args);
         }
 
-        public GameObject Scale(string args)
+        public Response Scale(string args)
         {
             return _actionsCatalog3D.Scale(args);
         }
 
-        public GameObject ShowSide(string args)
+        public Response ShowSide(string args)
         {
             return _actionsCatalog3D.ShowSide(args);
         }
 
-        public GameObject SideBySideLook(string args)
+        public Response SideBySideLook(string args)
         {
             return _actionsCatalog3D.SideBySideLook(args);
         }
 
-        public List<GameObject> CloseLook(string args)
+        public Response CloseLook(string args)
         {
             return _actionsCatalog3D.CloseLook(args);
         }
 
-        public GameObject Animate(string args)
+        public Response Animate(string args)
         {
             return _actionsCatalog3D.Animate(args);
         }
 
-        public List<GameObject> Visibility(string args)
+        public Response Visibility(string args)
         {
             return _actionsCatalog3D.Visibility(args);
         }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Catalogs;
+using Constants;
 using Newtonsoft.Json.Serialization;
 using UnityEngine;
 
@@ -62,22 +63,35 @@ public class FunctionalProgramsExecutor
             }
         }
 
-        if (Context.Instance.Prev != null)
+        if (Context.Instance.Prev is Response)
         {
-            if (Context.Instance.Prev.GetType() == typeof(List<GameObject>))
-            {
-                var objIds = new List<string>();
-                foreach (GameObject obj in Context.Instance.Prev)
-                {
-                    objIds.Add(obj.name.Split(' ')[0]);
-                }
+            var response = (Response) Context.Instance.Prev;
+            var operation = response.operation;
+            var objects = response.objects;
+            var extra = response.extra;
 
-                output = string.Join(", ", objIds);
-            }
-            else
+            var parsedObjects = objects.ToArray().Select(obj => obj.name).ToList();
+            var parsedExtra = new List<string>();
+            foreach (var key in extra.Keys)
             {
-                output = ((GameObject) Context.Instance.Prev).name.Split(' ')[0];
+                switch (key)
+                {
+                    case "degree": 
+                        parsedExtra.Add(string.Format("by {0} degrees", extra[key]));
+                        break;
+                    case "axis": 
+                        parsedExtra.Add(string.Format("in {0} axis", extra[key]));
+                        break;
+                    case "scale":
+                        parsedExtra.Add(string.Format("by {0}", extra[key]));
+                        break;
+                }
             }
+            
+            var operationPart = HelperFunctions.GetOperationForResponse(operation["name"], operation.ContainsKey("extra") ? operation["extra"] : null);
+            var objectsPart = string.Join(", ", parsedObjects);
+            var extraPart = string.Join(" ", parsedExtra);
+            output = operationPart + " " + objectsPart + " " + extraPart;
         }
         else
         {

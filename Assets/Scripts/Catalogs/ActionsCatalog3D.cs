@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Constants;
+using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Experimental.Playables;
 
@@ -12,15 +15,15 @@ namespace Catalogs
     {
         List<string> FilterIds(string args);
         List<GameObject> Filter3DAttr(string args);
-        GameObject Reset(string args);
-        List<GameObject> Highlight(string args);
-        GameObject Rotate(string args);
-        GameObject Scale(string args);
-        GameObject ShowSide(string args);
-        GameObject SideBySideLook(string args);
-        List<GameObject> CloseLook(string args);
-        GameObject Animate(string args);
-        List<GameObject> Visibility(string args);
+        Response Reset(string args);
+        Response Highlight(string args);
+        Response Rotate(string args);
+        Response Scale(string args);
+        Response ShowSide(string args);
+        Response SideBySideLook(string args);
+        Response CloseLook(string args);
+        Response Animate(string args);
+        Response Visibility(string args);
     }
 
     public class ActionsCatalog3D : MonoBehaviour, IActionsCatalog3DInterface
@@ -73,7 +76,6 @@ namespace Catalogs
             return ids;
         }
         
-        // filter 3d attr
         public List<GameObject> Filter3DAttr(string args)
         {
             var argsList = args.Split('#');
@@ -129,7 +131,6 @@ namespace Catalogs
             return foundObs;
         }
 
-        // close look
         private static List<GameObject> FindFigureWithId(List<string> ids, List<GameObject> parentFigures)
         {
             var allFigures = parentFigures;
@@ -147,8 +148,7 @@ namespace Catalogs
             return foundFigs;
         }
         
-        // rotate
-        public GameObject Rotate(string args) 
+        public Response Rotate(string args) 
         {
             var argsList = args.Split('#');
             GameObject obj = Context.GetAttribute(argsList[0]);
@@ -156,21 +156,28 @@ namespace Catalogs
 
             List<string> restArgs = Context.GetAttribute(argsList[1]);
             var degree = float.Parse(restArgs[0]);
-            var axis = Regex.Match(Context.Instance.Query, @"[XYZ] axis").Value;
-            var duration = 1.0f;
+            var axisRegex = Regex.Match(Context.Instance.Query, @"[XYZ] axis").Value;
             
             var rotation = obj.transform.rotation;
-            var rotationX = axis.StartsWith("X") ? degree : 0;
-            var rotationY = axis.StartsWith("Y") ? degree : 0;
-            var rotationZ = axis.StartsWith("Z") ? degree : 0;
+            var axis = axisRegex.Split(' ')[0];
+            var rotationX = axis == "X" ? degree : 0;
+            var rotationY = axis == "Y" ? degree : 0;
+            var rotationZ = axis == "Z" ? degree : 0;
 
             var newRotation = rotation * Quaternion.Euler(rotationX, rotationY, rotationZ);
-            StartCoroutine(IRotateObject(obj, newRotation, duration));
+            StartCoroutine(IRotateObject(obj, newRotation, 1.0f));
 
-            return obj;
+            return new Response(new Dictionary<string, dynamic>
+            {
+                {"name", "rotate"}
+            }, new List<GameObject> {obj}, new Dictionary<string, dynamic>
+            {
+                { "degree", degree },
+                { "axis", axis }
+            });
         }
 
-        public GameObject Scale(string args)
+        public Response Scale(string args)
         {
             var argsList = args.Split('#');
             GameObject obj = Context.GetAttribute(argsList[1]);
@@ -192,11 +199,17 @@ namespace Catalogs
         
             StartCoroutine(IScaleObject(obj, finalScale, 1.0f));
 
-            return obj;
+            return new Response(new Dictionary<string, dynamic>
+            {
+                {"name", "scale"},
+                {"extra", state}
+            }, new List<GameObject> {obj}, new Dictionary<string, dynamic>
+            {
+                { "scale", scaleRatio }
+            });
         }
     
-        // reset
-        public GameObject Reset(string args)
+         public Response Reset(string args)
         {
             var argsList = args.Split('#');
 
@@ -217,11 +230,13 @@ namespace Catalogs
 
             StartCoroutine(Sequence(coroutines));
 
-            return obj;
+            return new Response(new Dictionary<string, dynamic>
+            {
+                {"name", "reset"}
+            }, new List<GameObject> {obj}, new Dictionary<string, dynamic>());
         }
     
-        // highlight
-        public List<GameObject> Highlight(string args)
+        public Response Highlight(string args)
         {
             var argsList = args.Split('#');
         
@@ -250,9 +265,13 @@ namespace Catalogs
                 }
             }
             
-            return objs;
+            return new Response(new Dictionary<string, dynamic>
+            {
+                {"name", "highlight"},
+                {"extra", state}
+            }, objs, new Dictionary<string, dynamic>());
         }
-        public GameObject ShowSide(string args)
+        public Response ShowSide(string args)
         {
             var argsList = args.Split('#');
             
@@ -279,49 +298,120 @@ namespace Catalogs
             
             StartCoroutine(Sequence(coroutines));
 
-            return obj;
+            return new Response(new Dictionary<string, dynamic>
+            {
+                {"name", "show side"},
+                {"extra", figureSide}
+            }, new List<GameObject>{obj}, new Dictionary<string, dynamic>
+            {
+                {"side", figureSide}
+            });
         }
 
-        public GameObject SideBySideLook(string args)
+        public Response SideBySideLook(string args)
         {
             var argsList = args.Split(' ');
-            var fig = Context.GetAttribute(argsList[0]);
+            GameObject fig = Context.GetAttribute(argsList[0]);
             if (fig == null) return null;
-            //
-            // var figObjects = 
-            //
-            // void MoveObjects()
-            // {
-            //     var coroutines = new List<IEnumerator>();
-            //     var width = Math.Max(20, 5 * cloneObjects.Count);
-            //     for (var i = 0; i < cloneObjects.Count; i++)
-            //     {
-            //         coroutines.Add(IMoveObject(cloneObjects[i], new Vector3((i+1) * width / (cloneObjects.Count + 1) - width / 2, 5.0f, 0), 0.2f));
-            //     }
-            //
-            //     StartCoroutine(Sequence(coroutines));
-            // }
-            //
-            // Attributes attributes = Context.Instance.InitialAttributes[fig.name];
-            // var coroutines = new List<IEnumerator>
-            // {
-            //     IResetObject(fig, attributes, 0.2f),
-            //     IDelay(0.2f, MoveObjects)
-            // };
-            //
-            // StartCoroutine(Sequence(coroutines));
-            //
-            //
-            return fig;
+
+            var objs = new List<GameObject>();
+            for (var i = 0; i < fig.transform.childCount; i++)
+            {
+                objs.Add(fig.transform.GetChild(i).gameObject);
+            }
+            
+            CloseLookFunctionality(objs);
+
+            return new Response(new Dictionary<string, dynamic>
+            {
+                {"name", "side by side look"}
+            }, objs, new Dictionary<string, dynamic>());
         }
         
-        public List<GameObject> CloseLook(string args)
+        public Response CloseLook(string args)
         {
             var argsList = args.Split('#');
 
             List<GameObject> objs = Context.GetAttribute(argsList[0]);
             if (objs.Count == 0) return null;
             
+            CloseLookFunctionality(objs);
+            
+            return new Response(new Dictionary<string, dynamic>
+            {
+                {"name", "close look"}
+            }, objs, new Dictionary<string, dynamic>());
+        }
+
+        public Response Animate(string args)
+        {
+            var argsList = args.Split('#');
+            GameObject fig = Context.GetAttribute(argsList[1]);
+            if (fig == null) return null;
+            
+            var state = argsList[0];
+            Attributes attributes = Context.Instance.InitialAttributes[fig.name];
+        
+            void StartAnimatingFigure()
+            {
+                var infiniteRotationComponent = fig.GetComponent<InfiniteRotation>();
+                if (infiniteRotationComponent == null)
+                {
+                    infiniteRotationComponent = fig.AddComponent<InfiniteRotation>();
+                    infiniteRotationComponent.SetSpeed(25.0f);
+                }
+            }
+
+            void StopAnimatingFigure()
+            {
+                var infiniteRotationComponent = fig.GetComponent<InfiniteRotation>();
+                if (infiniteRotationComponent != null)
+                {
+                    Destroy(infiniteRotationComponent);
+                }
+                
+                StartCoroutine(IResetObject(fig, attributes, 1.0f));
+            }
+            
+            var infiniteRotationComponent = fig.GetComponent<InfiniteRotation>();
+            if (infiniteRotationComponent == null && state == "on")
+            {
+                StartCoroutine(IResetObject(fig, attributes, 1.0f));
+            }
+        
+            StartCoroutine(state == "on"
+                ? IDelay(1.0f, StartAnimatingFigure)
+                : IDelay(1.0f, StopAnimatingFigure));
+
+            return new Response(new Dictionary<string, dynamic>
+            {
+                {"name", "animate"},
+                {"extra", state}
+            }, new List<GameObject>{fig}, new Dictionary<string, dynamic>());
+        }
+
+        public Response Visibility(string args)
+        {
+            var argsList = args.Split('#');
+            List<GameObject> objs = Context.GetAttribute(argsList[1]);
+            if (objs.Count == 0) return null;
+            
+            var state = argsList[0];
+            
+            foreach (var obj in objs)
+            {
+                obj.GetComponent<MeshRenderer>().enabled = state == "on";
+            }
+
+            return new Response(new Dictionary<string, dynamic>
+            {
+                {"name", "visibility"},
+                {"extra", state}
+            }, objs, new Dictionary<string, dynamic>());
+        }
+
+        private void CloseLookFunctionality(List<GameObject>objs)
+        {
             var parentFigure = objs[0].transform.parent.gameObject;
             var cloneObjects = new List<GameObject>();
             
@@ -365,69 +455,8 @@ namespace Catalogs
             };
 
             StartCoroutine(Sequence(coroutines));
-            
-            return objs;
         }
-
-        public GameObject Animate(string args)
-        {
-            var argsList = args.Split('#');
-            GameObject fig = Context.GetAttribute(argsList[1]);
-            if (fig == null) return null;
-            
-            var state = argsList[0];
-            Attributes attributes = Context.Instance.InitialAttributes[fig.name];
         
-            void StartAnimatingFigure()
-            {
-                var infiniteRotationComponent = fig.GetComponent<InfiniteRotation>();
-                if (infiniteRotationComponent == null)
-                {
-                    infiniteRotationComponent = fig.AddComponent<InfiniteRotation>();
-                    infiniteRotationComponent.SetSpeed(25.0f);
-                }
-            }
-
-            void StopAnimatingFigure()
-            {
-                var infiniteRotationComponent = fig.GetComponent<InfiniteRotation>();
-                if (infiniteRotationComponent != null)
-                {
-                    Destroy(infiniteRotationComponent);
-                }
-                
-                StartCoroutine(IResetObject(fig, attributes, 1.0f));
-            }
-            
-            var infiniteRotationComponent = fig.GetComponent<InfiniteRotation>();
-            if (infiniteRotationComponent == null && state == "on")
-            {
-                StartCoroutine(IResetObject(fig, attributes, 1.0f));
-            }
-        
-            StartCoroutine(state == "on"
-                ? IDelay(1.0f, StartAnimatingFigure)
-                : IDelay(1.0f, StopAnimatingFigure));
-
-            return fig;
-        }
-
-        public List<GameObject> Visibility(string args)
-        {
-            var argsList = args.Split('#');
-            List<GameObject> objs = Context.GetAttribute(argsList[1]);
-            if (objs.Count == 0) return null;
-            
-            var state = argsList[0];
-            
-            foreach (var obj in objs)
-            {
-                obj.GetComponent<MeshRenderer>().enabled = state == "on";
-            }
-
-            return objs;
-        }
-
         private static IEnumerator IDelay(float duration, State.VoidFunction method = null)
         {
             yield return new WaitForSeconds(duration);
