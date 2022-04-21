@@ -120,12 +120,8 @@ public class FunctionalProgramsExecutor
         {
             var param = functionParams[i];
             parameters[i] = param;
-            // if (_params.Keys.Contains(param))
-            //     parameters[i] = string.Join("#", _params[param]);
-            // else
-            //     parameters[i] = param != "" ? param : null;
         }
 
-        return string.Join("#", parameters);
+        return string.Join(GeneralConstants.ArgsSeparator.ToString(), parameters);
     }
 }

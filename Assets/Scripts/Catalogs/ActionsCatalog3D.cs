@@ -1,19 +1,15 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Constants;
-using Newtonsoft.Json;
 using UnityEngine;
-using UnityEngine.Experimental.Playables;
 
 namespace Catalogs
 {
     public interface IActionsCatalog3DInterface
     {
-        List<string> FilterIds(string args);
         List<GameObject> Filter3DAttr(string args);
         Response Reset(string args);
         Response Highlight(string args);
@@ -45,7 +41,7 @@ namespace Catalogs
         
         public List<string> FilterIds(string args)
         {
-            var argsList = args.Split('#');
+            var argsList = args.Split(GeneralConstants.ArgsSeparator);
             var prev = Context.GetAttribute(argsList[0]);
             var varName = argsList[1];
 
@@ -78,7 +74,7 @@ namespace Catalogs
         
         public List<GameObject> Filter3DAttr(string args)
         {
-            var argsList = args.Split('#');
+            var argsList = args.Split(GeneralConstants.ArgsSeparator);
             var attrName = argsList[0];
             var prev = Context.HasAttribute(argsList[1]) ? Context.GetAttribute(argsList[1]) : argsList[1];
             var parent = Context.GetAttribute(argsList[2]);
@@ -150,7 +146,7 @@ namespace Catalogs
         
         public Response Rotate(string args) 
         {
-            var argsList = args.Split('#');
+            var argsList = args.Split(GeneralConstants.ArgsSeparator);
             GameObject obj = Context.GetAttribute(argsList[0]);
             if (obj == null) return null;
 
@@ -179,7 +175,7 @@ namespace Catalogs
 
         public Response Scale(string args)
         {
-            var argsList = args.Split('#');
+            var argsList = args.Split(GeneralConstants.ArgsSeparator);
             GameObject obj = Context.GetAttribute(argsList[1]);
             if (obj == null) return null;
             
@@ -211,7 +207,7 @@ namespace Catalogs
     
          public Response Reset(string args)
         {
-            var argsList = args.Split('#');
+            var argsList = args.Split(GeneralConstants.ArgsSeparator);
 
             GameObject obj = Context.GetAttribute(argsList[0]);
             if (obj == null) return null;
@@ -238,7 +234,7 @@ namespace Catalogs
     
         public Response Highlight(string args)
         {
-            var argsList = args.Split('#');
+            var argsList = args.Split(GeneralConstants.ArgsSeparator);
         
             var state = argsList[0];
 
@@ -273,7 +269,7 @@ namespace Catalogs
         }
         public Response ShowSide(string args)
         {
-            var argsList = args.Split('#');
+            var argsList = args.Split(GeneralConstants.ArgsSeparator);
             
             GameObject obj = Context.GetAttribute(argsList[1]);
             if (obj == null) return null;
@@ -330,7 +326,7 @@ namespace Catalogs
         
         public Response CloseLook(string args)
         {
-            var argsList = args.Split('#');
+            var argsList = args.Split(GeneralConstants.ArgsSeparator);
 
             List<GameObject> objs = Context.GetAttribute(argsList[0]);
             if (objs.Count == 0) return null;
@@ -345,7 +341,7 @@ namespace Catalogs
 
         public Response Animate(string args)
         {
-            var argsList = args.Split('#');
+            var argsList = args.Split(GeneralConstants.ArgsSeparator);
             GameObject fig = Context.GetAttribute(argsList[1]);
             if (fig == null) return null;
             
@@ -392,7 +388,7 @@ namespace Catalogs
 
         public Response Visibility(string args)
         {
-            var argsList = args.Split('#');
+            var argsList = args.Split(GeneralConstants.ArgsSeparator);
             List<GameObject> objs = Context.GetAttribute(argsList[1]);
             if (objs.Count == 0) return null;
             

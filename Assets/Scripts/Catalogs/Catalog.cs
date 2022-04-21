@@ -102,9 +102,9 @@ namespace Catalogs
             return _generalCatalog.ExtractNumbers(value);
         }
 
-        public string ExtractID(string attrId, string query)
+        public string ExtractID(string args)
         {
-            return _generalCatalog.ExtractID(attrId, query);
+            return _generalCatalog.ExtractID(args);
         }
     }
 }
