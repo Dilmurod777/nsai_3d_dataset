@@ -41,10 +41,17 @@ public class ScriptExecutor : MonoBehaviour
                 Programs = new[]
                 {
                     "ExtractNumbers query",
-                    "FilterIds prev var1",
-                    "Filter3DAttr name prev root",
-                    "Filter3DAttr type figure prev",
+                    "Save2Var prev var1",
+                    "ExtractID query",
+                    "Save2Var prev var2",
+                    "FilterType task root",
+                    "FilterType subtask prev",
+                    "FilterAttr subtaskId CurrentSubtaskId prev",
                     "Unique prev",
+                    "QueryAttr figure prev",
+                    "3DFilterAttr name prev",
+                    "Unique prev",
+                    "Same var2 prev",
                     "Rotate prev var1"
                 },
                 Reply = "402-32-11-61-990-802-A"
@@ -55,10 +62,17 @@ public class ScriptExecutor : MonoBehaviour
                 Programs = new[]
                 {
                     "ExtractNumbers query",
-                    "FilterIds prev var1",
-                    "Filter3DAttr name prev root",
-                    "Filter3DAttr type figure prev",
+                    "Save2Var prev var1",
+                    "ExtractID query",
+                    "Save2Var prev var2",
+                    "FilterType task root",
+                    "FilterType subtask prev",
+                    "FilterAttr subtaskId CurrentSubtaskId prev",
                     "Unique prev",
+                    "QueryAttr figure prev",
+                    "3DFilterAttr name prev",
+                    "Unique prev",
+                    "Same var2 prev",
                     "Rotate prev var1"
                 },
                 Reply = "402-32-11-61-990-802-A"
