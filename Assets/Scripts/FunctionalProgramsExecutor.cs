@@ -58,6 +58,7 @@ public class FunctionalProgramsExecutor
             catch (Exception e)
             {
                 Debug.LogError(e.Message);
+                Debug.LogError(e.StackTrace);
                 output = "Error: Could not execute programs";
                 return output;
             }

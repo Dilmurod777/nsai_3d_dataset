@@ -39,47 +39,22 @@ namespace Catalogs
             }
         }
         
-        public List<string> FilterIds(string args)
-        {
-            var argsList = args.Split(GeneralConstants.ArgsSeparator);
-            var prev = Context.GetAttribute(argsList[0]);
-            var varName = argsList[1];
-
-            var ids = new List<string>();
-            var rest = new List<string>();
-            foreach (var number in prev)
-            {
-                if (Regex.IsMatch(number, @"((\d|-)+[A-Z]+|(\[\d+\]))", RegexOptions.IgnoreCase))
-                {
-                    ids.Add(number);
-                }
-                else
-                {
-                    rest.Add(number);
-                }
-            }
-
-            switch (varName)
-            {
-                case "var1":
-                    Context.Instance.Var1 = rest;
-                    break;
-                case "var2":
-                    Context.Instance.Var2 = rest;
-                    break;
-            }
-
-            return ids;
-        }
-        
         public List<GameObject> Filter3DAttr(string args)
         {
             var argsList = args.Split(GeneralConstants.ArgsSeparator);
             var attrName = argsList[0];
             var prev = Context.HasAttribute(argsList[1]) ? Context.GetAttribute(argsList[1]) : argsList[1];
-            var parent = Context.GetAttribute(argsList[2]);
+            var parent = new List<GameObject>();
+            if (argsList[2] != "root")
+            {
+                parent = Context.GetAttribute(argsList[2]);
+            }
 
-
+            if (prev.GetType() == "".GetType())
+            {
+                prev = new List<string> {prev};
+            }
+            
             var allObjects = new List<GameObject>();
             switch (attrName)
             {
@@ -144,7 +119,7 @@ namespace Catalogs
             return foundFigs;
         }
         
-        public Response Rotate(string args) 
+        public Response Rotate(string args)
         {
             var argsList = args.Split(GeneralConstants.ArgsSeparator);
             GameObject obj = Context.GetAttribute(argsList[0]);

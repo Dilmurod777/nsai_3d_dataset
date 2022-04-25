@@ -66,12 +66,6 @@ namespace Catalogs
         {
             return _actionsCatalog3D.Visibility(args);
         }
-
-        public List<string> FilterIds(string args)
-        {
-            return _actionsCatalog3D.FilterIds(args);
-        }
-
         public List<GameObject> Filter3DAttr(string args)
         {
             return _actionsCatalog3D.Filter3DAttr(args);
@@ -97,14 +91,19 @@ namespace Catalogs
             return _generalCatalog.Unique(args);
         }
 
-        public string[] ExtractNumbers(string value)
+        public List<string> ExtractNumbers(string value)
         {
             return _generalCatalog.ExtractNumbers(value);
         }
 
-        public string ExtractID(string args)
+        public List<string> ExtractID(string args)
         {
             return _generalCatalog.ExtractID(args);
+        }
+
+        public string Same(string args)
+        {
+            return _generalCatalog.Same(args);
         }
     }
 }
