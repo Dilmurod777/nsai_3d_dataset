@@ -1,14 +1,17 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using Constants;
+using SimpleJSON;
 using UnityEngine;
 
 namespace Catalogs
 {
-    public class Catalog : IGeneralCatalogInterface, IActionsCatalog3DInterface
+    public class Catalog : IGeneralCatalogInterface, IActionsCatalog3DInterface, IKnowledgeCatalogInterface
     {
         private static Catalog _instance;
         private readonly ActionsCatalog3D _actionsCatalog3D;
         private readonly GeneralCatalog _generalCatalog;
+        private readonly KnowledgeCatalog _knowledgeCatalog;
 
         private Catalog()
         {
@@ -110,6 +113,26 @@ namespace Catalogs
         public string Same(string args)
         {
             return _generalCatalog.Same(args);
+        }
+
+        public List<JSONNode> FilterAttr(string attr, string attrValue, List<JSONNode> dataObjects)
+        {
+            return _knowledgeCatalog.FilterAttr(attr, attrValue, dataObjects);
+        }
+
+        public List<JSONNode> FilterType(string type, List<JSONNode> dataObjects)
+        {
+            return _knowledgeCatalog.FilterType(type, dataObjects);
+        }
+
+        public string QueryAttr(string attr, JSONNode dataObject)
+        {
+            return _knowledgeCatalog.QueryAttr(attr, dataObject);
+        }
+
+        public string ShowInfo(List<JSONNode> dataObjects)
+        {
+            return _knowledgeCatalog.ShowInfo(dataObjects);
         }
     }
 }
