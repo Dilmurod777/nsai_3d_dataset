@@ -392,11 +392,11 @@ namespace Catalogs
 		public Response Attach(string args)
 		{
 			var argsList = args.Split(GeneralConstants.ArgsSeparator);
-			var objs = Context.GetAttribute(argsList[0]);
+			List<GameObject> objs = Context.GetAttribute(argsList[0]);
 
-			List<IEnumerator> routines = new List<IEnumerator>();
+			var routines = new List<IEnumerator>();
 
-			var figureName = "402-32-11-61-990-802-A";
+			var figureName = Context.Instance.CurrentFigureID;
 			var figureRfmName = figureName + "-RFM";
 			var figureIfmName = figureName + "-IFM";
 
@@ -404,16 +404,16 @@ namespace Catalogs
 			var rfm = GameObject.Find(figureRfmName);
 			var ifm = GameObject.Find(figureIfmName);
 
-			GameObject attachingObj = objs[0];
-			GameObject referenceObj = objs[1];
-
+			var attachingObj = objs[0];
+			var referenceObj = objs[1];
+			
 			if (!ScriptExecutor.IsScattered)
 			{
 				ScatterObjects(figure);
 			}
 
-			GameObject rfmAttachingObj = HelperFunctions.FindObjectInFigure(rfm, objs[0].name);
-			GameObject rfmReferenceObj = HelperFunctions.FindObjectInFigure(rfm, objs[1].name);
+			var rfmAttachingObj = HelperFunctions.FindObjectInFigure(rfm, objs[0].name);
+			var rfmReferenceObj = HelperFunctions.FindObjectInFigure(rfm, objs[1].name);
 			var rmfReferenceObjPosition = rfmReferenceObj.transform.position;
 			var rmfAttachingObjPosition = rfmAttachingObj.transform.position;
 			var referenceObjPosition = referenceObj.transform.position;
@@ -423,8 +423,8 @@ namespace Catalogs
 			    rmfAttachingObjPosition.z - rmfReferenceObjPosition.z + referenceObjPosition.z
 			);
 			
-			GameObject ifmAttachingObj = HelperFunctions.FindObjectInFigure(ifm, objs[0].name);
-			GameObject ifmReferenceObj = HelperFunctions.FindObjectInFigure(ifm, objs[1].name);
+			var ifmAttachingObj = HelperFunctions.FindObjectInFigure(ifm, objs[0].name);
+			var ifmReferenceObj = HelperFunctions.FindObjectInFigure(ifm, objs[1].name);
 			var imfReferenceObjPosition = ifmReferenceObj.transform.position;
 			var imfAttachingObjPosition = ifmAttachingObj.transform.position;
 			var ifmFinalPosition = new Vector3(
