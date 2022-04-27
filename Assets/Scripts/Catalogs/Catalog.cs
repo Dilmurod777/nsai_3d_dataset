@@ -66,6 +66,12 @@ namespace Catalogs
         {
             return _actionsCatalog3D.Visibility(args);
         }
+
+        public Response Attach(string args)
+        {
+            return _actionsCatalog3D.Attach(args);
+        }
+
         public List<GameObject> Filter3DAttr(string args)
         {
             return _actionsCatalog3D.Filter3DAttr(args);

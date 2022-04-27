@@ -64,8 +64,23 @@ public class HelperFunctions : MonoBehaviour
                 return "Showing close look of ";
             case "side by side look":
                 return "Showing side by side look of";
+            case "attach":
+                return "Attaching";
             default:
                 return "Doing";
         }
+    }
+
+    public static GameObject FindObjectInFigure(GameObject figure, string name)
+    {
+        foreach (Transform child in figure.transform)
+        {
+            if (child.name.Contains(name))
+            {
+                return child.gameObject;
+            }
+        }
+
+        return null;
     }
 }
