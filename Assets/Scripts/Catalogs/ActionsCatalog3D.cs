@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Constants;
 using UnityEngine;
+using Action = Constants.Action;
 using Random = UnityEngine.Random;
 
 namespace Catalogs
@@ -22,6 +23,8 @@ namespace Catalogs
 		Response Animate(string args);
 		Response Visibility(string args);
 		Response Attach(string args);
+		List<Action> CreateActions(string args);
+		string CheckActionsValidity(string args);
 	}
 
 	public class ActionsCatalog3D : MonoBehaviour, IActionsCatalog3DInterface
@@ -388,69 +391,112 @@ namespace Catalogs
 				{"extra", state}
 			}, objs, new Dictionary<string, dynamic>());
 		}
-
-		public void Scatter(string args)
-		{
-			var figureName = Context.Instance.CurrentFigureID;
-			var figure = GameObject.Find(figureName);
-			ScatterObjects(figure);
-		}
 		
 		public Response Attach(string args)
 		{
 			var argsList = args.Split(GeneralConstants.ArgsSeparator);
-			List<GameObject> objs = Context.GetAttribute(argsList[0]);
+			var valid = Context.GetAttribute(argsList[0]) == "yes";
 
-			var routines = new List<IEnumerator>();
+			if (!valid) return null;
 
-			var figureName = Context.Instance.CurrentFigureID;
-			var figureRfmName = figureName + "-RFM";
-			var figureIfmName = figureName + "-IFM";
-
-			var figure = GameObject.Find(figureName);
-			var rfm = GameObject.Find(figureRfmName);
-			var ifm = GameObject.Find(figureIfmName);
-
-			var objA = objs[0];
-			var objB = objs[1];
+			List<Action> actionsList = Context.GetAttribute(argsList[1]);
 			
-			if (!ScriptExecutor.IsScattered)
+			foreach (var action in actionsList)
 			{
-				ScatterObjects(figure);
+				if (action.Name == "attach")
+				{
+					var routines = new List<IEnumerator>();
+					
+					var figureName = Context.Instance.CurrentFigureID;
+					var figureRfmName = figureName + "-RFM";
+					var figureIfmName = figureName + "-IFM";
+
+					var figure = GameObject.Find(figureName);
+					var rfm = GameObject.Find(figureRfmName);
+					var ifm = GameObject.Find(figureIfmName);
+
+					var objA = HelperFunctions.FindObjectInFigure(figure, action.Components[0]);
+					var objB = HelperFunctions.FindObjectInFigure(figure, action.Components[1]);
+					
+					if (!ScriptExecutor.IsScattered)
+					{
+						ScatterObjects(figure);
+					}
+
+					var rfmReferenceObjA = rfm.transform.Find(objA.name).gameObject;
+					var rfmReferenceObjB = rfm.transform.Find(objB.name).gameObject;
+					var rfmReferenceObjAPosition = rfmReferenceObjA.transform.position;
+					var rfmReferenceObjBPosition = rfmReferenceObjB.transform.position;
+					var objBPosition = objB.transform.position;
+					var rfmFinalPosition = new Vector3(
+						rfmReferenceObjAPosition.x - rfmReferenceObjBPosition.x + objBPosition.x,
+						rfmReferenceObjAPosition.y - rfmReferenceObjBPosition.y + objBPosition.y,
+						rfmReferenceObjAPosition.z - rfmReferenceObjBPosition.z + objBPosition.z
+					);
+			
+					var ifmReferenceObjA = ifm.transform.Find(objA.name).gameObject;
+					var ifmReferenceObjB = ifm.transform.Find(objB.name).gameObject;
+					var ifmReferenceObjAPosition = ifmReferenceObjA.transform.position;
+					var ifmReferenceObjBPosition = ifmReferenceObjB.transform.position;
+					var ifmFinalPosition = new Vector3(
+						ifmReferenceObjAPosition.x - ifmReferenceObjBPosition.x + objBPosition.x,
+						ifmReferenceObjAPosition.y - ifmReferenceObjBPosition.y + objBPosition.y,
+						ifmReferenceObjAPosition.z - ifmReferenceObjBPosition.z + objBPosition.z
+					);
+			
+					routines.Add(IRotateObject(objA, Quaternion.identity, 1.0f));
+					routines.Add(IRotateObject(objB, Quaternion.identity, 1.0f));
+					routines.Add(IMoveObject(objA, rfmFinalPosition, 1.0f));	
+					routines.Add(IMoveObject(objA, ifmFinalPosition, 1.0f));
+					routines.Add(IAdjustStructure(objA, objB));
+			
+					StartCoroutine(Sequence(routines, 1.0f));
+					
+					return new Response(new Dictionary<string, dynamic>
+					{
+						{"name", "attach"}
+					}, new List<GameObject>{objA, objB}, new Dictionary<string, dynamic>());
+				}
 			}
 
-			var rfmReferenceObjA = rfm.transform.Find(objA.name).gameObject;
-			var rfmReferenceObjB = rfm.transform.Find(objB.name).gameObject;
-			var rfmReferenceObjAPosition = rfmReferenceObjA.transform.position;
-			var rfmReferenceObjBPosition = rfmReferenceObjB.transform.position;
-			var objBPosition = objB.transform.position;
-			var rfmFinalPosition = new Vector3(
-			    rfmReferenceObjAPosition.x - rfmReferenceObjBPosition.x + objBPosition.x,
-			    rfmReferenceObjAPosition.y - rfmReferenceObjBPosition.y + objBPosition.y,
-			    rfmReferenceObjAPosition.z - rfmReferenceObjBPosition.z + objBPosition.z
-			);
-			
-			var ifmReferenceObjA = ifm.transform.Find(objA.name).gameObject;
-			var ifmReferenceObjB = ifm.transform.Find(objB.name).gameObject;
-			var ifmReferenceObjAPosition = ifmReferenceObjA.transform.position;
-			var ifmReferenceObjBPosition = ifmReferenceObjB.transform.position;
-			var ifmFinalPosition = new Vector3(
-			    ifmReferenceObjAPosition.x - ifmReferenceObjBPosition.x + objBPosition.x,
-			    ifmReferenceObjAPosition.y - ifmReferenceObjBPosition.y + objBPosition.y,
-			    ifmReferenceObjAPosition.z - ifmReferenceObjBPosition.z + objBPosition.z
-			);
-			
-			routines.Add(IRotateObject(objA, objB.transform.rotation, 1.0f));
-			routines.Add(IMoveObject(objA, rfmFinalPosition, 1.0f));	
-			routines.Add(IMoveObject(objA, ifmFinalPosition, 1.0f));
-			routines.Add(IAdjustStructure(objA, objB));
-			
-			StartCoroutine(Sequence(routines, 1.0f));
+			return null;
+		}
 
-			return new Response(new Dictionary<string, dynamic>
+		public List<Action> CreateActions(string args)
+		{
+			var argsList = args.Split(GeneralConstants.ArgsSeparator);
+			var actionType = argsList[0];
+			var refSpecified = argsList[1]; // always true for now
+			List<string> idList = Context.GetAttribute(argsList[2]);
+
+			var actionsList = new List<Action>();
+
+			if (refSpecified == "yes")
 			{
-				{"name", "attach"}
-			}, objs, new Dictionary<string, dynamic>());
+				var referenceId = idList[idList.Count - 1];
+
+				for (var i = 0; i < idList.Count - 1; i++)
+				{
+						actionsList.Add(new Action
+						{
+							Name = actionType,
+							Components = new List<string>{idList[i], referenceId}
+						});
+				}
+			}
+
+			return actionsList;
+		}
+
+		public string CheckActionsValidity(string args)
+		{
+			var argsList = args.Split(GeneralConstants.ArgsSeparator);
+			List<Action> a = Context.GetAttribute(argsList[0]);
+			List<Action> b = Context.GetAttribute(argsList[1]);
+			
+			// comparison logic
+			
+			return "yes";
 		}
 
 		private static void ScatterObjects(GameObject figure)
@@ -548,17 +594,26 @@ namespace Catalogs
 
 			DestroyCloneObjects();
 
-			for(var i=0; i< obj.transform.childCount; i++)
+			foreach(var o in obj.transform.GetComponentsInChildren<Transform>())
 			{
-				var o = obj.transform.GetChild(i);
 				var oTransform = o.transform;
-				o.GetComponent<MeshRenderer>().enabled = true;
-				
-				var attr = Context.Instance.InitialAttributes[obj.name + GeneralConstants.ArgsSeparator + o.name];
-				oTransform.rotation = attr.Rotation;
-				oTransform.position = attr.Position;
-				oTransform.localScale = attr.Scale;
+				var meshRenderer = o.GetComponent<MeshRenderer>();
+				if (meshRenderer != null)
+				{
+					o.GetComponent<MeshRenderer>().enabled = true;
+				}
+
+				if (Context.Instance.InitialAttributes.ContainsKey(obj.name + GeneralConstants.ArgsSeparator + o.name))
+				{
+					var attr = Context.Instance.InitialAttributes[obj.name + GeneralConstants.ArgsSeparator + o.name];
+					oTransform.rotation = attr.Rotation;
+					oTransform.position = attr.Position;
+					oTransform.localScale = attr.Scale;
+				}
+				o.transform.parent = obj.transform;
 			}
+
+			ScriptExecutor.IsScattered = false;
 
 			float counter = 0;
 			while (counter < duration)
@@ -571,8 +626,6 @@ namespace Catalogs
 
 				yield return null;
 			}
-
-			ScriptExecutor.IsInAction = false;
 		}
 
 		private static IEnumerator IAdjustStructure(GameObject objA, GameObject objB, float duration = 0.1f)

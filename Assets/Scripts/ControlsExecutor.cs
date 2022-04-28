@@ -11,4 +11,9 @@ public class ControlsExecutor: MonoBehaviour
 	{
 		ScriptExecutor.NextInstruction();
 	}
+
+	public void ExecuteClickHandler()
+	{
+		ScriptExecutor.ExecuteQuery();
+	}
 }

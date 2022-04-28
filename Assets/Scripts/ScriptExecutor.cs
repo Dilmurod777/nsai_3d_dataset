@@ -11,6 +11,7 @@ public class ScriptExecutor : MonoBehaviour
     private static Text _queryText;
     private static Text _replyText;
     private static Text _programsText;
+    private static Text _knowledgeText;
 
     private static List<QueryMeta> _queryMetas;
     private static int _currentQueryMetaId;
@@ -31,6 +32,9 @@ public class ScriptExecutor : MonoBehaviour
                     break;
                 case "ReplyText":
                     _replyText = textObj;
+                    break;
+                case "KnowledgeText":
+                    _knowledgeText = textObj;
                     break;
             }
         }
@@ -85,17 +89,23 @@ public class ScriptExecutor : MonoBehaviour
         // execute
         if (Input.GetKeyDown(KeyCode.E))
         {
-            var currentQueryMeta = _queryMetas[_currentQueryMetaId];
-            
-            _queryText.text = currentQueryMeta.Query;
-            _programsText.text = string.Join("\n", currentQueryMeta.Programs);
-
-            var result = FunctionalProgramsExecutor.Instance.Execute(currentQueryMeta);
-            print($"result: {result}");
-            _replyText.text = result;
+            ExecuteQuery();
         }
     }
 
+    public static void ExecuteQuery()
+    {
+        var currentQueryMeta = _queryMetas[_currentQueryMetaId];
+            
+        _queryText.text = currentQueryMeta.Query;
+        _programsText.text = string.Join("\n", currentQueryMeta.Programs);
+        _knowledgeText.text = currentQueryMeta.Knowledge;
+
+        var result = FunctionalProgramsExecutor.Instance.Execute(currentQueryMeta);
+        print($"result: {result}");
+        _replyText.text = result;
+    }
+    
     public static void NextInstruction()
     {
         _currentQueryMetaId += 1;

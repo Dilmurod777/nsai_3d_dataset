@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Data;
 using Constants;
 using SimpleJSON;
 using UnityEngine;
+using Action = Constants.Action;
 
 namespace Catalogs
 {
@@ -73,6 +73,16 @@ namespace Catalogs
         public Response Attach(string args)
         {
             return _actionsCatalog3D.Attach(args);
+        }
+
+        public List<Action> CreateActions(string args)
+        {
+            return _actionsCatalog3D.CreateActions(args);
+        }
+
+        public string CheckActionsValidity(string args)
+        {
+            return _actionsCatalog3D.CheckActionsValidity(args);
         }
 
         public List<GameObject> Filter3DAttr(string args)

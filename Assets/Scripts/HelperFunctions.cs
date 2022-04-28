@@ -73,7 +73,7 @@ public class HelperFunctions : MonoBehaviour
 
     public static GameObject FindObjectInFigure(GameObject figure, string name)
     {
-        foreach (Transform child in figure.transform)
+        foreach (var child in figure.transform.GetComponentsInChildren<Transform>())
         {
             if (child.name.Contains(name))
             {
