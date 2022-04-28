@@ -73,7 +73,7 @@ namespace Catalogs
 					{
 						foreach (var obj in parent)
 						{
-							if (((GameObject) obj).CompareTag("Figure"))
+							if (obj.CompareTag("Figure"))
 							{
 								allObjects.Add(obj);
 							}
@@ -82,7 +82,7 @@ namespace Catalogs
 
 					break;
 			}
-
+			
 			return allObjects;
 		}
 
@@ -97,8 +97,8 @@ namespace Catalogs
 
 			var foundObs = new List<GameObject>();
 
-			foreach (var obj in allObjects)
 			foreach (var id in ids)
+			foreach (var obj in allObjects)
 				if (obj.name.Contains($"{id}"))
 					foundObs.Add(obj);
 
@@ -389,6 +389,13 @@ namespace Catalogs
 			}, objs, new Dictionary<string, dynamic>());
 		}
 
+		public void Scatter(string args)
+		{
+			var figureName = Context.Instance.CurrentFigureID;
+			var figure = GameObject.Find(figureName);
+			ScatterObjects(figure);
+		}
+		
 		public Response Attach(string args)
 		{
 			var argsList = args.Split(GeneralConstants.ArgsSeparator);
@@ -404,39 +411,39 @@ namespace Catalogs
 			var rfm = GameObject.Find(figureRfmName);
 			var ifm = GameObject.Find(figureIfmName);
 
-			var attachingObj = objs[0];
-			var referenceObj = objs[1];
+			var objA = objs[0];
+			var objB = objs[1];
 			
 			if (!ScriptExecutor.IsScattered)
 			{
 				ScatterObjects(figure);
 			}
 
-			var rfmAttachingObj = HelperFunctions.FindObjectInFigure(rfm, objs[0].name);
-			var rfmReferenceObj = HelperFunctions.FindObjectInFigure(rfm, objs[1].name);
-			var rmfReferenceObjPosition = rfmReferenceObj.transform.position;
-			var rmfAttachingObjPosition = rfmAttachingObj.transform.position;
-			var referenceObjPosition = referenceObj.transform.position;
+			var rfmReferenceObjA = rfm.transform.Find(objA.name).gameObject;
+			var rfmReferenceObjB = rfm.transform.Find(objB.name).gameObject;
+			var rfmReferenceObjAPosition = rfmReferenceObjA.transform.position;
+			var rfmReferenceObjBPosition = rfmReferenceObjB.transform.position;
+			var objBPosition = objB.transform.position;
 			var rfmFinalPosition = new Vector3(
-			    rmfAttachingObjPosition.x - rmfReferenceObjPosition.x + referenceObjPosition.x,
-			    rmfAttachingObjPosition.y - rmfReferenceObjPosition.y + referenceObjPosition.y,
-			    rmfAttachingObjPosition.z - rmfReferenceObjPosition.z + referenceObjPosition.z
+			    rfmReferenceObjAPosition.x - rfmReferenceObjBPosition.x + objBPosition.x,
+			    rfmReferenceObjAPosition.y - rfmReferenceObjBPosition.y + objBPosition.y,
+			    rfmReferenceObjAPosition.z - rfmReferenceObjBPosition.z + objBPosition.z
 			);
 			
-			var ifmAttachingObj = HelperFunctions.FindObjectInFigure(ifm, objs[0].name);
-			var ifmReferenceObj = HelperFunctions.FindObjectInFigure(ifm, objs[1].name);
-			var imfReferenceObjPosition = ifmReferenceObj.transform.position;
-			var imfAttachingObjPosition = ifmAttachingObj.transform.position;
+			var ifmReferenceObjA = ifm.transform.Find(objA.name).gameObject;
+			var ifmReferenceObjB = ifm.transform.Find(objB.name).gameObject;
+			var ifmReferenceObjAPosition = ifmReferenceObjA.transform.position;
+			var ifmReferenceObjBPosition = ifmReferenceObjB.transform.position;
 			var ifmFinalPosition = new Vector3(
-			    imfAttachingObjPosition.x - imfReferenceObjPosition.x + referenceObjPosition.x,
-			    imfAttachingObjPosition.y - imfReferenceObjPosition.y + referenceObjPosition.y,
-			    imfAttachingObjPosition.z - imfReferenceObjPosition.z + referenceObjPosition.z
+			    ifmReferenceObjAPosition.x - ifmReferenceObjBPosition.x + objBPosition.x,
+			    ifmReferenceObjAPosition.y - ifmReferenceObjBPosition.y + objBPosition.y,
+			    ifmReferenceObjAPosition.z - ifmReferenceObjBPosition.z + objBPosition.z
 			);
 			
-			routines.Add(IRotateObject(attachingObj, referenceObj.transform.rotation, 1.0f));
-			routines.Add(IMoveObject(attachingObj, rfmFinalPosition, 1.0f));
-			routines.Add(IMoveObject(attachingObj, ifmFinalPosition, 1.0f));
-			routines.Add(IAdjustStructure(attachingObj, referenceObj));
+			routines.Add(IRotateObject(objA, objB.transform.rotation, 1.0f));
+			routines.Add(IMoveObject(objA, rfmFinalPosition, 1.0f));	
+			routines.Add(IMoveObject(objA, ifmFinalPosition, 1.0f));
+			routines.Add(IAdjustStructure(objA, objB));
 			
 			StartCoroutine(Sequence(routines, 1.0f));
 
@@ -570,6 +577,8 @@ namespace Catalogs
 
 		private static IEnumerator IAdjustStructure(GameObject objA, GameObject objB, float duration = 0.1f)
 		{
+			objA.transform.parent = objB.transform;
+			
 			float elapsedTime = 0;
 			while (elapsedTime <= duration)
 			{

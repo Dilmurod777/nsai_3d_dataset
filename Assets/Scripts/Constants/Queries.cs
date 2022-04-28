@@ -400,7 +400,7 @@ namespace Constants
 				},
 				new QueryMeta
 				{
-					Query = "Attach objects [8], [41]",
+					Query = "Attach objects [41], [8]",
 					Programs = new[]
 					{
 						"ExtractNumbers query",
@@ -417,7 +417,28 @@ namespace Constants
 						"Filter3DAttr name prev root",
 						"Attach prev"
 					},
-					Reply = "[8], [41]"
+					Reply = "[41], [8]"
+				},
+				new QueryMeta
+				{
+					Query = "Attach objects [45], [8]",
+					Programs = new[]
+					{
+						"ExtractNumbers query",
+						"SaveVal2Var prev var1",
+						"ExtractID object query",
+						"SaveVal2Var prev var2",
+						// "FilterType task root",
+						// "FilterType subtask prev",
+						// "FilterAttr subtaskId CurrentSubtaskId prev",
+						// "Unique prev",
+						// "QueryAttr figure prev",
+						// "3DFilterAttr name prev",
+						// "Unique prev",
+						"Filter3DAttr name prev root",
+						"Attach prev"
+					},
+					Reply = "402-32-11-61-990-802-A"
 				},
 				new QueryMeta
 				{
@@ -442,7 +463,49 @@ namespace Constants
 				},
 				new QueryMeta
 				{
-					Query = "Attach objects [8], [45]",
+					Query = "Attach objects [46], [8]",
+					Programs = new[]
+					{
+						"ExtractNumbers query",
+						"SaveVal2Var prev var1",
+						"ExtractID object query",
+						"SaveVal2Var prev var2",
+						// "FilterType task root",
+						// "FilterType subtask prev",
+						// "FilterAttr subtaskId CurrentSubtaskId prev",
+						// "Unique prev",
+						// "QueryAttr figure prev",
+						// "3DFilterAttr name prev",
+						// "Unique prev",
+						"Filter3DAttr name prev root",
+						"Attach prev"
+					},
+					Reply = "402-32-11-61-990-802-A"
+				},
+				new QueryMeta
+				{
+					Query = "Attach objects [43], [46]",
+					Programs = new[]
+					{
+						"ExtractNumbers query",
+						"SaveVal2Var prev var1",
+						"ExtractID object query",
+						"SaveVal2Var prev var2",
+						// "FilterType task root",
+						// "FilterType subtask prev",
+						// "FilterAttr subtaskId CurrentSubtaskId prev",
+						// "Unique prev",
+						// "QueryAttr figure prev",
+						// "3DFilterAttr name prev",
+						// "Unique prev",
+						"Filter3DAttr name prev root",
+						"Attach prev"
+					},
+					Reply = "402-32-11-61-990-802-A"
+				},
+				new QueryMeta
+				{
+					Query = "Attach objects [42], [46]",
 					Programs = new[]
 					{
 						"ExtractNumbers query",
