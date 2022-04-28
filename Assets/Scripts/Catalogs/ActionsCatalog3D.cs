@@ -418,10 +418,10 @@ namespace Catalogs
 					var objA = HelperFunctions.FindObjectInFigure(figure, action.Components[0]);
 					var objB = HelperFunctions.FindObjectInFigure(figure, action.Components[1]);
 					
-					if (!ScriptExecutor.IsScattered)
-					{
-						ScatterObjects(figure);
-					}
+					// if (!ScriptExecutor.IsScattered)
+					// {
+					// 	ScatterObjects(figure);
+					// }
 
 					var rfmReferenceObjA = rfm.transform.Find(objA.name).gameObject;
 					var rfmReferenceObjB = rfm.transform.Find(objB.name).gameObject;
@@ -444,8 +444,8 @@ namespace Catalogs
 						ifmReferenceObjAPosition.z - ifmReferenceObjBPosition.z + objBPosition.z
 					);
 			
-					routines.Add(IRotateObject(objA, Quaternion.identity, 1.0f));
-					routines.Add(IRotateObject(objB, Quaternion.identity, 1.0f));
+					routines.Add(IRotateObject(objA, objB.transform.rotation, 1.0f));
+					// routines.Add(IRotateObject(objB,Quaternion.Euler(0, 0, 0), 1.0f));
 					routines.Add(IMoveObject(objA, rfmFinalPosition, 1.0f));	
 					routines.Add(IMoveObject(objA, ifmFinalPosition, 1.0f));
 					routines.Add(IAdjustStructure(objA, objB));
