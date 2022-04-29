@@ -423,29 +423,25 @@ namespace Catalogs
 					// 	ScatterObjects(figure);
 					// }
 
-					var rfmReferenceObjA = rfm.transform.Find(objA.name).gameObject;
-					var rfmReferenceObjB = rfm.transform.Find(objB.name).gameObject;
+					var rfmReferenceObjA = HelperFunctions.FindObjectInFigure(rfm, objA.name);
+					var rfmReferenceObjB = HelperFunctions.FindObjectInFigure(rfm, objB.name);
 					var rfmReferenceObjAPosition = rfmReferenceObjA.transform.position;
 					var rfmReferenceObjBPosition = rfmReferenceObjB.transform.position;
-					var objBPosition = objB.transform.position;
-					var rfmFinalPosition = new Vector3(
-						rfmReferenceObjAPosition.x - rfmReferenceObjBPosition.x + objBPosition.x,
-						rfmReferenceObjAPosition.y - rfmReferenceObjBPosition.y + objBPosition.y,
-						rfmReferenceObjAPosition.z - rfmReferenceObjBPosition.z + objBPosition.z
-					);
+					
+					var diff = rfmReferenceObjAPosition - rfmReferenceObjBPosition;
+
+					var rfmFinalPosition = objB.transform.TransformPoint(diff);
 			
-					var ifmReferenceObjA = ifm.transform.Find(objA.name).gameObject;
-					var ifmReferenceObjB = ifm.transform.Find(objB.name).gameObject;
+					var ifmReferenceObjA = HelperFunctions.FindObjectInFigure(ifm, objA.name);
+					var ifmReferenceObjB = HelperFunctions.FindObjectInFigure(ifm, objB.name);
 					var ifmReferenceObjAPosition = ifmReferenceObjA.transform.position;
 					var ifmReferenceObjBPosition = ifmReferenceObjB.transform.position;
-					var ifmFinalPosition = new Vector3(
-						ifmReferenceObjAPosition.x - ifmReferenceObjBPosition.x + objBPosition.x,
-						ifmReferenceObjAPosition.y - ifmReferenceObjBPosition.y + objBPosition.y,
-						ifmReferenceObjAPosition.z - ifmReferenceObjBPosition.z + objBPosition.z
-					);
+					
+					diff = ifmReferenceObjAPosition - ifmReferenceObjBPosition;
+					
+					var ifmFinalPosition = objB.transform.TransformPoint(diff);
 			
 					routines.Add(IRotateObject(objA, objB.transform.rotation, 1.0f));
-					// routines.Add(IRotateObject(objB,Quaternion.Euler(0, 0, 0), 1.0f));
 					routines.Add(IMoveObject(objA, rfmFinalPosition, 1.0f));	
 					routines.Add(IMoveObject(objA, ifmFinalPosition, 1.0f));
 					routines.Add(IAdjustStructure(objA, objB));
