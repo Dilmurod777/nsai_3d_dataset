@@ -125,11 +125,6 @@ public class Testing : MonoBehaviour
 		var rfm = GameObject.Find(figureRfmName);
 		var ifm = GameObject.Find(figureIfmName);
 
-		if (!IsInitialized)
-		{
-			
-		}
-
 		var objA = HelperFunctions.FindObjectInFigure(figure, action.Components[0]);
 		var objB = HelperFunctions.FindObjectInFigure(figure, action.Components[1]);
 
@@ -137,7 +132,6 @@ public class Testing : MonoBehaviour
 		var rfmReferenceObjB = rfm.transform.Find(objB.name).gameObject;
 		var rfmReferenceObjAPosition = rfmReferenceObjA.transform.position;
 		var rfmReferenceObjBPosition = rfmReferenceObjB.transform.position;
-		var objBPosition = objB.transform.position;
 		var objBRotation = objB.transform.rotation;
 		
 		var diff = rfmReferenceObjAPosition - rfmReferenceObjBPosition;

@@ -75,7 +75,7 @@ public class HelperFunctions : MonoBehaviour
     {
         foreach (var child in figure.transform.GetComponentsInChildren<Transform>())
         {
-            if (child.name.Contains(name))
+            if (child.name.Contains(name) || child.name.Equals(name))
             {
                 return child.gameObject;
             }
