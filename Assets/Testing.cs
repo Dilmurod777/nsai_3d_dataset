@@ -1,16 +1,26 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
+using System.Text.RegularExpressions;
 using UnityEngine;
+using UnityEngine.UI;
 using Action = Constants.Action;
 
 public class Testing : MonoBehaviour
 {
 	private List<Action> _actions;
 	private int _activeIndex;
-
+	private GameObject _figure, _rfm, _ifm;
+	private List<string> ifmHierarchy;
+	private bool _isTheSame;
+	
+	private Image _isCompleteIndicatorPanel;
 	public static bool IsInitialized = false;
+
+	
+	public Testing(List<string> ifmHierarchy)
+	{
+		this.ifmHierarchy = ifmHierarchy;
+	}
 
 	private IEnumerator Sequence(List<IEnumerator> coroutines, float delay = 0.0f)
 	{
@@ -30,6 +40,30 @@ public class Testing : MonoBehaviour
 			yield return null;
 		}
 	}
+
+	private IEnumerator CheckIsFigureComplete()
+	{
+		var figureHierarchy = CreateHierarchy(_figure);
+
+		_isTheSame = true;
+		for (var i = 0; i < ifmHierarchy.Count; i++)
+		{
+			if (figureHierarchy.Contains(ifmHierarchy[i])) continue;
+			_isTheSame = false;
+			break;
+		}
+
+		if (_isTheSame)
+		{
+			_isCompleteIndicatorPanel.color = Color.green;
+		}else
+		{
+			_isCompleteIndicatorPanel.color = Color.red;
+		}
+		
+		yield return null;
+	}
+	
 
 	private static IEnumerator IMoveObject(GameObject obj, Vector3 finalPosition, float duration=1.0f, bool isLocal = false)
 	{
@@ -81,11 +115,29 @@ public class Testing : MonoBehaviour
 		ScriptExecutor.IsInAction = false;
 	}
 
-	private List<string> CreateHierarchy(GameObject obj)
+	private List<string> CreateHierarchy(GameObject figure)
 	{
 		var hierarchy = new List<string>();
 
-		
+		var figureName = figure.name;
+		foreach (var child in figure.GetComponentsInChildren<Transform>())
+		{
+			if (child.name == figureName) continue;
+
+			var id = Regex.Match(child.name, @"\d+").Value;
+			
+			if (child.parent.name == figureName)
+			{
+				if (figureName.Contains("-RFM")) figureName = figureName.Replace("-RFM", "");
+				if (figureName.Contains("-IFM")) figureName = figureName.Replace("-IFM", "");
+				hierarchy.Add(figureName + "#" + id);
+			}
+			else
+			{
+				var parentId = Regex.Match(child.parent.name, @"\d+").Value;
+				hierarchy.Add(parentId + "#" + id);
+			}
+		}
 		
 		return hierarchy;
 	}
@@ -102,6 +154,18 @@ public class Testing : MonoBehaviour
 			new Action {Name = "attach", Components = new List<string> {"[43]", "[46]"}},
 			new Action {Name = "attach", Components = new List<string> {"[42]", "[46]"}}
 		};
+		
+		var figureName = "402-32-11-61-990-802-A";
+		var figureRfmName = figureName + "-RFM";
+		var figureIfmName = figureName + "-IFM";
+
+		_figure = GameObject.Find(figureName);
+		_rfm = GameObject.Find(figureRfmName);
+		_ifm = GameObject.Find(figureIfmName);
+
+		ifmHierarchy = CreateHierarchy(_ifm);
+
+		_isCompleteIndicatorPanel = GameObject.Find("IsCompleteIndicator").GetComponent<Image>();
 	}
 
 	private void Update()
@@ -117,19 +181,11 @@ public class Testing : MonoBehaviour
 	{
 		var routines = new List<IEnumerator>();
 
-		var figureName = "402-32-11-61-990-802-A";
-		var figureRfmName = figureName + "-RFM";
-		var figureIfmName = figureName + "-IFM";
+		var objA = HelperFunctions.FindObjectInFigure(_figure, action.Components[0]);
+		var objB = HelperFunctions.FindObjectInFigure(_figure, action.Components[1]);
 
-		var figure = GameObject.Find(figureName);
-		var rfm = GameObject.Find(figureRfmName);
-		var ifm = GameObject.Find(figureIfmName);
-
-		var objA = HelperFunctions.FindObjectInFigure(figure, action.Components[0]);
-		var objB = HelperFunctions.FindObjectInFigure(figure, action.Components[1]);
-
-		var rfmReferenceObjA = rfm.transform.Find(objA.name).gameObject;
-		var rfmReferenceObjB = rfm.transform.Find(objB.name).gameObject;
+		var rfmReferenceObjA = HelperFunctions.FindObjectInFigure(_rfm, objA.name);
+		var rfmReferenceObjB = HelperFunctions.FindObjectInFigure(_rfm, objB.name);
 		var rfmReferenceObjAPosition = rfmReferenceObjA.transform.position;
 		var rfmReferenceObjBPosition = rfmReferenceObjB.transform.position;
 		var objBRotation = objB.transform.rotation;
@@ -138,8 +194,8 @@ public class Testing : MonoBehaviour
 
 		var rfmFinalPosition = objB.transform.TransformPoint(diff);
 
-		var ifmReferenceObjA = ifm.transform.Find(objA.name).gameObject;
-		var ifmReferenceObjB = ifm.transform.Find(objB.name).gameObject;
+		var ifmReferenceObjA = HelperFunctions.FindObjectInFigure(_ifm, objA.name);
+		var ifmReferenceObjB = HelperFunctions.FindObjectInFigure(_ifm, objB.name);
 		var ifmReferenceObjAPosition = ifmReferenceObjA.transform.position;
 		var ifmReferenceObjBPosition = ifmReferenceObjB.transform.position;
 		
@@ -151,6 +207,7 @@ public class Testing : MonoBehaviour
 		routines.Add(IMoveObject(objA, rfmFinalPosition, 1.0f));
 		routines.Add(IMoveObject(objA, ifmFinalPosition, 1.0f));
 		routines.Add(IAdjustStructure(objA, objB));
+		routines.Add(CheckIsFigureComplete());
 
 		StartCoroutine(Sequence(routines, 1.0f));
 	}
