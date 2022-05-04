@@ -413,7 +413,7 @@ namespace Constants
 						// "FilterAttr order CurrentInstructionId prev",
 						// "FilterType actions prev",
 						"CheckActionsValidity var1 prev",
-						"Attach prev var1"
+						"Align prev var1"
 					},
 					Knowledge = "Align the hole in the pushrod [41] with the hole in the strut assembly, lower [8].",
 					Reply = "[41], [8]"
@@ -433,7 +433,7 @@ namespace Constants
 						// "FilterAttr order CurrentInstructionId prev",
 						// "FilterType actions prev",
 						"CheckActionsValidity var1 prev",
-						"Attach prev var1"
+						"StepInstall prev var1"
 					},
 					Knowledge = "Put the bushing [45] through the strut assembly, lower [8], and the pushrod [41].",
 					Reply = "[45], [8]"
@@ -453,7 +453,7 @@ namespace Constants
 						// "FilterAttr order CurrentInstructionId prev",
 						// "FilterType actions prev",
 						"CheckActionsValidity var1 prev",
-						"Attach prev var1"
+						"SmoothInstall prev var1"
 					},
 					Knowledge = "Install the washer [44] on the bolt [46].",
 					Reply = "[44], [46]"
@@ -473,7 +473,7 @@ namespace Constants
 						// "FilterAttr order CurrentInstructionId prev",
 						// "FilterType actions prev",
 						"CheckActionsValidity var1 prev",
-						"Attach prev var1"
+						"SmoothScrew prev var1"
 					},
 					Knowledge = "Put the bolt [46] through the strut assembly, lower [8], and the pushrod [41].",
 					Reply = "[46], [8]"
@@ -493,7 +493,7 @@ namespace Constants
 						// "FilterAttr order CurrentInstructionId prev",
 						// "FilterType actions prev",
 						"CheckActionsValidity var1 prev",
-						"Attach prev var1"
+						"SmoothInstall prev var1"
 					},
 					Knowledge = "Install the washer [43] on the bolt [46].",
 					Reply = "[43], [46]"
@@ -513,7 +513,7 @@ namespace Constants
 						// "FilterAttr order CurrentInstructionId prev",
 						// "FilterType actions prev",
 						"CheckActionsValidity var1 prev",
-						"Attach prev var1"
+						"StepScrew prev var1"
 					},
 					Knowledge = "Install the nut [42] on the bolt [46].",
 					Reply = "[42], [46]"

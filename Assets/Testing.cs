@@ -179,6 +179,8 @@ public class Testing : MonoBehaviour
 
 	private void Attach(Action action)
 	{
+		_isCompleteIndicatorPanel.color = Color.gray;
+		
 		var routines = new List<IEnumerator>();
 
 		var objA = HelperFunctions.FindObjectInFigure(_figure, action.Components[0]);

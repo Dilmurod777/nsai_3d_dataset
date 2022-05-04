@@ -70,9 +70,29 @@ namespace Catalogs
             return _actionsCatalog3D.Visibility(args);
         }
 
-        public Response Attach(string args)
+        public Response SmoothInstall(string args)
         {
-            return _actionsCatalog3D.Attach(args);
+            return _actionsCatalog3D.SmoothInstall(args);
+        }
+        
+        public Response Align(string args)
+        {
+            return _actionsCatalog3D.Align(args);
+        }
+        
+        public Response StepInstall(string args)
+        {
+            return _actionsCatalog3D.StepInstall(args);
+        }
+        
+        public Response SmoothScrew(string args)
+        {
+            return _actionsCatalog3D.SmoothScrew(args);
+        }
+        
+        public Response StepScrew(string args)
+        {
+            return _actionsCatalog3D.StepScrew(args);
         }
 
         public List<Action> CreateActions(string args)

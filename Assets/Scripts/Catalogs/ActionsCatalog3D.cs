@@ -4,8 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Constants;
+using CustomFunctionality;
+using UnityEditor.UIElements;
 using UnityEngine;
 using Action = Constants.Action;
+using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
 namespace Catalogs
@@ -22,7 +25,11 @@ namespace Catalogs
 		Response CloseLook(string args);
 		Response Animate(string args);
 		Response Visibility(string args);
-		Response Attach(string args);
+		Response SmoothInstall(string args);
+		Response Align(string args);
+		Response StepInstall(string args);
+		Response SmoothScrew(string args);
+		Response StepScrew(string args);
 		List<Action> CreateActions(string args);
 		string CheckActionsValidity(string args);
 	}
@@ -391,71 +398,120 @@ namespace Catalogs
 				{"extra", state}
 			}, objs, new Dictionary<string, dynamic>());
 		}
-		
-		public Response Attach(string args)
+
+		public Response SmoothInstall(string args)
 		{
 			var argsList = args.Split(GeneralConstants.ArgsSeparator);
 			var valid = Context.GetAttribute(argsList[0]) == "yes";
-
+			
 			if (!valid) return null;
-
+			
 			List<Action> actionsList = Context.GetAttribute(argsList[1]);
+
+			var action = actionsList[0];
+			var figureID = Context.Instance.CurrentFigureID;
+			var figure = GameObject.Find(figureID);
+			var objA = HelperFunctions.FindObjectInFigure(figure, action.Components[0]);
+			var objB = HelperFunctions.FindObjectInFigure(figure, action.Components[1]);
+
+			StartCoroutine(Attach(figure, objA, objB, GeneralConstants.AttachTypes.SmoothInstall));
 			
-			foreach (var action in actionsList)
+			return new Response(new Dictionary<string, dynamic>
 			{
-				if (action.Name == "attach")
-				{
-					var routines = new List<IEnumerator>();
-					
-					var figureName = Context.Instance.CurrentFigureID;
-					var figureRfmName = figureName + "-RFM";
-					var figureIfmName = figureName + "-IFM";
-
-					var figure = GameObject.Find(figureName);
-					var rfm = GameObject.Find(figureRfmName);
-					var ifm = GameObject.Find(figureIfmName);
-
-					var objA = HelperFunctions.FindObjectInFigure(figure, action.Components[0]);
-					var objB = HelperFunctions.FindObjectInFigure(figure, action.Components[1]);
-					
-					// if (!ScriptExecutor.IsScattered)
-					// {
-					// 	ScatterObjects(figure);
-					// }
-
-					var rfmReferenceObjA = HelperFunctions.FindObjectInFigure(rfm, objA.name);
-					var rfmReferenceObjB = HelperFunctions.FindObjectInFigure(rfm, objB.name);
-					var rfmReferenceObjAPosition = rfmReferenceObjA.transform.position;
-					var rfmReferenceObjBPosition = rfmReferenceObjB.transform.position;
-					
-					var diff = rfmReferenceObjAPosition - rfmReferenceObjBPosition;
-
-					var rfmFinalPosition = objB.transform.TransformPoint(diff);
+				{"name", "attach"}
+			}, new List<GameObject>{objA, objB}, new Dictionary<string, dynamic>());
+		}
+		
+		public Response Align(string args)
+		{
+			var argsList = args.Split(GeneralConstants.ArgsSeparator);
+			var valid = Context.GetAttribute(argsList[0]) == "yes";
 			
-					var ifmReferenceObjA = HelperFunctions.FindObjectInFigure(ifm, objA.name);
-					var ifmReferenceObjB = HelperFunctions.FindObjectInFigure(ifm, objB.name);
-					var ifmReferenceObjAPosition = ifmReferenceObjA.transform.position;
-					var ifmReferenceObjBPosition = ifmReferenceObjB.transform.position;
-					
-					diff = ifmReferenceObjAPosition - ifmReferenceObjBPosition;
-					
-					var ifmFinalPosition = objB.transform.TransformPoint(diff);
+			if (!valid) return null;
 			
-					routines.Add(IRotateObject(objA, objB.transform.rotation, 1.0f));
-					routines.Add(IMoveObject(objA, rfmFinalPosition, 1.0f));	
-					routines.Add(IMoveObject(objA, ifmFinalPosition, 1.0f));
-					routines.Add(IAdjustStructure(objA, objB));
-			
-					StartCoroutine(Sequence(routines, 1.0f));
-					
-					return new Response(new Dictionary<string, dynamic>
-					{
-						{"name", "attach"}
-					}, new List<GameObject>{objA, objB}, new Dictionary<string, dynamic>());
-				}
-			}
+			List<Action> actionsList = Context.GetAttribute(argsList[1]);
 
-			return null;
+			var action = actionsList[0];
+			var figureID = Context.Instance.CurrentFigureID;
+			var figure = GameObject.Find(figureID);
+			var objA = HelperFunctions.FindObjectInFigure(figure, action.Components[0]);
+			var objB = HelperFunctions.FindObjectInFigure(figure, action.Components[1]);
+
+			StartCoroutine(Attach(figure, objA, objB, GeneralConstants.AttachTypes.Align));
+			
+			return new Response(new Dictionary<string, dynamic>
+			{
+				{"name", "attach"}
+			}, new List<GameObject>{objA, objB}, new Dictionary<string, dynamic>());
+		}
+		
+		public Response StepInstall(string args)
+		{
+			var argsList = args.Split(GeneralConstants.ArgsSeparator);
+			var valid = Context.GetAttribute(argsList[0]) == "yes";
+			
+			if (!valid) return null;
+			
+			List<Action> actionsList = Context.GetAttribute(argsList[1]);
+
+			var action = actionsList[0];
+			var figureID = Context.Instance.CurrentFigureID;
+			var figure = GameObject.Find(figureID);
+			var objA = HelperFunctions.FindObjectInFigure(figure, action.Components[0]);
+			var objB = HelperFunctions.FindObjectInFigure(figure, action.Components[1]);
+
+			StartCoroutine(Attach(figure, objA, objB, GeneralConstants.AttachTypes.StepInstall));
+			
+			return new Response(new Dictionary<string, dynamic>
+			{
+				{"name", "attach"}
+			}, new List<GameObject>{objA, objB}, new Dictionary<string, dynamic>());
+		}
+		
+		public Response SmoothScrew(string args)
+		{
+			var argsList = args.Split(GeneralConstants.ArgsSeparator);
+			var valid = Context.GetAttribute(argsList[0]) == "yes";
+			
+			if (!valid) return null;
+			
+			List<Action> actionsList = Context.GetAttribute(argsList[1]);
+
+			var action = actionsList[0];
+			var figureID = Context.Instance.CurrentFigureID;
+			var figure = GameObject.Find(figureID);
+			var objA = HelperFunctions.FindObjectInFigure(figure, action.Components[0]);
+			var objB = HelperFunctions.FindObjectInFigure(figure, action.Components[1]);
+
+			StartCoroutine(Attach(figure, objA, objB, GeneralConstants.AttachTypes.SmoothScrew));
+			
+			return new Response(new Dictionary<string, dynamic>
+			{
+				{"name", "attach"}
+			}, new List<GameObject>{objA, objB}, new Dictionary<string, dynamic>());
+		}
+		
+		public Response StepScrew(string args)
+		{
+			var argsList = args.Split(GeneralConstants.ArgsSeparator);
+			var valid = Context.GetAttribute(argsList[0]) == "yes";
+			
+			if (!valid) return null;
+			
+			List<Action> actionsList = Context.GetAttribute(argsList[1]);
+
+			var action = actionsList[0];
+			var figureID = Context.Instance.CurrentFigureID;
+			var figure = GameObject.Find(figureID);
+			var objA = HelperFunctions.FindObjectInFigure(figure, action.Components[0]);
+			var objB = HelperFunctions.FindObjectInFigure(figure, action.Components[1]);
+
+			StartCoroutine(Attach(figure, objA, objB, GeneralConstants.AttachTypes.StepScrew));
+			
+			return new Response(new Dictionary<string, dynamic>
+			{
+				{"name", "attach"}
+			}, new List<GameObject>{objA, objB}, new Dictionary<string, dynamic>());
 		}
 
 		public List<Action> CreateActions(string args)
@@ -493,6 +549,80 @@ namespace Catalogs
 			// comparison logic
 			
 			return "yes";
+		}
+
+		private IEnumerator Attach(Object figure, GameObject objA, GameObject objB, GeneralConstants.AttachTypes type)
+		{
+			Vector3 delta;
+			var steps = 3;
+			
+			var figureName = figure.name;
+			var figureRfmName = figureName + "-RFM";
+			var figureIfmName = figureName + "-IFM";
+
+			var rfm = GameObject.Find(figureRfmName);
+			var ifm = GameObject.Find(figureIfmName);
+			
+			var rfmReferenceObjA = HelperFunctions.FindObjectInFigure(rfm, objA.name);
+			var rfmReferenceObjB = HelperFunctions.FindObjectInFigure(rfm, objB.name);
+			var rfmReferenceObjAPosition = rfmReferenceObjA.transform.position;
+			var rfmReferenceObjBPosition = rfmReferenceObjB.transform.position;
+					
+			var diff = rfmReferenceObjAPosition - rfmReferenceObjBPosition;
+
+			var rfmFinalPosition = objB.transform.TransformPoint(diff);
+			
+			var ifmReferenceObjA = HelperFunctions.FindObjectInFigure(ifm, objA.name);
+			var ifmReferenceObjB = HelperFunctions.FindObjectInFigure(ifm, objB.name);
+			var ifmReferenceObjAPosition = ifmReferenceObjA.transform.position;
+			var ifmReferenceObjBPosition = ifmReferenceObjB.transform.position;
+					
+			diff = ifmReferenceObjAPosition - ifmReferenceObjBPosition;
+					
+			var ifmFinalPosition = objB.transform.TransformPoint(diff);
+
+			var routines = new List<IEnumerator>();
+			routines.Add(IRotateObject(objA, objB.transform.rotation, 1.0f));
+			routines.Add(IMoveObject(objA, rfmFinalPosition, 1.0f));
+
+			switch (type)
+			{
+				case GeneralConstants.AttachTypes.SmoothInstall:
+				case GeneralConstants.AttachTypes.Align:
+					routines.Add(IMoveObject(objA, ifmFinalPosition, 1.0f));
+					break;
+				case GeneralConstants.AttachTypes.StepInstall:
+					delta = ifmFinalPosition - rfmFinalPosition;
+					
+					for (var i = 1; i <= steps; i++)
+					{
+						routines.Add(IMoveObject(objA, rfmFinalPosition + delta * i / steps, 0.5f));
+					}
+
+					break;
+				case GeneralConstants.AttachTypes.SmoothScrew:
+					routines.Add(IMoveObjectWithRotation(objA, ifmFinalPosition, 1.0f));
+					break;
+				case GeneralConstants.AttachTypes.StepScrew:
+					delta = ifmFinalPosition - rfmFinalPosition;
+
+					for (var i = 1; i <= steps; i++)
+					{
+						routines.Add(IMoveObjectWithRotation(objA, rfmFinalPosition + delta * i / steps, 0.5f));
+						routines.Add(IDelay(0.3f));
+					}
+
+					break;
+				default:
+					routines.Add(IMoveObject(objA, ifmFinalPosition, 1.0f));
+					break;
+			}
+			
+			routines.Add(IAdjustStructure(objA, objB));
+			
+			StartCoroutine(Sequence(routines, 1.0f));
+
+			yield return null;
 		}
 
 		private static void ScatterObjects(GameObject figure)
@@ -652,6 +782,48 @@ namespace Catalogs
 				yield return null;
 			}
 
+			ScriptExecutor.IsInAction = false;
+		}
+		
+		private static IEnumerator IMoveObjectWithRotation(GameObject obj, Vector3 finalPosition, float duration)
+		{
+			if (ScriptExecutor.IsInAction) yield break;
+			ScriptExecutor.IsInAction = true;
+			
+			var infiniteRotationComponents = obj.GetComponents<InfiniteRotation>();
+			InfiniteRotation infiniteRotationComponent;
+			if (infiniteRotationComponents.Length == 0)
+			{ 
+				infiniteRotationComponent = obj.AddComponent<InfiniteRotation>();
+			} else if (infiniteRotationComponents.Length > 1)
+			{
+				for (var i = 1; i < infiniteRotationComponents.Length; i++)
+				{
+					Destroy(infiniteRotationComponents[i]);
+				}
+				
+				infiniteRotationComponent = infiniteRotationComponents[0];
+			}
+			else
+			{
+				infiniteRotationComponent = infiniteRotationComponents[0];
+			}
+
+			
+			infiniteRotationComponent.SetSpeed(100);
+			infiniteRotationComponent.SetDirection(Vector3.forward);
+			
+			float counter = 0;
+			while (counter < duration)
+			{
+				counter += Time.deltaTime;
+
+				obj.transform.position = Vector3.Lerp(obj.transform.position, finalPosition, counter / duration);
+				yield return null;
+			}
+
+			Destroy(infiniteRotationComponent);
+ 
 			ScriptExecutor.IsInAction = false;
 		}
 
