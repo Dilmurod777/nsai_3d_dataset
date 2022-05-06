@@ -583,7 +583,9 @@ namespace Catalogs
 
 			var routines = new List<IEnumerator>();
 			routines.Add(IRotateObject(objA, objB.transform.rotation, 1.0f));
+			routines.Add(IDelay(0.5f));
 			routines.Add(IMoveObject(objA, rfmFinalPosition, 1.0f));
+			routines.Add(IDelay(0.5f));
 
 			switch (type)
 			{
@@ -597,11 +599,12 @@ namespace Catalogs
 					for (var i = 1; i <= steps; i++)
 					{
 						routines.Add(IMoveObject(objA, rfmFinalPosition + delta * i / steps, 0.5f));
+						routines.Add(IDelay(0.5f));
 					}
 
 					break;
 				case GeneralConstants.AttachTypes.SmoothScrew:
-					routines.Add(IMoveObjectWithRotation(objA, ifmFinalPosition, 1.0f));
+					routines.Add(IMoveObjectWithRotation(objA, ifmFinalPosition, 2.0f));
 					break;
 				case GeneralConstants.AttachTypes.StepScrew:
 					delta = ifmFinalPosition - rfmFinalPosition;
@@ -609,7 +612,7 @@ namespace Catalogs
 					for (var i = 1; i <= steps; i++)
 					{
 						routines.Add(IMoveObjectWithRotation(objA, rfmFinalPosition + delta * i / steps, 0.5f));
-						routines.Add(IDelay(0.3f));
+						routines.Add(IDelay(0.5f));
 					}
 
 					break;
@@ -768,17 +771,18 @@ namespace Catalogs
 		}
 		
 		// smoothly move object
-		private static IEnumerator IMoveObject(dynamic obj, Vector3 finalPosition, float duration)
+		private static IEnumerator IMoveObject(GameObject obj, Vector3 finalPosition, float duration)
 		{
 			if (ScriptExecutor.IsInAction) yield break;
 			ScriptExecutor.IsInAction = true;
 
 			float counter = 0;
-			while (counter < duration)
+			var currentPos = obj.transform.position;
+			while (counter < 1)
 			{
-				counter += Time.deltaTime;
+				counter += Time.deltaTime / duration;
 
-				obj.transform.position = Vector3.Lerp(obj.transform.position, finalPosition, counter / duration);
+				obj.transform.position = Vector3.Lerp(currentPos, finalPosition, counter);
 				yield return null;
 			}
 
@@ -808,23 +812,25 @@ namespace Catalogs
 			{
 				infiniteRotationComponent = infiniteRotationComponents[0];
 			}
-
+			
 			
 			infiniteRotationComponent.SetSpeed(100);
 			infiniteRotationComponent.SetDirection(Vector3.forward);
-			
-			float counter = 0;
-			while (counter < duration)
-			{
-				counter += Time.deltaTime;
 
-				obj.transform.position = Vector3.Lerp(obj.transform.position, finalPosition, counter / duration);
+			var currentPos = obj.transform.position;
+			float counter = 0;
+			while (counter < 1)
+			{
+				counter += Time.deltaTime / duration;
+				obj.transform.position = Vector3.Lerp(currentPos, finalPosition, counter);
 				yield return null;
 			}
 
 			Destroy(infiniteRotationComponent);
  
 			ScriptExecutor.IsInAction = false;
+
+			yield return null;
 		}
 
 		// smoothly change rotation of camera
@@ -833,12 +839,13 @@ namespace Catalogs
 			if (ScriptExecutor.IsInAction) yield break;
 			ScriptExecutor.IsInAction = true;
 
+			var currentRot = obj.transform.rotation;
 			float counter = 0;
-			while (counter < duration)
+			while (counter < 1)
 			{
-				counter += Time.deltaTime;
+				counter += Time.deltaTime / duration;
 
-				obj.transform.rotation = Quaternion.Slerp(obj.transform.rotation, finalRotation, counter / duration);
+				obj.transform.rotation = Quaternion.Slerp(currentRot, finalRotation, counter);
 				yield return null;
 			}
 
@@ -850,12 +857,13 @@ namespace Catalogs
 			if (ScriptExecutor.IsInAction) yield break;
 			ScriptExecutor.IsInAction = true;
 
+			var currentScale = obj.transform.localScale;
 			float counter = 0;
-			while (counter < duration)
+			while (counter < 1)
 			{
-				counter += Time.deltaTime;
+				counter += Time.deltaTime / duration;
 
-				obj.transform.localScale = Vector3.Lerp(obj.transform.localScale, finalScale, counter / duration);
+				obj.transform.localScale = Vector3.Lerp(currentScale, finalScale, counter);
 				yield return null;
 			}
 
@@ -869,12 +877,13 @@ namespace Catalogs
 
 			ScriptExecutor.IsInAction = true;
 
+			var currentFOV = camera.fieldOfView;
 			float counter = 0;
 			while (counter < duration)
 			{
 				counter += Time.deltaTime;
 
-				camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, finalFoV, counter / duration);
+				camera.fieldOfView = Mathf.Lerp(currentFOV, finalFoV, counter / duration);
 				yield return null;
 			}
 
