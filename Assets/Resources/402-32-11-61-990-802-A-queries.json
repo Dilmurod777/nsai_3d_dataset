@@ -1,0 +1,86 @@
+﻿[
+  {
+    "query": "Attach objects [41], [8]",
+    "programs": [
+      "ExtractID object query",
+      "CreateActions attach yes prev",
+      "SaveVal2Var prev var1",
+      "CheckActionsValidity var1 prev",
+      "Align prev var1"
+    ],
+    "knowledge": "Align the hole in the pushrod [41] with the hole in the strut assembly, lower [8].",
+    "reply": "[41], [8]"
+  },
+  {
+    "query": "Attach objects [45], [8]",
+    "programs": [
+      "ExtractID object query",
+      "CreateActions attach yes prev",
+      "SaveVal2Var prev var1",
+      "CheckActionsValidity var1 prev",
+      "StepInstall prev var1"
+    ],
+    "knowledge": "Put the bushing [45] through the strut assembly, lower [8], and the pushrod [41].",
+    "reply": "[45], [8]"
+  },
+  {
+    "query": "Attach objects [44], [46]",
+    "programs": [
+      "ExtractID object query",
+      "CreateActions attach yes prev",
+      "SaveVal2Var prev var1",
+      "CheckActionsValidity var1 prev",
+      "SmoothInstall prev var1"
+    ],
+    "knowledge": "Install the washer [44] on the bolt [46].",
+    "reply": "[44], [46]"
+  },
+  {
+    "query": "Attach objects [46], [8]",
+    "programs": [
+      "ExtractID object query",
+      "CreateActions attach yes prev",
+      "SaveVal2Var prev var1",
+      "CheckActionsValidity var1 prev",
+      "SmoothScrew prev var1"
+    ],
+    "knowledge": "Put the bolt [46] through the strut assembly, lower [8], and the pushrod [41].",
+    "reply": "[46], [8]"
+  },
+  {
+    "query": "Attach objects [43], [46]",
+    "programs": [
+      "ExtractID object query",
+      "CreateActions attach yes prev",
+      "SaveVal2Var prev var1",
+      "CheckActionsValidity var1 prev",
+      "SmoothInstall prev var1"
+    ],
+    "knowledge": "Install the washer [43] on the bolt [46].",
+    "reply": "[43], [46]"
+  },
+  {
+    "query": "Attach objects [42], [46]",
+    "programs": [
+      "ExtractID object query",
+      "CreateActions attach yes prev",
+      "SaveVal2Var prev var1",
+      "CheckActionsValidity var1 prev",
+      "StepScrew prev var1"
+    ],
+    "knowledge":  "Install the nut [42] on the bolt [46].",
+    "reply": "[42], [46]"
+  },
+  {
+    "query": "Attach objects [42], [46]",
+    "programs": [
+      "ExtractID object query",
+      "CreateActions attach yes prev",
+      "SaveVal2Var prev var1",
+      "CheckActionsValidity var1 prev",
+      "StepScrew prev var1"
+    ],
+    "knowledge":  "Install the nut [42] on the bolt [46].",
+    "reply": "[42], [46]"
+  }
+]
