@@ -1,0 +1,98 @@
+﻿[
+  {
+    "query": "Attach objects [8], [51]",
+    "programs": [
+      "ExtractID object query",
+      "CreateActions attach yes prev",
+      "SaveVal2Var prev var1",
+      "CheckActionsValidity var1 prev",
+      "Align prev var1"
+    ],
+    "knowledge": "Put the strut assembly, lower [8] in its position for attachment to the shock strut [51].",
+    "reply": "[8], [51]"
+  },
+  {
+    "query": "Attach objects [52], [51]",
+    "programs": [
+      "ExtractID object query",
+      "CreateActions attach yes prev",
+      "SaveVal2Var prev var1",
+      "CheckActionsValidity var1 prev",
+      "SmoothScrew prev var1"
+    ],
+    "knowledge": "Put the side strut pin [52] through the strut assembly, lower [8] and the clevis on the shock strut [51].",
+    "reply": "[52], [51]"
+  },
+  {
+    "query": "Attach objects [53], [52]",
+    "programs": [
+      "ExtractID object query",
+      "CreateActions attach yes prev",
+      "SaveVal2Var prev var1",
+      "CheckActionsValidity var1 prev",
+      "SmoothInstall prev var1"
+    ],
+    "knowledge": "Install the side strut washer [53] on the side strut pin [52].",
+    "reply": "[53], [52]"
+  },
+  {
+    "query": "Attach objects [54], [52]",
+    "programs": [
+      "ExtractID object query",
+      "CreateActions attach yes prev",
+      "SaveVal2Var prev var1",
+      "CheckActionsValidity var1 prev",
+      "StepScrew prev var1"
+    ],
+    "knowledge": "Install the side strut nut [54] on the side strut pin [52].",
+    "reply": "[54], [52]"
+  },
+  {
+    "query": "Attach objects [47], [52]",
+    "programs": [
+      "ExtractID object query",
+      "CreateActions attach yes prev",
+      "SaveVal2Var prev var1",
+      "CheckActionsValidity var1 prev",
+      "SmoothScrew prev var1"
+    ],
+    "knowledge": "Install the cross bolt [47] with the bolt head inboard in the side strut pin [52].",
+    "reply": "[47], [52]"
+  },
+  {
+    "query": "Attach objects [48], [47]",
+    "programs": [
+      "ExtractID object query",
+      "CreateActions attach yes prev",
+      "SaveVal2Var prev var1",
+      "CheckActionsValidity var1 prev",
+      "SmoothInstall prev var1"
+    ],
+    "knowledge":  "Install the washer [48] on the cross bolt [47].",
+    "reply": "[48], [47]"
+  },
+  {
+    "query": "Attach objects [50], [47]",
+    "programs": [
+      "ExtractID object query",
+      "CreateActions attach yes prev",
+      "SaveVal2Var prev var1",
+      "CheckActionsValidity var1 prev",
+      "StepScrew prev var1"
+    ],
+    "knowledge":  "Install the nut [50] on the cross bolt [47].",
+    "reply": "[50], [47]"
+  },
+  {
+    "query": "Attach objects [49], [47]",
+    "programs": [
+      "ExtractID object query",
+      "CreateActions attach yes prev",
+      "SaveVal2Var prev var1",
+      "CheckActionsValidity var1 prev",
+      "SmoothScrew prev var1"
+    ],
+    "knowledge":  "Install the pin [49] in the cross bolt [47].",
+    "reply": "[49], [47]"
+  }
+]

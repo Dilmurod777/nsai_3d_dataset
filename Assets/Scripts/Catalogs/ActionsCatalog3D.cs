@@ -551,7 +551,7 @@ namespace Catalogs
 			return "yes";
 		}
 
-		private IEnumerator Attach(Object figure, GameObject objA, GameObject objB, GeneralConstants.AttachTypes type)
+		private IEnumerator Attach(GameObject figure, GameObject objA, GameObject objB, GeneralConstants.AttachTypes type)
 		{
 			Vector3 delta;
 			var steps = 3;
@@ -560,6 +560,7 @@ namespace Catalogs
 			var figureRfmName = figureName + "-RFM";
 			var figureIfmName = figureName + "-IFM";
 
+			var figureWrapper = figure.transform.parent;
 			var rfm = GameObject.Find(figureRfmName);
 			var ifm = GameObject.Find(figureIfmName);
 			
@@ -568,60 +569,63 @@ namespace Catalogs
 			var rfmReferenceObjAPosition = rfmReferenceObjA.transform.position;
 			var rfmReferenceObjBPosition = rfmReferenceObjB.transform.position;
 					
-			var diff = rfmReferenceObjAPosition - rfmReferenceObjBPosition;
-
+			var diff = (rfmReferenceObjAPosition - rfmReferenceObjBPosition) / rfm.transform.localScale.x;
 			var rfmFinalPosition = objB.transform.TransformPoint(diff);
 			
-			var ifmReferenceObjA = HelperFunctions.FindObjectInFigure(ifm, objA.name);
-			var ifmReferenceObjB = HelperFunctions.FindObjectInFigure(ifm, objB.name);
-			var ifmReferenceObjAPosition = ifmReferenceObjA.transform.position;
-			var ifmReferenceObjBPosition = ifmReferenceObjB.transform.position;
-					
-			diff = ifmReferenceObjAPosition - ifmReferenceObjBPosition;
-					
-			var ifmFinalPosition = objB.transform.TransformPoint(diff);
+			// (2.91591144, 6.9050045, 6.85317564)
+			// (-0.0434860215, -0.142524645, 0.185333788)
+				
+			// var ifmReferenceObjA = HelperFunctions.FindObjectInFigure(ifm, objA.name);
+			// var ifmReferenceObjB = HelperFunctions.FindObjectInFigure(ifm, objB.name);
+			// var ifmReferenceObjAPosition = ifmReferenceObjA.transform.position;
+			// var ifmReferenceObjBPosition = ifmReferenceObjB.transform.position;
+			// 		
+			// diff = ifmReferenceObjAPosition - ifmReferenceObjBPosition;
+			// var ifmFinalPosition = (objB.transform.TransformPoint(diff) + figureWrapper.position) / ifm.transform.localScale.x;
 
-			var routines = new List<IEnumerator>();
-			routines.Add(IRotateObject(objA, objB.transform.rotation, 1.0f));
-			routines.Add(IDelay(0.5f));
-			routines.Add(IMoveObject(objA, rfmFinalPosition, 1.0f));
-			routines.Add(IDelay(0.5f));
-
-			switch (type)
+			var routines = new List<IEnumerator>
 			{
-				case GeneralConstants.AttachTypes.SmoothInstall:
-				case GeneralConstants.AttachTypes.Align:
-					routines.Add(IMoveObject(objA, ifmFinalPosition, 1.0f));
-					break;
-				case GeneralConstants.AttachTypes.StepInstall:
-					delta = ifmFinalPosition - rfmFinalPosition;
-					
-					for (var i = 1; i <= steps; i++)
-					{
-						routines.Add(IMoveObject(objA, rfmFinalPosition + delta * i / steps, 0.5f));
-						routines.Add(IDelay(0.5f));
-					}
+				IRotateObject(objA, objB.transform.rotation, 0.5f),
+				IDelay(0.5f),
+				IMoveObject(objA, rfmFinalPosition, 0.5f),
+				IDelay(0.5f)
+			};
 
-					break;
-				case GeneralConstants.AttachTypes.SmoothScrew:
-					routines.Add(IMoveObjectWithRotation(objA, ifmFinalPosition, 2.0f));
-					break;
-				case GeneralConstants.AttachTypes.StepScrew:
-					delta = ifmFinalPosition - rfmFinalPosition;
-
-					for (var i = 1; i <= steps; i++)
-					{
-						routines.Add(IMoveObjectWithRotation(objA, rfmFinalPosition + delta * i / steps, 0.5f));
-						routines.Add(IDelay(0.5f));
-					}
-
-					break;
-				default:
-					routines.Add(IMoveObject(objA, ifmFinalPosition, 1.0f));
-					break;
-			}
+			// switch (type)
+			// {
+			// 	case GeneralConstants.AttachTypes.SmoothInstall:
+			// 	case GeneralConstants.AttachTypes.Align:
+			// 		routines.Add(IMoveObject(objA, ifmFinalPosition, 1.0f));
+			// 		break;
+			// 	case GeneralConstants.AttachTypes.StepInstall:
+			// 		delta = ifmFinalPosition - rfmFinalPosition;
+			// 		
+			// 		for (var i = 1; i <= steps; i++)
+			// 		{
+			// 			routines.Add(IMoveObject(objA, rfmFinalPosition + delta * i / steps, 0.5f));
+			// 			routines.Add(IDelay(0.5f));
+			// 		}
+			//
+			// 		break;
+			// 	case GeneralConstants.AttachTypes.SmoothScrew:
+			// 		routines.Add(IMoveObjectWithRotation(objA, ifmFinalPosition, 2.0f));
+			// 		break;
+			// 	case GeneralConstants.AttachTypes.StepScrew:
+			// 		delta = ifmFinalPosition - rfmFinalPosition;
+			//
+			// 		for (var i = 1; i <= steps; i++)
+			// 		{
+			// 			routines.Add(IMoveObjectWithRotation(objA, rfmFinalPosition + delta * i / steps, 0.5f));
+			// 			routines.Add(IDelay(0.5f));
+			// 		}
+			//
+			// 		break;
+			// 	default:
+			// 		routines.Add(IMoveObject(objA, ifmFinalPosition, 1.0f));
+			// 		break;
+			// }
 			
-			routines.Add(IAdjustStructure(objA, objB));
+			// routines.Add(IAdjustStructure(objA, objB));
 			
 			StartCoroutine(Sequence(routines, 1.0f));
 

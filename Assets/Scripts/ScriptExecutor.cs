@@ -18,7 +18,7 @@ public class ScriptExecutor : MonoBehaviour
 
     private void Start()
     {
-        Context.Instance.CurrentFigureID = "402-32-11-61-990-802-A";
+        Context.Instance.CurrentFigureID = "402-32-11-61-990-802-B";
         Context.Instance.CurrentTaskID = "1";
         Context.Instance.CurrentSubtaskID = "2";
         Context.Instance.CurrentInstructionOrder = "3";
@@ -44,22 +44,67 @@ public class ScriptExecutor : MonoBehaviour
             }
         }
 
+        HideAllFigureWrappersExceptCurrent();
+        InitProgram();
+    }
+
+    private void Update()
+    {
+        // execute
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            ExecuteQuery();
+        }
+    }
+
+    private static void HideAllFigureWrappersExceptCurrent()
+    {
+        var allFigures = GameObject.FindGameObjectsWithTag("Figure");
+
+        foreach (var figure in allFigures)
+        {
+            var wrapper = figure.transform.parent;
+            wrapper.localScale = figure.name == Context.Instance.CurrentFigureID ? Vector3.one : Vector3.zero;
+        }
+        
+        
+    }
+
+    public static void InitProgram()
+    {
         _queryMetas = Queries.GetAllQueries();
         
         _queryText.text = _queryMetas[_currentQueryMetaId].Query;
-
+        
         var mainCamera = Camera.main;
         Context.Instance.Camera = mainCamera;
         if (mainCamera != null)
         {
+            var cameraLocation = GameObject.Find(Context.Instance.CurrentFigureID + "-Wrapper")?.transform.Find("CameraLocation")?.transform;
             var cameraTransform = mainCamera.transform;
-            Context.Instance.InitialAttributes.Add("camera", new Attributes
+            
+            if (cameraLocation)
+            {
+                cameraTransform.position = cameraLocation.position;
+                cameraTransform.rotation = cameraLocation.rotation;
+                cameraTransform.localScale = cameraLocation.localScale;
+            }
+
+            var cameraAttributes = new Attributes
             {
                 Position =  cameraTransform.position,
                 Rotation = cameraTransform.rotation,
                 Scale = cameraTransform.localScale,
                 FoV =  mainCamera.fieldOfView
-            });
+            };
+            if (Context.Instance.InitialAttributes.ContainsKey("camera"))
+            {
+                Context.Instance.InitialAttributes["camera"] = cameraAttributes;
+            }
+            else
+            {
+                Context.Instance.InitialAttributes.Add("camera", cameraAttributes);
+            }
         }
         
         var allFigures = GameObject.FindGameObjectsWithTag("Figure");
@@ -74,25 +119,26 @@ public class ScriptExecutor : MonoBehaviour
 
             foreach (Transform child in fig.transform)
             {
-                Context.Instance.InitialAttributes[fig.name + GeneralConstants.ArgsSeparator + child.name] = new Attributes
+                var keyName = fig.name + GeneralConstants.ArgsSeparator + child.name;
+                var childAttributes = new Attributes
                 {
                     Position = child.position,
                     Rotation = child.rotation,
                     Scale = child.localScale
                 };
+
+                if (Context.Instance.InitialAttributes.ContainsKey(keyName))
+                {
+                    Context.Instance.InitialAttributes[keyName] = childAttributes;
+                }
+                else
+                {
+                    Context.Instance.InitialAttributes.Add(keyName, childAttributes);
+                }
             }
         }
     }
-
-    private void Update()
-    {
-        // execute
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            ExecuteQuery();
-        }
-    }
-
+    
     public static void ExecuteQuery()
     {
         var currentQueryMeta = _queryMetas[_currentQueryMetaId];

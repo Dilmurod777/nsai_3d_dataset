@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using SimpleJSON;
 
@@ -6,15 +7,12 @@ namespace Constants
 {
 	public static class Queries
 	{
-		
-		
 		public static List<QueryMeta> GetAllQueries()
 		{
 			var figureName = Context.Instance.CurrentFigureID;
 			
-			var jsonDocumentName = figureName + "-queries.json";
+			var jsonDocumentName = figureName + "-queries";
 			var jsonContent = Resources.Load<TextAsset>(jsonDocumentName);
-			Debug.Log(jsonContent);
 			
 			var unparsedQueries = JSON.Parse(jsonContent.ToString());
 
@@ -24,10 +22,11 @@ namespace Constants
 			{
 				parsedQueries.Add(new QueryMeta
 				{
+					
 					Query = query.HasKey("query") ? query["query"].Value : "",
 					Knowledge = query.HasKey("knowledge") ? query["knowledge"].Value : "",
 					Reply = query.HasKey("reply") ? query["reply"].Value : "",
-					// Programs = query.HasKey("programs") ? query["programs"].Value : new string[]
+					Programs = query.HasKey("programs") ? query["programs"].AsArray : Array.Empty<string>()
 				});
 			}
 

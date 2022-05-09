@@ -16,4 +16,16 @@ public class ControlsExecutor: MonoBehaviour
 	{
 		ScriptExecutor.ExecuteQuery();
 	}
+
+	public void Switch2Figure(string figureName)
+	{
+		// disable old figure
+		GameObject.Find(Context.Instance.CurrentFigureID + "-Wrapper").transform.localScale = Vector3.zero;
+		
+		// enable new figure
+		Context.Instance.CurrentFigureID = figureName;
+		GameObject.Find(figureName+ "-Wrapper").transform.localScale = Vector3.one;
+		
+		ScriptExecutor.InitProgram();
+	}
 }
