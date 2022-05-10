@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class ScriptExecutor : MonoBehaviour
 {
     public static bool IsInAction = false;
-    public static bool IsScattered = false;
 
     private static Text _queryText;
     private static Text _replyText;
@@ -18,7 +17,7 @@ public class ScriptExecutor : MonoBehaviour
 
     private void Start()
     {
-        Context.Instance.CurrentFigureID = "402-32-11-61-990-802-B";
+        Context.Instance.CurrentFigureID = "402-32-11-61-990-802-A";
         Context.Instance.CurrentTaskID = "1";
         Context.Instance.CurrentSubtaskID = "2";
         Context.Instance.CurrentInstructionOrder = "3";
@@ -44,7 +43,7 @@ public class ScriptExecutor : MonoBehaviour
             }
         }
 
-        HideAllFigureWrappersExceptCurrent();
+        HideAllUnnecessaryGameObjects();
         InitProgram();
     }
 
@@ -57,7 +56,7 @@ public class ScriptExecutor : MonoBehaviour
         }
     }
 
-    private static void HideAllFigureWrappersExceptCurrent()
+    private static void HideAllUnnecessaryGameObjects()
     {
         var allFigures = GameObject.FindGameObjectsWithTag("Figure");
 
@@ -66,8 +65,17 @@ public class ScriptExecutor : MonoBehaviour
             var wrapper = figure.transform.parent;
             wrapper.localScale = figure.name == Context.Instance.CurrentFigureID ? Vector3.one : Vector3.zero;
         }
-        
-        
+
+        var referenceObjects = GameObject.FindGameObjectsWithTag("ReferenceObject");
+
+        foreach (var obj in referenceObjects)
+        {
+            var meshRenderer = obj.GetComponent<MeshRenderer>();
+            if (meshRenderer != null)
+            {
+                meshRenderer.enabled = false;
+            }
+        }
     }
 
     public static void InitProgram()

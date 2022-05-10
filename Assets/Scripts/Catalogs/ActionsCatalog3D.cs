@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Constants;
 using CustomFunctionality;
-using UnityEditor.UIElements;
 using UnityEngine;
 using Action = Constants.Action;
-using Object = UnityEngine.Object;
-using Random = UnityEngine.Random;
 
 namespace Catalogs
 {
+	[SuppressMessage("ReSharper", "UnusedMemberInSuper.Global")]
 	public interface IActionsCatalog3DInterface
 	{
+		// ReSharper disable once UnusedMemberInSuper.Global
 		List<GameObject> Filter3DAttr(string args);
 		Response Reset(string args);
 		Response Highlight(string args);
@@ -150,7 +150,7 @@ namespace Catalogs
 			var rotationZ = axis == "Z" ? degree : 0;
 
 			var newRotation = rotation * Quaternion.Euler(rotationX, rotationY, rotationZ);
-			StartCoroutine(IRotateObject(obj, newRotation, 1.0f));
+			StartCoroutine(RotateObjectCoroutine(obj, newRotation, 1.0f));
 
 			return new Response(new Dictionary<string, dynamic>
 			{
@@ -185,7 +185,7 @@ namespace Catalogs
 			var finalScale = new Vector3(currentLocalScaleX * change, currentLocalScaleY * change,
 				currentLocalScaleZ * change);
 
-			StartCoroutine(IScaleObject(obj, finalScale, 1.0f));
+			StartCoroutine(ScaleObjectCoroutine(obj, finalScale, 1.0f));
 
 			return new Response(new Dictionary<string, dynamic>
 			{
@@ -197,6 +197,7 @@ namespace Catalogs
 			});
 		}
 
+		// ReSharper disable once Unity.IncorrectMethodSignature
 		public Response Reset(string args)
 		{
 			var argsList = args.Split(GeneralConstants.ArgsSeparator);
@@ -209,12 +210,12 @@ namespace Catalogs
 
 			var coroutines = new List<IEnumerator>
 			{
-				IResetObject(obj, attributes, 1.0f),
-				IResetObject(Context.Instance.Camera.gameObject, cameraAttributes, 1.0f)
+				ResetObjectCoroutine(obj, attributes, 1.0f),
+				ResetObjectCoroutine(Context.Instance.Camera.gameObject, cameraAttributes, 1.0f)
 			};
 
 			if (cameraAttributes.FoV != 0)
-				coroutines.Add(IChangeFieldOfViewByValue(Context.Instance.Camera, cameraAttributes.FoV, 1.0f));
+				coroutines.Add(ChangeFieldOfViewByValueCoroutine(Context.Instance.Camera, cameraAttributes.FoV, 1.0f));
 
 			StartCoroutine(Sequence(coroutines));
 
@@ -282,7 +283,7 @@ namespace Catalogs
 
 			var coroutines = new List<IEnumerator>
 			{
-				IRotateObject(obj, sideRotation, 1.0f)
+				RotateObjectCoroutine(obj, sideRotation, 1.0f)
 			};
 
 			StartCoroutine(Sequence(coroutines));
@@ -359,18 +360,18 @@ namespace Catalogs
 					Destroy(infiniteRotationComponent);
 				}
 
-				StartCoroutine(IResetObject(fig, attributes, 1.0f));
+				StartCoroutine(ResetObjectCoroutine(fig, attributes, 1.0f));
 			}
 
 			var infiniteRotationComponent = fig.GetComponent<InfiniteRotation>();
 			if (infiniteRotationComponent == null && state == "on")
 			{
-				StartCoroutine(IResetObject(fig, attributes, 1.0f));
+				StartCoroutine(ResetObjectCoroutine(fig, attributes, 1.0f));
 			}
 
 			StartCoroutine(state == "on"
-				? IDelay(1.0f, StartAnimatingFigure)
-				: IDelay(1.0f, StopAnimatingFigure));
+				? DelayCoroutine(1.0f, StartAnimatingFigure)
+				: DelayCoroutine(1.0f, StopAnimatingFigure));
 
 			return new Response(new Dictionary<string, dynamic>
 			{
@@ -544,9 +545,9 @@ namespace Catalogs
 
 		public string CheckActionsValidity(string args)
 		{
-			var argsList = args.Split(GeneralConstants.ArgsSeparator);
-			List<Action> a = Context.GetAttribute(argsList[0]);
-			List<Action> b = Context.GetAttribute(argsList[1]);
+			// var argsList = args.Split(GeneralConstants.ArgsSeparator);
+			// List<Action> a = Context.GetAttribute(argsList[0]);
+			// List<Action> b = Context.GetAttribute(argsList[1]);
 			
 			// comparison logic
 			
@@ -556,13 +557,12 @@ namespace Catalogs
 		private IEnumerator Attach(GameObject figure, GameObject objA, GameObject objB, GeneralConstants.AttachTypes type, Vector3 screwVector = default)
 		{
 			Vector3 delta;
-			var steps = 3;
+			const int steps = 3;
 			
 			var figureName = figure.name;
 			var figureRfmName = figureName + "-RFM";
 			var figureIfmName = figureName + "-IFM";
 
-			var figureWrapper = figure.transform.parent;
 			var rfm = GameObject.Find(figureRfmName);
 			var ifm = GameObject.Find(figureIfmName);
 			
@@ -583,44 +583,44 @@ namespace Catalogs
 			
 			var routines = new List<IEnumerator>
 			{
-				IRotateObject(objA, objB.transform.rotation, 0.5f),
-				IDelay(0.5f),
-				IAdjustStructure(objA, objB),
-				IMoveObject(objA, rfmFinalPosition, 0.5f),
-				IDelay(0.5f)
+				RotateObjectCoroutine(objA, objB.transform.rotation, 0.5f),
+				DelayCoroutine(0.5f),
+				AdjustStructureCoroutine(objA, objB),
+				MoveObjectCoroutine(objA, rfmFinalPosition, 0.5f),
+				DelayCoroutine(0.5f)
 			};
 
 			switch (type)
 			{
 				case GeneralConstants.AttachTypes.SmoothInstall:
 				case GeneralConstants.AttachTypes.Align:
-					routines.Add(IMoveObject(objA, ifmFinalPosition, 1.0f));
+					routines.Add(MoveObjectCoroutine(objA, ifmFinalPosition, 1.0f));
 					break;
 				case GeneralConstants.AttachTypes.StepInstall:
 					delta = ifmFinalPosition - rfmFinalPosition;
 					
 					for (var i = 1; i <= steps; i++)
 					{
-						routines.Add(IMoveObject(objA, rfmFinalPosition + delta * i / steps, 0.5f));
-						routines.Add(IDelay(0.5f));
+						routines.Add(MoveObjectCoroutine(objA, rfmFinalPosition + delta * i / steps, 0.5f));
+						routines.Add(DelayCoroutine(0.3f));
 					}
 			
 					break;
 				case GeneralConstants.AttachTypes.SmoothScrew:
-					routines.Add(IMoveObjectWithRotation(objA, ifmFinalPosition, 2.0f, screwVector));
+					routines.Add(MoveObjectWithRotationCoroutine(objA, ifmFinalPosition, 2.0f, screwVector));
 					break;
 				case GeneralConstants.AttachTypes.StepScrew:
 					delta = ifmFinalPosition - rfmFinalPosition;
 			
 					for (var i = 1; i <= steps; i++)
 					{
-						routines.Add(IMoveObjectWithRotation(objA, rfmFinalPosition + delta * i / steps, 0.5f, screwVector));
-						routines.Add(IDelay(0.5f));
+						routines.Add(MoveObjectWithRotationCoroutine(objA, rfmFinalPosition + delta * i / steps, 0.5f, screwVector));
+						routines.Add(DelayCoroutine(0.3f));
 					}
 			
 					break;
 				default:
-					routines.Add(IMoveObject(objA, ifmFinalPosition, 1.0f));
+					routines.Add(MoveObjectCoroutine(objA, ifmFinalPosition, 1.0f));
 					break;
 			}
 
@@ -638,29 +638,6 @@ namespace Catalogs
 				"z" => Vector3.forward,
 				_ => Vector3.forward
 			};
-		}
-		
-		private static void ScatterObjects(GameObject figure)
-		{
-			ScriptExecutor.IsScattered = true;
-			
-			var count = figure.transform.childCount;
-			var deltaDegree = Mathf.Ceil(360.0f / count);
-
-			for (var i = 0; i < count; i++)
-			{
-				var child = figure.transform.GetChild(i);
-				
-				var radius = Random.Range(8.0f, 10.0f);	
-				var newPosX = radius * Mathf.Sin(deltaDegree * i);
-				var newPosZ = radius * Mathf.Cos(deltaDegree * i);
-				child.transform.position += new Vector3(newPosX, 0, newPosZ);
-
-				var newRotX = Random.Range(15.0f, 30.0f);
-				var newRotY = Random.Range(15.0f, 30.0f);
-				var newRotZ = Random.Range(15.0f, 30.0f);
-				child.transform.rotation = Quaternion.Euler(newRotX, newRotY, newRotZ);
-			}
 		}
 
 		private void CloseLookFunctionality(List<GameObject> objs)
@@ -693,7 +670,7 @@ namespace Catalogs
 				var width = Math.Max(20, 5 * cloneObjects.Count);
 				for (var i = 0; i < cloneObjects.Count; i++)
 				{
-					coroutines.Add(IMoveObject(cloneObjects[i],
+					coroutines.Add(MoveObjectCoroutine(cloneObjects[i],
 						new Vector3((i + 1) * width / (cloneObjects.Count + 1) - width / 2, 5.0f, 0), 0.2f));
 				}
 
@@ -703,24 +680,22 @@ namespace Catalogs
 			Attributes attributes = Context.Instance.InitialAttributes[parentFigure.name];
 			var coroutines = new List<IEnumerator>
 			{
-				IResetObject(parentFigure, attributes, 0.2f),
-				IDelay(0.2f, CreateCloneObjects),
-				IDelay(0.2f, MoveCloneObjects)
+				ResetObjectCoroutine(parentFigure, attributes, 0.2f),
+				DelayCoroutine(0.2f, CreateCloneObjects),
+				DelayCoroutine(0.2f, MoveCloneObjects)
 			};
 
 			StartCoroutine(Sequence(coroutines));
 		}
 
-		private static IEnumerator IDelay(float duration, State.VoidFunction method = null)
+		private static IEnumerator DelayCoroutine(float duration, State.VoidFunction method = null)
 		{
 			yield return new WaitForSeconds(duration);
 			method?.Invoke();
 		}
 
-		private static IEnumerator IResetObject(GameObject obj, Attributes attributes, float duration)
+		private static IEnumerator ResetObjectCoroutine(GameObject obj, Attributes attributes, float duration)
 		{
-			ScriptExecutor.IsScattered = false;
-			
 			if (ScriptExecutor.IsInAction) yield break;
 			ScriptExecutor.IsInAction = true;
 
@@ -753,23 +728,21 @@ namespace Catalogs
 				}
 				o.transform.parent = obj.transform;
 			}
-
-			ScriptExecutor.IsScattered = false;
-
+			
 			float counter = 0;
-			while (counter < duration)
+			while (counter < 1)
 			{
-				counter += Time.deltaTime;
+				counter += Time.deltaTime / duration;
 
-				obj.transform.rotation = Quaternion.Lerp(currentRot, attributes.Rotation, counter / duration);
-				obj.transform.localScale = Vector3.Lerp(currentScale, attributes.Scale, counter / duration);
-				// obj.transform.position = Vector3.Lerp(obj.transform.position, attributes.Position, counter / duration);
+				obj.transform.rotation = Quaternion.Lerp(currentRot, attributes.Rotation, counter);
+				obj.transform.localScale = Vector3.Lerp(currentScale, attributes.Scale, counter);
+				obj.transform.position = Vector3.Lerp(obj.transform.position, attributes.Position, counter);
 
 				yield return null;
 			}
 		}
 
-		private static IEnumerator IAdjustStructure(GameObject objA, GameObject objB, float duration = 0.1f)
+		private static IEnumerator AdjustStructureCoroutine(GameObject objA, GameObject objB, float duration = 0.1f)
 		{
 			objA.transform.parent = objB.transform;
 			
@@ -783,7 +756,7 @@ namespace Catalogs
 		}
 		
 		// smoothly move object
-		private static IEnumerator IMoveObject(GameObject obj, Vector3 finalPosition, float duration)
+		private static IEnumerator MoveObjectCoroutine(GameObject obj, Vector3 finalPosition, float duration)
 		{
 			if (ScriptExecutor.IsInAction) yield break;
 			ScriptExecutor.IsInAction = true;
@@ -801,7 +774,7 @@ namespace Catalogs
 			ScriptExecutor.IsInAction = false;
 		}
 		
-		private static IEnumerator IMoveObjectWithRotation(GameObject obj, Vector3 finalPosition, float duration, Vector3 direction = default)
+		private static IEnumerator MoveObjectWithRotationCoroutine(GameObject obj, Vector3 finalPosition, float duration, Vector3 direction = default)
 		{
 			if (ScriptExecutor.IsInAction) yield break;
 			ScriptExecutor.IsInAction = true;
@@ -846,7 +819,7 @@ namespace Catalogs
 		}
 
 		// smoothly change rotation of camera
-		private static IEnumerator IRotateObject(dynamic obj, Quaternion finalRotation, float duration)
+		private static IEnumerator RotateObjectCoroutine(dynamic obj, Quaternion finalRotation, float duration)
 		{
 			if (ScriptExecutor.IsInAction) yield break;
 			ScriptExecutor.IsInAction = true;
@@ -864,7 +837,7 @@ namespace Catalogs
 			ScriptExecutor.IsInAction = false;
 		}
 
-		private static IEnumerator IScaleObject(dynamic obj, Vector3 finalScale, float duration)
+		private static IEnumerator ScaleObjectCoroutine(dynamic obj, Vector3 finalScale, float duration)
 		{
 			if (ScriptExecutor.IsInAction) yield break;
 			ScriptExecutor.IsInAction = true;
@@ -883,7 +856,7 @@ namespace Catalogs
 		}
 
 		// smoothly change FoV of camera
-		private static IEnumerator IChangeFieldOfViewByValue(Camera camera, float finalFoV, float duration)
+		private static IEnumerator ChangeFieldOfViewByValueCoroutine(Camera camera, float finalFoV, float duration)
 		{
 			if (ScriptExecutor.IsInAction) yield break;
 

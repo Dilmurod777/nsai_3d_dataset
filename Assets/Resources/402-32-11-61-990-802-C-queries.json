@@ -1,0 +1,98 @@
+﻿[
+  {
+    "query": "Attach objects [8], [3]",
+    "programs": [
+      "ExtractID object query",
+      "CreateActions attach yes prev",
+      "SaveVal2Var prev var1",
+      "CheckActionsValidity var1 prev",
+      "Align prev var1"
+    ],
+    "knowledge": "Put the upper side strut assembly [3] in its position for connection to the strut assembly, lower [8].",
+    "reply": "[3], [8]"
+  },
+  {
+    "query": "Attach objects [7], [8]",
+    "programs": [
+      "ExtractID object query",
+      "CreateActions attach yes prev",
+      "SaveVal2Var prev var1",
+      "CheckActionsValidity var1 prev",
+      "StepInstall prev var1"
+    ],
+    "knowledge": "Put the side strut pin [7] through the upper side strut assembly [3] and the strut assembly, lower [8].",
+    "reply": "[7], [8]"
+  },
+  {
+    "query": "Attach objects [9], [7]",
+    "programs": [
+      "ExtractID object query",
+      "CreateActions attach yes prev",
+      "SaveVal2Var prev var1",
+      "CheckActionsValidity var1 prev",
+      "SmoothInstall prev var1"
+    ],
+    "knowledge": "Install the end cap [9] on the side strut pin [7].",
+    "reply": "[9], [7]"
+  },
+  {
+    "query": "Attach objects [10], [7]",
+    "programs": [
+      "ExtractID object query",
+      "CreateActions attach yes prev",
+      "SaveVal2Var prev var1",
+      "CheckActionsValidity var1 prev",
+      "SmoothInstall prev var1"
+    ],
+    "knowledge": "Install the end cap [10] on the side strut pin [7].",
+    "reply": "[10], [7]"
+  },
+  {
+    "query": "Attach objects [11], [7]",
+    "programs": [
+      "ExtractID object query",
+      "CreateActions attach yes prev",
+      "SaveVal2Var prev var1",
+      "CheckActionsValidity var1 prev",
+      "SmoothScrew y prev var1"
+    ],
+    "knowledge": "Install the bolt [11] in the side strut pin [7].",
+    "reply": "[11], [7]"
+  },
+  {
+    "query": "Attach objects [12], [11]",
+    "programs": [
+      "ExtractID object query",
+      "CreateActions attach yes prev",
+      "SaveVal2Var prev var1",
+      "CheckActionsValidity var1 prev",
+      "SmoothInstall prev var1"
+    ],
+    "knowledge": "Install the washer [12] on the bolt [11].",
+    "reply": "[12], [11]"
+  },
+  {
+    "query": "Attach objects [14], [11]",
+    "programs": [
+      "ExtractID object query",
+      "CreateActions attach yes prev",
+      "SaveVal2Var prev var1",
+      "CheckActionsValidity var1 prev",
+      "StepScrew y prev var1"
+    ],
+    "knowledge": "Install the nut [14] on the bolt [11].",
+    "reply": "[14], [11]"
+  },
+  {
+    "query": "Attach objects [13], [11]",
+    "programs": [
+      "ExtractID object query",
+      "CreateActions attach yes prev",
+      "SaveVal2Var prev var1",
+      "CheckActionsValidity var1 prev",
+      "SmoothScrew x prev var1"
+    ],
+    "knowledge": "Install the cotter pin [13] in the bolt [11].",
+    "reply": "[13], [11]"
+  }
+]
