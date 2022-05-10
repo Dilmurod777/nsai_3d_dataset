@@ -1,1 +1,334 @@
-[{"tasks": [{"task_id": "32-11-61-000-802", "title": "Main Landing Gear Lower Side Strut Removal", "general": [{"1": "This procedure supplies instructions to remove the lower side strut."}], "references": [{"reference": "07-11-01-580-815", "title": "Lift the Airplane with the Jacks (P/B 201)"}, {"reference": "29-11-00-860-805", "title": "Hydraulic System A or B Power Removal (P/B 201)"}, {"reference": "32-00-01-480-801", "title": "Landing Gear Downlock Pins Installation (P/B 201)"}, {"reference": "32-32-91-000-801", "title": "Main Gear Downlock Springs Removal (P/B 401)"}], "tools_equipment": [{"reference": "SPL-1370", "description": "Protector - Thread (C32029-14, Part of Kit C32029-38 or C32029-45)"}], "zones": [{"zone": "133", "area": "Main Landing Gear Wheel Well, Body Station 663.75 to Body Station 727.00 - Left"}, {"zone": "134", "area": "Main Landing Gear Wheel Well, Body Station 663.75 to Body Station 727.00 - Right"}, {"zone": "713", "area": "Nose Landing Gear"}, {"zone": "734", "area": "Left Main Landing Gear"}, {"zone": "744", "area": "Right Main Landing Gear"}], "preparation": {"subtasks": [{"subtask_id": "32-11-61-480-003", "content": "If the downlock pins are not installed on all the landing gear, do this task: Landing Gear Downlock Pins Installation, TASK 32-00-01-480-801", "warnings": [{"content": "MAKE SURE THE DOWNLOCK PINS ARE INSTALLED ON ALL THE LANDING GEAR BUT THE ONE TO BE REMOVED. WITHOUT THE DOWNLOCK PINS, THE LANDING GEAR COULD RETRACT AND CAUSE INJURIES TO PERSONS AND DAMAGE TO EQUIPMENT."}]}, {"subtask_id": "32-11-61-580-006", "content": "Do this task: Lift the Airplane with the Jacks, TASK 07-11-01-580-815."}, {"subtask_id": "32-11-61-860-002", "content": "For hydraulic system A, do this task: Hydraulic System A or B Power Removal, TASK 29-11-00-860-805."}, {"subtask_id": "32-11-61-020-006", "content": "Do this task: Main Gear Downlock Springs Removal, TASK 32-32-91-000-801."}]}, "figures": [{"title": "402-32-11-61-990-802-A", "figure_items": {"41": "[41] PUSHROD", "42": "[42] NUT", "43": "[43] WASHER", "45": "[45] BUSHING", "46": "[46] BOLT", "8": "[8] LOWER SIDE STRUT"}}, {"title": "402-32-11-61-990-802-B", "figure_items": {"47": "[47] CROSS BOLT", "48": "[48] WASHER", "49": "[49] COTTER PIN", "50": "[50] NUT", "51": "[51] SHOCK STRUT", "52": "[52] SIDE STRUT PIN", "53": "[53] SIDE STRUT WASHER", "54": "[54] SIDE STRUT NUT", "8": "[8] LOWER SIDE STRUT"}}, {"title": "402-32-11-61-990-802-C", "figure_items": {"3": "[3] UPPER SIDE STRUT", "9": "[9] END CAP", "11": "[11] BOLT", "12": "[12] WASHER", "13": "[13] COTTER PIN", "14": "[14] NUT", "7": "[7] SIDE STRUT PIN", "8": "[8] LOWER SIDE STRUT"}}], "subtasks": [{"subtask_id": "32-11-61-020-007", "content": "Disconnect the lower side strut assembly, lower [8] from the pushrod [41]", "figure": "402-32-11-61-990-802-A", "instructions": [{"order": "1", "content": "Remove the nut [42], washer [43] from the bolt [46]", "actions": [{"remove": [42, 46]}, {"remove": [43, 46]}]}, {"order": "2", "content": "Remove the bolt [46] to disconnect the lower side strut assembly, lower [8] from the pushrod [41]", "actions": [{"remove": [46, 8]}]}, {"order": "3", "content": "Isolate the pushrod [41] from the lower side strut assembly, lower [8]", "actions": [{"remove": [41, 8]}]}]}, {"subtask_id": "32-11-61-480-004", "content": "Use a rope to hold the pushrod [41] and the inner door in its position", "figure": "402-32-11-61-990-802-A"}, {"subtask_id": "32-11-61-020-008", "content": "Disconnect the lower side strut assembly, lower [8] from the shock strut [51]", "figure": "402-32-11-61-990-802-B", "instructions": [{"order": "1", "content": "Remove the pin [49], nut [50], and washer [48] from the cross bolt [47]", "actions": [{"remove": [49, 47]}, {"remove": [50, 47]}, {"remove": [48, 47]}]}, {"order": "2", "content": "Remove the cross bolt [47] from the side strut pin [52]", "actions": [{"remove": [47, 52]}]}, {"order": "3", "content": "Remove the side strut nut [54], and the side strut washer [53] from the side strut pin [52]", "actions": [{"remove": [54, 52]}, {"remove": [53, 52]}]}, {"order": "4", "content": "Remove the side strut pin [52] to disconnect the lower side strut assembly, lower [8] from the shock strut [51]", "actions": [{"remove": [52, 51]}], "note": "Use the thread protector, SPL-1370, for the side strut pin [52] when you do this step"}]}, {"subtask_id": "32-11-61-020-009", "content": "Disconnect the lower strut assembly, lower [8] from the upper side strut assembly [3]", "figure": "402-32-11-61-990-802-C", "instructions": [{"order": "1", "content": "Remove the cotter pin [13], nut [14], and washer [12] from the bolt [11]", "actions": [{"remove": [13, 11]}, {"remove": [14, 11]}, {"remove": [12, 11]}]}, {"order": "2", "content": "Remove the bolt [11] from the side strut pin [7]", "actions": [{"remove": [11, 7]}]}, {"order": "3", "content": "Remove the end cap [9] from the side strut pin [7]", "actions": [{"remove": [9, 7]}]}, {"order": "4", "content": "Use a rope to support the upper end of the lower side strut assembly, lower [8] and attach the rope to the outboard side of the reaction link assembly [15]", "note": "The lower side strut weighs approximately 48.3 lb (21.91 kg)"}, {"order": "5", "content": "Remove the side strut pin [7] to disconnect the upper side strut assembly [3] from the lower side strut assembly, lower [8]", "actions": [{"remove": [7, 3]}]}]}, {"subtask_id": "32-11-61-020-016", "content": "Carefully lower and remove the lower side strut assembly, lower [8] from the airplane", "figure": "402-32-11-61-990-802-C", "note": "The lower side strut assembly, lower [8] weighs approximately 48.3 lb (21.91 kg). Make sure its sufficiently supported"}]}]}]
+[
+  {
+    "tasks": [
+      {
+        "task_id": "32-11-61-000-802",
+        "title": "Main Landing Gear Lower Side Strut Removal",
+        "general": [
+          {
+            "1": "This procedure supplies instructions to remove the lower side strut."
+          }
+        ],
+        "references": [
+          {
+            "reference": "07-11-01-580-815",
+            "title": "Lift the Airplane with the Jacks (P/B 201)"
+          },
+          {
+            "reference": "29-11-00-860-805",
+            "title": "Hydraulic System A or B Power Removal (P/B 201)"
+          },
+          {
+            "reference": "32-00-01-480-801",
+            "title": "Landing Gear Downlock Pins Installation (P/B 201)"
+          },
+          {
+            "reference": "32-32-91-000-801",
+            "title": "Main Gear Downlock Springs Removal (P/B 401)"
+          }
+        ],
+        "tools_equipment": [
+          {
+            "reference": "SPL-1370",
+            "description": "Protector - Thread (C32029-14, Part of Kit C32029-38 or C32029-45)"
+          }
+        ],
+        "zones": [
+          {
+            "zone": "133",
+            "area": "Main Landing Gear Wheel Well, Body Station 663.75 to Body Station 727.00 - Left"
+          },
+          {
+            "zone": "134",
+            "area": "Main Landing Gear Wheel Well, Body Station 663.75 to Body Station 727.00 - Right"
+          },
+          {
+            "zone": "713",
+            "area": "Nose Landing Gear"
+          },
+          {
+            "zone": "734",
+            "area": "Left Main Landing Gear"
+          },
+          {
+            "zone": "744",
+            "area": "Right Main Landing Gear"
+          }
+        ],
+        "preparation": {
+          "subtasks": [
+            {
+              "subtask_id": "32-11-61-480-003",
+              "content": "If the downlock pins are not installed on all the landing gear, do this task: Landing Gear Downlock Pins Installation, TASK 32-00-01-480-801",
+              "warnings": [
+                {
+                  "content": "MAKE SURE THE DOWNLOCK PINS ARE INSTALLED ON ALL THE LANDING GEAR BUT THE ONE TO BE REMOVED. WITHOUT THE DOWNLOCK PINS, THE LANDING GEAR COULD RETRACT AND CAUSE INJURIES TO PERSONS AND DAMAGE TO EQUIPMENT."
+                }
+              ]
+            },
+            {
+              "subtask_id": "32-11-61-580-006",
+              "content": "Do this task: Lift the Airplane with the Jacks, TASK 07-11-01-580-815."
+            },
+            {
+              "subtask_id": "32-11-61-860-002",
+              "content": "For hydraulic system A, do this task: Hydraulic System A or B Power Removal, TASK 29-11-00-860-805."
+            },
+            {
+              "subtask_id": "32-11-61-020-006",
+              "content": "Do this task: Main Gear Downlock Springs Removal, TASK 32-32-91-000-801."
+            }
+          ]
+        },
+        "figures": [
+          {
+            "title": "402-32-11-61-990-802-A",
+            "figure_items": {
+              "41": "[41] PUSHROD",
+              "42": "[42] NUT",
+              "43": "[43] WASHER",
+              "45": "[45] BUSHING",
+              "46": "[46] BOLT",
+              "8": "[8] LOWER SIDE STRUT"
+            }
+          },
+          {
+            "title": "402-32-11-61-990-802-B",
+            "figure_items": {
+              "47": "[47] CROSS BOLT",
+              "48": "[48] WASHER",
+              "49": "[49] COTTER PIN",
+              "50": "[50] NUT",
+              "51": "[51] SHOCK STRUT",
+              "52": "[52] SIDE STRUT PIN",
+              "53": "[53] SIDE STRUT WASHER",
+              "54": "[54] SIDE STRUT NUT",
+              "8": "[8] LOWER SIDE STRUT"
+            }
+          },
+          {
+            "title": "402-32-11-61-990-802-C",
+            "figure_items": {
+              "3": "[3] UPPER SIDE STRUT",
+              "9": "[9] END CAP",
+              "11": "[11] BOLT",
+              "12": "[12] WASHER",
+              "13": "[13] COTTER PIN",
+              "14": "[14] NUT",
+              "7": "[7] SIDE STRUT PIN",
+              "8": "[8] LOWER SIDE STRUT"
+            }
+          }
+        ],
+        "subtasks": [
+          {
+            "subtask_id": "32-11-61-020-007",
+            "content": "Disconnect the lower side strut assembly, lower [8] from the pushrod [41]",
+            "figure": "402-32-11-61-990-802-A",
+            "instructions": [
+              {
+                "order": "1",
+                "content": "Remove the nut [42], washer [43] from the bolt [46]",
+                "actions": [
+                  {
+                    "remove": [
+                      42,
+                      46
+                    ]
+                  },
+                  {
+                    "remove": [
+                      43,
+                      46
+                    ]
+                  }
+                ]
+              },
+              {
+                "order": "2",
+                "content": "Remove the bolt [46] to disconnect the lower side strut assembly, lower [8] from the pushrod [41]",
+                "actions": [
+                  {
+                    "remove": [
+                      46,
+                      8
+                    ]
+                  }
+                ]
+              },
+              {
+                "order": "3",
+                "content": "Isolate the pushrod [41] from the lower side strut assembly, lower [8]",
+                "actions": [
+                  {
+                    "remove": [
+                      41,
+                      8
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "subtask_id": "32-11-61-480-004",
+            "content": "Use a rope to hold the pushrod [41] and the inner door in its position",
+            "figure": "402-32-11-61-990-802-A"
+          },
+          {
+            "subtask_id": "32-11-61-020-008",
+            "content": "Disconnect the lower side strut assembly, lower [8] from the shock strut [51]",
+            "figure": "402-32-11-61-990-802-B",
+            "instructions": [
+              {
+                "order": "1",
+                "content": "Remove the pin [49], nut [50], and washer [48] from the cross bolt [47]",
+                "actions": [
+                  {
+                    "remove": [
+                      49,
+                      47
+                    ]
+                  },
+                  {
+                    "remove": [
+                      50,
+                      47
+                    ]
+                  },
+                  {
+                    "remove": [
+                      48,
+                      47
+                    ]
+                  }
+                ]
+              },
+              {
+                "order": "2",
+                "content": "Remove the cross bolt [47] from the side strut pin [52]",
+                "actions": [
+                  {
+                    "remove": [
+                      47,
+                      52
+                    ]
+                  }
+                ]
+              },
+              {
+                "order": "3",
+                "content": "Remove the side strut nut [54], and the side strut washer [53] from the side strut pin [52]",
+                "actions": [
+                  {
+                    "remove": [
+                      54,
+                      52
+                    ]
+                  },
+                  {
+                    "remove": [
+                      53,
+                      52
+                    ]
+                  }
+                ]
+              },
+              {
+                "order": "4",
+                "content": "Remove the side strut pin [52] to disconnect the lower side strut assembly, lower [8] from the shock strut [51]",
+                "actions": [
+                  {
+                    "remove": [
+                      52,
+                      51
+                    ]
+                  }
+                ],
+                "note": "Use the thread protector, SPL-1370, for the side strut pin [52] when you do this step"
+              }
+            ]
+          },
+          {
+            "subtask_id": "32-11-61-020-009",
+            "content": "Disconnect the lower strut assembly, lower [8] from the upper side strut assembly [3]",
+            "figure": "402-32-11-61-990-802-C",
+            "instructions": [
+              {
+                "order": "1",
+                "content": "Remove the cotter pin [13], nut [14], and washer [12] from the bolt [11]",
+                "actions": [
+                  {
+                    "remove": [
+                      13,
+                      11
+                    ]
+                  },
+                  {
+                    "remove": [
+                      14,
+                      11
+                    ]
+                  },
+                  {
+                    "remove": [
+                      12,
+                      11
+                    ]
+                  }
+                ]
+              },
+              {
+                "order": "2",
+                "content": "Remove the bolt [11] from the side strut pin [7]",
+                "actions": [
+                  {
+                    "remove": [
+                      11,
+                      7
+                    ]
+                  }
+                ]
+              },
+              {
+                "order": "3",
+                "content": "Remove the end cap [9] from the side strut pin [7]",
+                "actions": [
+                  {
+                    "remove": [
+                      9,
+                      7
+                    ]
+                  }
+                ]
+              },
+              {
+                "order": "4",
+                "content": "Use a rope to support the upper end of the lower side strut assembly, lower [8] and attach the rope to the outboard side of the reaction link assembly [15]",
+                "note": "The lower side strut weighs approximately 48.3 lb (21.91 kg)"
+              },
+              {
+                "order": "5",
+                "content": "Remove the side strut pin [7] to disconnect the upper side strut assembly [3] from the lower side strut assembly, lower [8]",
+                "actions": [
+                  {
+                    "remove": [
+                      7,
+                      3
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "subtask_id": "32-11-61-020-016",
+            "content": "Carefully lower and remove the lower side strut assembly, lower [8] from the airplane",
+            "figure": "402-32-11-61-990-802-C",
+            "note": "The lower side strut assembly, lower [8] weighs approximately 48.3 lb (21.91 kg). Make sure its sufficiently supported"
+          }
+        ]
+      }
+    ]
+  }
+]
