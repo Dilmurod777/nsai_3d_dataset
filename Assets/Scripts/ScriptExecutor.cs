@@ -73,7 +73,8 @@ public class ScriptExecutor : MonoBehaviour
     public static void InitProgram()
     {
         _queryMetas = Queries.GetAllQueries();
-        
+
+        _currentQueryMetaId = 0;
         _queryText.text = _queryMetas[_currentQueryMetaId].Query;
         
         var mainCamera = Camera.main;

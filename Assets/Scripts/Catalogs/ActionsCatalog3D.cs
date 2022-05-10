@@ -471,11 +471,12 @@ namespace Catalogs
 		public Response SmoothScrew(string args)
 		{
 			var argsList = args.Split(GeneralConstants.ArgsSeparator);
-			var valid = Context.GetAttribute(argsList[0]) == "yes";
+			var screwDirection = argsList[0];
+			var valid = Context.GetAttribute(argsList[1]) == "yes";
 			
 			if (!valid) return null;
 			
-			List<Action> actionsList = Context.GetAttribute(argsList[1]);
+			List<Action> actionsList = Context.GetAttribute(argsList[2]);
 
 			var action = actionsList[0];
 			var figureID = Context.Instance.CurrentFigureID;
@@ -483,7 +484,7 @@ namespace Catalogs
 			var objA = HelperFunctions.FindObjectInFigure(figure, action.Components[0]);
 			var objB = HelperFunctions.FindObjectInFigure(figure, action.Components[1]);
 
-			StartCoroutine(Attach(figure, objA, objB, GeneralConstants.AttachTypes.SmoothScrew));
+			StartCoroutine(Attach(figure, objA, objB, GeneralConstants.AttachTypes.SmoothScrew, GetScrewVector(screwDirection)));
 			
 			return new Response(new Dictionary<string, dynamic>
 			{
@@ -494,11 +495,12 @@ namespace Catalogs
 		public Response StepScrew(string args)
 		{
 			var argsList = args.Split(GeneralConstants.ArgsSeparator);
-			var valid = Context.GetAttribute(argsList[0]) == "yes";
+			var screwDirection = argsList[0];
+			var valid = Context.GetAttribute(argsList[1]) == "yes";
 			
 			if (!valid) return null;
 			
-			List<Action> actionsList = Context.GetAttribute(argsList[1]);
+			List<Action> actionsList = Context.GetAttribute(argsList[2]);
 
 			var action = actionsList[0];
 			var figureID = Context.Instance.CurrentFigureID;
@@ -506,7 +508,7 @@ namespace Catalogs
 			var objA = HelperFunctions.FindObjectInFigure(figure, action.Components[0]);
 			var objB = HelperFunctions.FindObjectInFigure(figure, action.Components[1]);
 
-			StartCoroutine(Attach(figure, objA, objB, GeneralConstants.AttachTypes.StepScrew));
+			StartCoroutine(Attach(figure, objA, objB, GeneralConstants.AttachTypes.StepScrew, GetScrewVector(screwDirection)));
 			
 			return new Response(new Dictionary<string, dynamic>
 			{
@@ -551,7 +553,7 @@ namespace Catalogs
 			return "yes";
 		}
 
-		private IEnumerator Attach(GameObject figure, GameObject objA, GameObject objB, GeneralConstants.AttachTypes type)
+		private IEnumerator Attach(GameObject figure, GameObject objA, GameObject objB, GeneralConstants.AttachTypes type, Vector3 screwVector = default)
 		{
 			Vector3 delta;
 			var steps = 3;
@@ -566,72 +568,78 @@ namespace Catalogs
 			
 			var rfmReferenceObjA = HelperFunctions.FindObjectInFigure(rfm, objA.name);
 			var rfmReferenceObjB = HelperFunctions.FindObjectInFigure(rfm, objB.name);
-			var rfmReferenceObjAPosition = rfmReferenceObjA.transform.position;
-			var rfmReferenceObjBPosition = rfmReferenceObjB.transform.position;
-					
-			var diff = (rfmReferenceObjAPosition - rfmReferenceObjBPosition) / rfm.transform.localScale.x;
-			var rfmFinalPosition = objB.transform.TransformPoint(diff);
-			
-			// (2.91591144, 6.9050045, 6.85317564)
-			// (-0.0434860215, -0.142524645, 0.185333788)
-				
-			// var ifmReferenceObjA = HelperFunctions.FindObjectInFigure(ifm, objA.name);
-			// var ifmReferenceObjB = HelperFunctions.FindObjectInFigure(ifm, objB.name);
-			// var ifmReferenceObjAPosition = ifmReferenceObjA.transform.position;
-			// var ifmReferenceObjBPosition = ifmReferenceObjB.transform.position;
-			// 		
-			// diff = ifmReferenceObjAPosition - ifmReferenceObjBPosition;
-			// var ifmFinalPosition = (objB.transform.TransformPoint(diff) + figureWrapper.position) / ifm.transform.localScale.x;
+			var ifmReferenceObjA = HelperFunctions.FindObjectInFigure(ifm, objA.name);
+			var ifmReferenceObjB = HelperFunctions.FindObjectInFigure(ifm, objB.name);
 
+			rfmReferenceObjA.transform.parent = rfmReferenceObjB.transform;
+			var diff = rfmReferenceObjA.transform.localPosition;
+			var rfmFinalPosition = objB.transform.TransformPoint(diff);
+			rfmReferenceObjB.transform.parent = rfmReferenceObjA.transform.parent;
+			
+			ifmReferenceObjA.transform.parent = ifmReferenceObjB.transform;
+			diff = ifmReferenceObjA.transform.localPosition;
+			var ifmFinalPosition = objB.transform.TransformPoint(diff);
+			ifmReferenceObjB.transform.parent = ifmReferenceObjA.transform.parent;
+			
 			var routines = new List<IEnumerator>
 			{
 				IRotateObject(objA, objB.transform.rotation, 0.5f),
 				IDelay(0.5f),
+				IAdjustStructure(objA, objB),
 				IMoveObject(objA, rfmFinalPosition, 0.5f),
 				IDelay(0.5f)
 			};
 
-			// switch (type)
-			// {
-			// 	case GeneralConstants.AttachTypes.SmoothInstall:
-			// 	case GeneralConstants.AttachTypes.Align:
-			// 		routines.Add(IMoveObject(objA, ifmFinalPosition, 1.0f));
-			// 		break;
-			// 	case GeneralConstants.AttachTypes.StepInstall:
-			// 		delta = ifmFinalPosition - rfmFinalPosition;
-			// 		
-			// 		for (var i = 1; i <= steps; i++)
-			// 		{
-			// 			routines.Add(IMoveObject(objA, rfmFinalPosition + delta * i / steps, 0.5f));
-			// 			routines.Add(IDelay(0.5f));
-			// 		}
-			//
-			// 		break;
-			// 	case GeneralConstants.AttachTypes.SmoothScrew:
-			// 		routines.Add(IMoveObjectWithRotation(objA, ifmFinalPosition, 2.0f));
-			// 		break;
-			// 	case GeneralConstants.AttachTypes.StepScrew:
-			// 		delta = ifmFinalPosition - rfmFinalPosition;
-			//
-			// 		for (var i = 1; i <= steps; i++)
-			// 		{
-			// 			routines.Add(IMoveObjectWithRotation(objA, rfmFinalPosition + delta * i / steps, 0.5f));
-			// 			routines.Add(IDelay(0.5f));
-			// 		}
-			//
-			// 		break;
-			// 	default:
-			// 		routines.Add(IMoveObject(objA, ifmFinalPosition, 1.0f));
-			// 		break;
-			// }
+			switch (type)
+			{
+				case GeneralConstants.AttachTypes.SmoothInstall:
+				case GeneralConstants.AttachTypes.Align:
+					routines.Add(IMoveObject(objA, ifmFinalPosition, 1.0f));
+					break;
+				case GeneralConstants.AttachTypes.StepInstall:
+					delta = ifmFinalPosition - rfmFinalPosition;
+					
+					for (var i = 1; i <= steps; i++)
+					{
+						routines.Add(IMoveObject(objA, rfmFinalPosition + delta * i / steps, 0.5f));
+						routines.Add(IDelay(0.5f));
+					}
 			
-			// routines.Add(IAdjustStructure(objA, objB));
+					break;
+				case GeneralConstants.AttachTypes.SmoothScrew:
+					routines.Add(IMoveObjectWithRotation(objA, ifmFinalPosition, 2.0f, screwVector));
+					break;
+				case GeneralConstants.AttachTypes.StepScrew:
+					delta = ifmFinalPosition - rfmFinalPosition;
 			
+					for (var i = 1; i <= steps; i++)
+					{
+						routines.Add(IMoveObjectWithRotation(objA, rfmFinalPosition + delta * i / steps, 0.5f, screwVector));
+						routines.Add(IDelay(0.5f));
+					}
+			
+					break;
+				default:
+					routines.Add(IMoveObject(objA, ifmFinalPosition, 1.0f));
+					break;
+			}
+
 			StartCoroutine(Sequence(routines, 1.0f));
 
 			yield return null;
 		}
 
+		private static Vector3 GetScrewVector(string screwDirection)
+		{
+			return screwDirection switch
+			{
+				"x" => Vector3.right,
+				"y" => Vector3.up,
+				"z" => Vector3.forward,
+				_ => Vector3.forward
+			};
+		}
+		
 		private static void ScatterObjects(GameObject figure)
 		{
 			ScriptExecutor.IsScattered = true;
@@ -793,7 +801,7 @@ namespace Catalogs
 			ScriptExecutor.IsInAction = false;
 		}
 		
-		private static IEnumerator IMoveObjectWithRotation(GameObject obj, Vector3 finalPosition, float duration)
+		private static IEnumerator IMoveObjectWithRotation(GameObject obj, Vector3 finalPosition, float duration, Vector3 direction = default)
 		{
 			if (ScriptExecutor.IsInAction) yield break;
 			ScriptExecutor.IsInAction = true;
@@ -818,8 +826,8 @@ namespace Catalogs
 			}
 			
 			
-			infiniteRotationComponent.SetSpeed(100);
-			infiniteRotationComponent.SetDirection(Vector3.forward);
+			infiniteRotationComponent.SetSpeed(150);
+			infiniteRotationComponent.SetDirection(direction);
 
 			var currentPos = obj.transform.position;
 			float counter = 0;
