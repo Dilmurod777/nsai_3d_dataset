@@ -14,6 +14,7 @@ public class ScriptExecutor : MonoBehaviour
 
     private static List<QueryMeta> _queryMetas;
     private static int _currentQueryMetaId;
+    
 
     private void Start()
     {

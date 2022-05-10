@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Constants;
 using CustomFunctionality;
+using UnityEditor;
 using UnityEngine;
 using Action = Constants.Action;
 
@@ -558,6 +559,8 @@ namespace Catalogs
 		{
 			Vector3 delta;
 			const int steps = 3;
+
+			FocusObject(objA, objB);
 			
 			var figureName = figure.name;
 			var figureRfmName = figureName + "-RFM";
@@ -627,6 +630,15 @@ namespace Catalogs
 			StartCoroutine(Sequence(routines, 1.0f));
 
 			yield return null;
+		}
+
+		private static void FocusObject(GameObject objA, GameObject objB)
+		{
+			// var objAPosition = objA.transform.position;
+			// var objBPosition = objB.transform.position;
+			// var middlePosition = (objAPosition + objBPosition) / 2;
+			//
+			// Context.Instance.Camera.transform.LookAt(middlePosition);
 		}
 
 		private static Vector3 GetScrewVector(string screwDirection)
