@@ -473,12 +473,11 @@ namespace Catalogs
 		public Response SmoothScrew(string args)
 		{
 			var argsList = args.Split(GeneralConstants.ArgsSeparator);
-			var screwDirection = argsList[0];
-			var valid = Context.GetAttribute(argsList[1]) == "yes";
+			var valid = Context.GetAttribute(argsList[0]) == "yes";
 			
 			if (!valid) return null;
 			
-			List<Action> actionsList = Context.GetAttribute(argsList[2]);
+			List<Action> actionsList = Context.GetAttribute(argsList[1]);
 
 			var action = actionsList[0];
 			var figureID = Context.Instance.CurrentFigureID;
@@ -486,7 +485,7 @@ namespace Catalogs
 			var objA = HelperFunctions.FindObjectInFigure(figure, action.Components[0]);
 			var objB = HelperFunctions.FindObjectInFigure(figure, action.Components[1]);
 
-			StartCoroutine(Attach(figure, objA, objB, GeneralConstants.AttachTypes.SmoothScrew, GetScrewVector(screwDirection)));
+			StartCoroutine(Attach(figure, objA, objB, GeneralConstants.AttachTypes.SmoothScrew));
 			
 			return new Response(new Dictionary<string, dynamic>
 			{
@@ -497,12 +496,11 @@ namespace Catalogs
 		public Response StepScrew(string args)
 		{
 			var argsList = args.Split(GeneralConstants.ArgsSeparator);
-			var screwDirection = argsList[0];
-			var valid = Context.GetAttribute(argsList[1]) == "yes";
+			var valid = Context.GetAttribute(argsList[0]) == "yes";
 			
 			if (!valid) return null;
 			
-			List<Action> actionsList = Context.GetAttribute(argsList[2]);
+			List<Action> actionsList = Context.GetAttribute(argsList[1]);
 
 			var action = actionsList[0];
 			var figureID = Context.Instance.CurrentFigureID;
@@ -510,7 +508,7 @@ namespace Catalogs
 			var objA = HelperFunctions.FindObjectInFigure(figure, action.Components[0]);
 			var objB = HelperFunctions.FindObjectInFigure(figure, action.Components[1]);
 
-			StartCoroutine(Attach(figure, objA, objB, GeneralConstants.AttachTypes.StepScrew, GetScrewVector(screwDirection)));
+			StartCoroutine(Attach(figure, objA, objB, GeneralConstants.AttachTypes.StepScrew));
 			
 			return new Response(new Dictionary<string, dynamic>
 			{
@@ -555,9 +553,10 @@ namespace Catalogs
 			return "yes";
 		}
 
-		private IEnumerator Attach(GameObject figure, GameObject objA, GameObject objB, GeneralConstants.AttachTypes type, Vector3 screwVector = default)
+		private IEnumerator Attach(GameObject figure, GameObject objA, GameObject objB, GeneralConstants.AttachTypes type)
 		{
 			Vector3 delta;
+			RotationAxisEnum rotationAxis;
 			const int steps = 3;
 
 			FocusObject(objA, objB);
@@ -610,14 +609,17 @@ namespace Catalogs
 			
 					break;
 				case GeneralConstants.AttachTypes.SmoothScrew:
-					routines.Add(MoveObjectWithRotationCoroutine(objA, ifmFinalPosition, 2.0f, screwVector));
+					rotationAxis = objA.GetComponent<ObjectMeta>().AttachRotationAxis;
+					
+					routines.Add(MoveObjectWithRotationCoroutine(objA, ifmFinalPosition, 2.0f, GetScrewVector(rotationAxis)));
 					break;
 				case GeneralConstants.AttachTypes.StepScrew:
 					delta = ifmFinalPosition - rfmFinalPosition;
+					rotationAxis = objA.GetComponent<ObjectMeta>().AttachRotationAxis;
 			
 					for (var i = 1; i <= steps; i++)
 					{
-						routines.Add(MoveObjectWithRotationCoroutine(objA, rfmFinalPosition + delta * i / steps, 0.5f, screwVector));
+						routines.Add(MoveObjectWithRotationCoroutine(objA, rfmFinalPosition + delta * i / steps, 0.5f, GetScrewVector(rotationAxis)));
 						routines.Add(DelayCoroutine(0.3f));
 					}
 			
@@ -641,15 +643,25 @@ namespace Catalogs
 			// Context.Instance.Camera.transform.LookAt(middlePosition);
 		}
 
-		private static Vector3 GetScrewVector(string screwDirection)
+		private static Vector3 GetScrewVector(RotationAxisEnum rotationAxis)
 		{
-			return screwDirection switch
+			switch (rotationAxis)
 			{
-				"x" => Vector3.right,
-				"y" => Vector3.up,
-				"z" => Vector3.forward,
-				_ => Vector3.forward
-			};
+				case RotationAxisEnum.X:
+					return Vector3.right;
+				case RotationAxisEnum.negX:
+					return Vector3.left;
+				case RotationAxisEnum.Y:
+					return Vector3.up;
+				case RotationAxisEnum.negY:
+					return Vector3.down;
+				case RotationAxisEnum.Z:
+					return Vector3.forward;
+				case RotationAxisEnum.negZ:
+					return Vector3.back;
+				default:
+					return Vector3.forward;
+			}
 		}
 
 		private void CloseLookFunctionality(List<GameObject> objs)

@@ -18,7 +18,7 @@
       "CreateActions attach yes prev",
       "SaveVal2Var prev var1",
       "CheckActionsValidity var1 prev",
-      "SmoothScrew y prev var1"
+      "SmoothScrew prev var1"
     ],
     "knowledge": "Put the side strut pin [52] through the strut assembly, lower [8] and the clevis on the shock strut [51].",
     "reply": "[52], [51]"
@@ -42,7 +42,7 @@
       "CreateActions attach yes prev",
       "SaveVal2Var prev var1",
       "CheckActionsValidity var1 prev",
-      "StepScrew y prev var1"
+      "StepScrew prev var1"
     ],
     "knowledge": "Install the side strut nut [54] on the side strut pin [52].",
     "reply": "[54], [52]"
@@ -54,7 +54,7 @@
       "CreateActions attach yes prev",
       "SaveVal2Var prev var1",
       "CheckActionsValidity var1 prev",
-      "SmoothScrew x prev var1"
+      "SmoothScrew prev var1"
     ],
     "knowledge": "Install the cross bolt [47] with the bolt head inboard in the side strut pin [52].",
     "reply": "[47], [52]"
@@ -78,7 +78,7 @@
       "CreateActions attach yes prev",
       "SaveVal2Var prev var1",
       "CheckActionsValidity var1 prev",
-      "StepScrew y prev var1"
+      "StepScrew prev var1"
     ],
     "knowledge":  "Install the nut [50] on the cross bolt [47].",
     "reply": "[50], [47]"
@@ -90,7 +90,7 @@
       "CreateActions attach yes prev",
       "SaveVal2Var prev var1",
       "CheckActionsValidity var1 prev",
-      "SmoothScrew z prev var1"
+      "SmoothScrew prev var1"
     ],
     "knowledge":  "Install the pin [49] in the cross bolt [47].",
     "reply": "[49], [47]"

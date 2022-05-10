@@ -42,7 +42,7 @@
       "CreateActions attach yes prev",
       "SaveVal2Var prev var1",
       "CheckActionsValidity var1 prev",
-      "SmoothScrew z prev var1"
+      "SmoothScrew prev var1"
     ],
     "knowledge": "Put the bolt [46] through the strut assembly, lower [8], and the pushrod [41].",
     "reply": "[46], [8]"
@@ -66,7 +66,7 @@
       "CreateActions attach yes prev",
       "SaveVal2Var prev var1",
       "CheckActionsValidity var1 prev",
-      "StepScrew z prev var1"
+      "StepScrew prev var1"
     ],
     "knowledge":  "Install the nut [42] on the bolt [46].",
     "reply": "[42], [46]"
@@ -78,7 +78,7 @@
       "CreateActions attach yes prev",
       "SaveVal2Var prev var1",
       "CheckActionsValidity var1 prev",
-      "StepScrew z prev var1"
+      "StepScrew prev var1"
     ],
     "knowledge":  "Install the nut [42] on the bolt [46].",
     "reply": "[42], [46]"
