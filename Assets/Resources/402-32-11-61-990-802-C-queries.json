@@ -1,10 +1,17 @@
 ﻿[
   {
-    "query": "Attach objects [8], [3]",
+    "query": "Attach objects [3], [8]",
     "programs": [
       "ExtractID object query",
       "CreateActions attach yes prev",
       "SaveVal2Var prev var1",
+      "FilterType tasks root",
+      "FilterAttr task_id CurrentTaskID prev",
+      "FilterType subtasks prev",
+      "FilterAttr subtask_id CurrentSubtaskID prev",
+      "FilterType instructions prev",
+      "FilterAttr order CurrentInstructionOrder prev",
+      "FilterType actions prev",      
       "CheckActionsValidity var1 prev",
       "Align prev var1"
     ],
@@ -17,6 +24,13 @@
       "ExtractID object query",
       "CreateActions attach yes prev",
       "SaveVal2Var prev var1",
+      "FilterType tasks root",
+      "FilterAttr task_id CurrentTaskID prev",
+      "FilterType subtasks prev",
+      "FilterAttr subtask_id CurrentSubtaskID prev",
+      "FilterType instructions prev",
+      "FilterAttr order CurrentInstructionOrder prev",
+      "FilterType actions prev",
       "CheckActionsValidity var1 prev",
       "StepInstall prev var1"
     ],
@@ -29,6 +43,13 @@
       "ExtractID object query",
       "CreateActions attach yes prev",
       "SaveVal2Var prev var1",
+      "FilterType tasks root",
+      "FilterAttr task_id CurrentTaskID prev",
+      "FilterType subtasks prev",
+      "FilterAttr subtask_id CurrentSubtaskID prev",
+      "FilterType instructions prev",
+      "FilterAttr order CurrentInstructionOrder prev",
+      "FilterType actions prev",
       "CheckActionsValidity var1 prev",
       "SmoothInstall prev var1"
     ],

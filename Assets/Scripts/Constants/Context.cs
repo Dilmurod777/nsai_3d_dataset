@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using SimpleJSON;
 using UnityEngine;
 
 public class Context
@@ -16,7 +17,7 @@ public class Context
 	public dynamic Prev;
 	public object Var1;
 	public object Var2;
-	public object Root;
+	public List<JSONNode> Root;
 	
 	private Context() {}  
 	private static Context _instance;  
@@ -38,6 +39,14 @@ public class Context
 				return Instance.Prev;
 			case "root":
 				return Instance.Root;
+			case "CurrentFigureId":
+				return Instance.CurrentFigureID;
+			case "CurrentTaskID":
+				return Instance.CurrentTaskID;
+			case "CurrentSubtaskID":
+				return Instance.CurrentSubtaskID;
+			case "CurrentInstructionOrder":
+				return Instance.CurrentInstructionOrder;
 			default:
 				return null;
 		}

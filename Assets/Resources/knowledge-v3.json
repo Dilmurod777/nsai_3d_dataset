@@ -1,0 +1,227 @@
+[
+  {
+    "tasks": [
+      {
+        "task_id": "32-11-61-400-802",
+        "title": "Main Landing Gear Lower Side Strut Installation",
+        "general": [
+          {
+            "1": "This procedure supplies instructions to install the lower side strut."
+          }
+        ],
+        "references": [
+          {
+            "reference": "07-11-01-580-816",
+            "title": "Lower the Airplane Off the Jacks (P/B 201)"
+          },
+          {
+            "reference": "12-21-11-640-801",
+            "title": "Main Landing Gear Upper End Components Servicing (P/B 301)"
+          },
+          {
+            "reference": "29-11-00-860-801",
+            "title": "Hydraulic System A or B Pressurization (P/B 201)"
+          },
+          {
+            "reference": "32-00-01-480-801",
+            "title": "Landing Gear Downlock Pins Installation (P/B 201)"
+          },
+          {
+            "reference": "32-13-11-820-801",
+            "title": "Main Landing Gear Shock Strut Door Adjustment (P/B 501)"
+          },
+          {
+            "reference": "32-32-00-710-801",
+            "title": "Main Landing Gear Operational Test (P/B 501)"
+          },
+          {
+            "reference": "32-32-00-710-802",
+            "title": "Main Landing Gear Test - Component Replacement (P/B 501)"
+          },
+          {
+            "reference": "32-32-91-400-801",
+            "title": "Main Gear Downlock Spring Installation (P/B 401)"
+          }
+        ],
+        "tools_equipment": [
+          {
+            "reference": "SPL-1361",
+            "description": "Assembly - Wrench Adapter (C32029-39, Part of Kit C32029-38 or C32029-45)"
+          },
+          {
+            "reference": "SPL-1370",
+            "description": "Protector - Thread (C32029-14, Part of Kit C32029-38 or C32029-45)"
+          }
+        ],
+        "zones": [
+          {
+            "zone": "133",
+            "area": "Main Landing Gear Wheel Well, Body Station 663.75 to Body Station 727.00 - Left"
+          },
+          {
+            "zone": "134",
+            "area": "Main Landing Gear Wheel Well, Body Station 663.75 to Body Station 727.00 - Right"
+          },
+          {
+            "zone": "713",
+            "area": "Nose Landing Gear"
+          },
+          {
+            "zone": "734",
+            "area": "Left Main Landing Gear"
+          },
+          {
+            "zone": "744",
+            "area": "Right Main Landing Gear"
+          }
+        ],
+        "preparation": {
+          "subtasks": [
+            {
+              "subtask_id": "32-11-61-480-005",
+              "content": "If the downlock pins are not installed on all the landing gear, do this task: Landing Gear Downlock Pins Installation, TASK 32-00-01-480-801.",
+              "warnings": [
+                {
+                  "content": "MAKE SURE THE DOWNLOCK PINS ARE INSTALLED ON ALL THE LANDING GEAR, BUT THE ONE TO BE REMOVED. WITHOUT THE DOWNLOCK PINS, THE LANDING GEAR COULD RETRACT AND CAUSE INJURIES TO PERSONS AND DAMAGE TO EQUIPMENT."
+                }
+              ]
+            }
+          ]
+        },
+        "figures": [
+          {
+            "title": "402-32-11-61-990-802-A",
+            "figure_items": {
+              "41": "[41] PUSHROD",
+              "42": "[42] NUT",
+              "43": "[43] WASHER",
+              "45": "[45] BUSHING",
+              "46": "[46] BOLT",
+              "8": "[8] LOWER SIDE STRUT"
+            }
+          },
+          {
+            "title": "402-32-11-61-990-802-B",
+            "figure_items": {
+              "47": "[47] CROSS BOLT",
+              "48": "[48] WASHER",
+              "49": "[49] COTTER PIN",
+              "50": "[50] NUT",
+              "51": "[51] SHOCK STRUT",
+              "52": "[52] SIDE STRUT PIN",
+              "53": "[53] SIDE STRUT WASHER",
+              "54": "[54] SIDE STRUT NUT",
+              "8": "[8] LOWER SIDE STRUT"
+            }
+          },
+          {
+            "title": "402-32-11-61-990-802-C",
+            "figure_items": {
+              "3": "[3] UPPER SIDE STRUT",
+              "9": "[9] END CAP",
+              "11": "[11] BOLT",
+              "12": "[12] WASHER",
+              "13": "[13] COTTER PIN",
+              "14": "[14] NUT",
+              "7": "[7] SIDE STRUT PIN",
+              "8": "[8] LOWER SIDE STRUT"
+            }
+          }
+        ],
+        "subtasks": [
+          {
+            "subtask_id": "32-11-61-420-014",
+            "content": "Connect the upper side strut assembly [3] to the strut assembly, lower [8]",
+            "figure": "402-32-11-61-990-802-C",
+            "instructions": [
+              {
+                "order": "1",
+                "content": "Put the upper side strut assembly [3] in its position for connection to the strut assembly, lower [8].",
+                "actions": [
+                  {
+                    "attach": [
+                      3,
+                      8
+                    ]
+                  }
+                ]
+              },
+              {
+                "order": "2",
+                "content": "Put the side strut pin [7] through the upper side strut assembly [3] and the strut assembly, lower [8].",
+                "actions": [
+                  {
+                    "attach": [
+                      7,
+                      8
+                    ]
+                  }
+                ]
+              },
+              {
+                "order": "3",
+                "content": "Install the end cap [9] on the side strut pin [7].",
+                "actions": [
+                  {
+                    "attach": [
+                      9,
+                      7
+                    ]
+                  },
+                  {
+                    "attach": [
+                      10,
+                      7
+                    ]
+                  }
+                ]
+              },
+              {
+                "order": "4",
+                "content": "Install the bolt [11] in the side strut pin [7].",
+                "actions": [
+                  {
+                    "attach": [
+                      11,
+                      7
+                    ]
+                  }
+                ]
+              },
+              {
+                "order": "5",
+                "content": "Install the washer [12], and the nut [14] on the bolt [11].",
+                "actions": [
+                  {
+                    "attach": [
+                      12,
+                      11
+                    ]
+                  },
+                  {
+                    "attach": [
+                      14,
+                      11
+                    ]
+                  }
+                ]
+              },
+              {
+                "order": "6",
+                "content": "Install the cotter pin [13] in the bolt [11].",
+                "actions": [
+                  {
+                    "attach": [
+                      13,
+                      11
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

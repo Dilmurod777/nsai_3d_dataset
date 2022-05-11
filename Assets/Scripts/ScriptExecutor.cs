@@ -18,10 +18,10 @@ public class ScriptExecutor : MonoBehaviour
 
     private void Start()
     {
-        Context.Instance.CurrentFigureID = "402-32-11-61-990-802-A";
-        Context.Instance.CurrentTaskID = "1";
-        Context.Instance.CurrentSubtaskID = "2";
-        Context.Instance.CurrentInstructionOrder = "3";
+        Context.Instance.CurrentFigureID = "402-32-11-61-990-802-C";
+        Context.Instance.CurrentTaskID = "32-11-61-400-802";
+        Context.Instance.CurrentSubtaskID = "32-11-61-420-014";
+        Context.Instance.CurrentInstructionOrder = "1";
         
         var textObjects = FindObjectsOfType<Text>();
 

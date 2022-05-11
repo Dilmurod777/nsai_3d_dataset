@@ -21,6 +21,7 @@ namespace Catalogs
             _actionsCatalog3D = gameObject.GetComponent<ActionsCatalog3D>()
                 ? gameObject.GetComponent<ActionsCatalog3D>()
                 : gameObject.AddComponent<ActionsCatalog3D>();
+            _knowledgeCatalog = new KnowledgeCatalog();
         }
 
         public static Catalog Instance => _instance ??= new Catalog();
@@ -145,19 +146,19 @@ namespace Catalogs
             return _generalCatalog.Same(args);
         }
 
-        public List<JSONNode> FilterAttr(string attr, string attrValue, List<JSONNode> dataObjects)
+        public List<JSONNode> FilterAttr(string args)
         {
-            return _knowledgeCatalog.FilterAttr(attr, attrValue, dataObjects);
+            return _knowledgeCatalog.FilterAttr(args);
         }
 
-        public List<JSONNode> FilterType(string type, List<JSONNode> dataObjects)
+        public List<JSONNode> FilterType(string args)
         {
-            return _knowledgeCatalog.FilterType(type, dataObjects);
+            return _knowledgeCatalog.FilterType(args);
         }
 
-        public string QueryAttr(string attr, JSONNode dataObject)
+        public string QueryAttr(string args)
         {
-            return _knowledgeCatalog.QueryAttr(attr, dataObject);
+            return _knowledgeCatalog.QueryAttr(args);
         }
 
         public string ShowInfo(List<JSONNode> dataObjects)

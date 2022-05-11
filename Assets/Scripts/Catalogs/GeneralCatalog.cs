@@ -21,6 +21,7 @@ namespace Catalogs
 	{
 		public object SaveVal2Var(string args)
 		{
+			Debug.Log("SaveVal2Var");
 			var argsList = args.Split(GeneralConstants.ArgsSeparator);
 			var source = Context.GetAttribute(argsList[0]);
 			var varName = argsList[1];
@@ -40,16 +41,19 @@ namespace Catalogs
 
 		public int Count(object[] objects)
 		{
+			Debug.Log("Count");
 			return objects.Length;
 		}
 
 		public bool Exist(object[] objects)
 		{
-			return (objects.Length > 0);
+			Debug.Log("Exist");
+			return objects.Length > 0;
 		}
 
 		public object Unique(string args)
 		{
+			Debug.Log("Unique");
 			var argsList = args.Split(GeneralConstants.ArgsSeparator);
 			var prev = Context.GetAttribute(argsList[0]);
 			return prev.Count > 0 ? prev[0] : null;
@@ -57,6 +61,7 @@ namespace Catalogs
 
 		public List<string> ExtractNumbers(string args)
 		{
+			Debug.Log("ExtractNumbers");
 			var argsList = args.Split(GeneralConstants.ArgsSeparator);
 			string query = Context.GetAttribute(argsList[0]);
 			
@@ -85,6 +90,7 @@ namespace Catalogs
 
 		public List<string> ExtractID(string args)
 		{
+			Debug.Log("ExtractID");
 			var argsList = args.Split(GeneralConstants.ArgsSeparator);
 			var attrId = argsList[0];
 			var source = Context.GetAttribute(argsList[1]);
@@ -124,6 +130,7 @@ namespace Catalogs
 
 		public string Same(string args)
 		{
+			Debug.Log("Same");
 			var argsList = args.Split(GeneralConstants.ArgsSeparator);
 			var var1 = Context.GetAttribute(argsList[0]);
 			var var2 = Context.GetAttribute(argsList[1]);

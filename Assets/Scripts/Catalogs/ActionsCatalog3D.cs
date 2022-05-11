@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Constants;
 using CustomFunctionality;
+using SimpleJSON;
 using UnityEditor;
 using UnityEngine;
 using Action = Constants.Action;
@@ -55,6 +56,7 @@ namespace Catalogs
 
 		public List<GameObject> Filter3DAttr(string args)
 		{
+			Debug.Log("Filter3DAttr");
 			var argsList = args.Split(GeneralConstants.ArgsSeparator);
 			var attrName = argsList[0];
 			var prev = Context.HasAttribute(argsList[1]) ? Context.GetAttribute(argsList[1]) : argsList[1];
@@ -156,7 +158,7 @@ namespace Catalogs
 			return new Response(new Dictionary<string, dynamic>
 			{
 				{"name", "rotate"}
-			}, new List<GameObject> {obj}, new Dictionary<string, dynamic>
+			}, new List<string> {obj.name}, new Dictionary<string, dynamic>
 			{
 				{"degree", degree},
 				{"axis", axis}
@@ -192,7 +194,7 @@ namespace Catalogs
 			{
 				{"name", "scale"},
 				{"extra", state}
-			}, new List<GameObject> {obj}, new Dictionary<string, dynamic>
+			}, new List<string> {obj.name}, new Dictionary<string, dynamic>
 			{
 				{"scale", scaleRatio}
 			});
@@ -223,7 +225,7 @@ namespace Catalogs
 			return new Response(new Dictionary<string, dynamic>
 			{
 				{"name", "reset"}
-			}, new List<GameObject> {obj}, new Dictionary<string, dynamic>());
+			}, new List<string> {obj.name}, new Dictionary<string, dynamic>());
 		}
 
 		public Response Highlight(string args)
@@ -255,11 +257,13 @@ namespace Catalogs
 				}
 			}
 
+			var objNames = objs.Select(obj => obj.name).ToList();
+
 			return new Response(new Dictionary<string, dynamic>
 			{
 				{"name", "highlight"},
 				{"extra", state}
-			}, objs, new Dictionary<string, dynamic>());
+			}, objNames, new Dictionary<string, dynamic>());
 		}
 
 		public Response ShowSide(string args)
@@ -293,7 +297,7 @@ namespace Catalogs
 			{
 				{"name", "show side"},
 				{"extra", figureSide}
-			}, new List<GameObject> {obj}, new Dictionary<string, dynamic>
+			}, new List<string> {obj.name}, new Dictionary<string, dynamic>
 			{
 				{"side", figureSide}
 			});
@@ -313,10 +317,12 @@ namespace Catalogs
 
 			CloseLookFunctionality(objs);
 
+			var objNames = objs.Select(obj => obj.name).ToList();
+			
 			return new Response(new Dictionary<string, dynamic>
 			{
 				{"name", "side by side look"}
-			}, objs, new Dictionary<string, dynamic>());
+			}, objNames, new Dictionary<string, dynamic>());
 		}
 
 		public Response CloseLook(string args)
@@ -328,10 +334,12 @@ namespace Catalogs
 
 			CloseLookFunctionality(objs);
 
+			var objNames = objs.Select(obj => obj.name).ToList();
+			
 			return new Response(new Dictionary<string, dynamic>
 			{
 				{"name", "close look"}
-			}, objs, new Dictionary<string, dynamic>());
+			}, objNames, new Dictionary<string, dynamic>());
 		}
 
 		public Response Animate(string args)
@@ -378,7 +386,7 @@ namespace Catalogs
 			{
 				{"name", "animate"},
 				{"extra", state}
-			}, new List<GameObject> {fig}, new Dictionary<string, dynamic>());
+			}, new List<string> {fig.name}, new Dictionary<string, dynamic>());
 		}
 
 		public Response Visibility(string args)
@@ -393,131 +401,44 @@ namespace Catalogs
 			{
 				obj.GetComponent<MeshRenderer>().enabled = state == "on";
 			}
-
+			
+			var objNames = objs.Select(obj => obj.name).ToList();
+			
 			return new Response(new Dictionary<string, dynamic>
 			{
 				{"name", "visibility"},
 				{"extra", state}
-			}, objs, new Dictionary<string, dynamic>());
+			}, objNames, new Dictionary<string, dynamic>());
 		}
 
 		public Response SmoothInstall(string args)
 		{
-			var argsList = args.Split(GeneralConstants.ArgsSeparator);
-			var valid = Context.GetAttribute(argsList[0]) == "yes";
-			
-			if (!valid) return null;
-			
-			List<Action> actionsList = Context.GetAttribute(argsList[1]);
-
-			var action = actionsList[0];
-			var figureID = Context.Instance.CurrentFigureID;
-			var figure = GameObject.Find(figureID);
-			var objA = HelperFunctions.FindObjectInFigure(figure, action.Components[0]);
-			var objB = HelperFunctions.FindObjectInFigure(figure, action.Components[1]);
-
-			StartCoroutine(Attach(figure, objA, objB, GeneralConstants.AttachTypes.SmoothInstall));
-			
-			return new Response(new Dictionary<string, dynamic>
-			{
-				{"name", "attach"}
-			}, new List<GameObject>{objA, objB}, new Dictionary<string, dynamic>());
+			return Attach(args, GeneralConstants.AttachTypes.SmoothInstall);
 		}
 		
 		public Response Align(string args)
 		{
-			var argsList = args.Split(GeneralConstants.ArgsSeparator);
-			var valid = Context.GetAttribute(argsList[0]) == "yes";
-			
-			if (!valid) return null;
-			
-			List<Action> actionsList = Context.GetAttribute(argsList[1]);
-
-			var action = actionsList[0];
-			var figureID = Context.Instance.CurrentFigureID;
-			var figure = GameObject.Find(figureID);
-			var objA = HelperFunctions.FindObjectInFigure(figure, action.Components[0]);
-			var objB = HelperFunctions.FindObjectInFigure(figure, action.Components[1]);
-
-			StartCoroutine(Attach(figure, objA, objB, GeneralConstants.AttachTypes.Align));
-			
-			return new Response(new Dictionary<string, dynamic>
-			{
-				{"name", "attach"}
-			}, new List<GameObject>{objA, objB}, new Dictionary<string, dynamic>());
+			return Attach(args, GeneralConstants.AttachTypes.Align);
 		}
 		
 		public Response StepInstall(string args)
 		{
-			var argsList = args.Split(GeneralConstants.ArgsSeparator);
-			var valid = Context.GetAttribute(argsList[0]) == "yes";
-			
-			if (!valid) return null;
-			
-			List<Action> actionsList = Context.GetAttribute(argsList[1]);
-
-			var action = actionsList[0];
-			var figureID = Context.Instance.CurrentFigureID;
-			var figure = GameObject.Find(figureID);
-			var objA = HelperFunctions.FindObjectInFigure(figure, action.Components[0]);
-			var objB = HelperFunctions.FindObjectInFigure(figure, action.Components[1]);
-
-			StartCoroutine(Attach(figure, objA, objB, GeneralConstants.AttachTypes.StepInstall));
-			
-			return new Response(new Dictionary<string, dynamic>
-			{
-				{"name", "attach"}
-			}, new List<GameObject>{objA, objB}, new Dictionary<string, dynamic>());
+			return Attach(args, GeneralConstants.AttachTypes.StepInstall);
 		}
 		
 		public Response SmoothScrew(string args)
 		{
-			var argsList = args.Split(GeneralConstants.ArgsSeparator);
-			var valid = Context.GetAttribute(argsList[0]) == "yes";
-			
-			if (!valid) return null;
-			
-			List<Action> actionsList = Context.GetAttribute(argsList[1]);
-
-			var action = actionsList[0];
-			var figureID = Context.Instance.CurrentFigureID;
-			var figure = GameObject.Find(figureID);
-			var objA = HelperFunctions.FindObjectInFigure(figure, action.Components[0]);
-			var objB = HelperFunctions.FindObjectInFigure(figure, action.Components[1]);
-
-			StartCoroutine(Attach(figure, objA, objB, GeneralConstants.AttachTypes.SmoothScrew));
-			
-			return new Response(new Dictionary<string, dynamic>
-			{
-				{"name", "attach"}
-			}, new List<GameObject>{objA, objB}, new Dictionary<string, dynamic>());
+			return Attach(args, GeneralConstants.AttachTypes.SmoothScrew);
 		}
 		
 		public Response StepScrew(string args)
 		{
-			var argsList = args.Split(GeneralConstants.ArgsSeparator);
-			var valid = Context.GetAttribute(argsList[0]) == "yes";
-			
-			if (!valid) return null;
-			
-			List<Action> actionsList = Context.GetAttribute(argsList[1]);
-
-			var action = actionsList[0];
-			var figureID = Context.Instance.CurrentFigureID;
-			var figure = GameObject.Find(figureID);
-			var objA = HelperFunctions.FindObjectInFigure(figure, action.Components[0]);
-			var objB = HelperFunctions.FindObjectInFigure(figure, action.Components[1]);
-
-			StartCoroutine(Attach(figure, objA, objB, GeneralConstants.AttachTypes.StepScrew));
-			
-			return new Response(new Dictionary<string, dynamic>
-			{
-				{"name", "attach"}
-			}, new List<GameObject>{objA, objB}, new Dictionary<string, dynamic>());
+			return Attach(args, GeneralConstants.AttachTypes.StepScrew);
 		}
 
 		public List<Action> CreateActions(string args)
 		{
+			Debug.Log("CreateActions");
 			var argsList = args.Split(GeneralConstants.ArgsSeparator);
 			var actionType = argsList[0];
 			var refSpecified = argsList[1]; // always true for now
@@ -544,94 +465,149 @@ namespace Catalogs
 
 		public string CheckActionsValidity(string args)
 		{
-			// var argsList = args.Split(GeneralConstants.ArgsSeparator);
-			// List<Action> a = Context.GetAttribute(argsList[0]);
-			// List<Action> b = Context.GetAttribute(argsList[1]);
+			Debug.Log("CheckActionsValidity " + args);
+			var argsList = args.Split(GeneralConstants.ArgsSeparator);
+			List<Action> a = Context.GetAttribute(argsList[0]);
+			List<JSONNode> b = Context.GetAttribute(argsList[1]);
+
+			var parsedB = new List<Action>();
 			
+			foreach (var node in b)
+			{
+				foreach (var item in node)
+				{
+					parsedB.Add(new Action
+					{
+						Name = item.Key,
+						Components = new List<string>
+						{
+							"[" + item.Value[0] + "]",
+							"[" + item.Value[1] + "]"
+						}
+					});
+				}
+				
+			}
+
 			// comparison logic
+			if (a.Count != parsedB.Count) return "no";
+
+			for (var i = 0; i < a.Count; i++)
+			{
+				var actionA = a[i];
+				var actionB = parsedB[i];
+
+				if (actionA.Name != actionB.Name) return "no";
+
+				if (actionA.Components[0] != actionB.Components[0] ||
+				    actionA.Components[1] != actionB.Components[1]) return "no";
+			}
 			
 			return "yes";
 		}
 
-		private IEnumerator Attach(GameObject figure, GameObject objA, GameObject objB, GeneralConstants.AttachTypes type)
+		private Response Attach(string args, GeneralConstants.AttachTypes type)
 		{
 			Vector3 delta;
 			RotationAxisEnum rotationAxis;
 			const int steps = 3;
-
-			FocusObject(objA, objB);
 			
-			var figureName = figure.name;
-			var figureRfmName = figureName + "-RFM";
-			var figureIfmName = figureName + "-IFM";
+			var argsList = args.Split(GeneralConstants.ArgsSeparator);
+			var valid = Context.GetAttribute(argsList[0]) == "yes";
+			
+			if (!valid) return null;
+			
+			List<Action> actionsList = Context.GetAttribute(argsList[1]);
+
+			var figureID = Context.Instance.CurrentFigureID;
+			var figure = GameObject.Find(figureID);
+			var figureRfmName = figureID + "-RFM";
+			var figureIfmName = figureID + "-IFM";
 
 			var rfm = GameObject.Find(figureRfmName);
 			var ifm = GameObject.Find(figureIfmName);
 			
-			var rfmReferenceObjA = HelperFunctions.FindObjectInFigure(rfm, objA.name);
-			var rfmReferenceObjB = HelperFunctions.FindObjectInFigure(rfm, objB.name);
-			var ifmReferenceObjA = HelperFunctions.FindObjectInFigure(ifm, objA.name);
-			var ifmReferenceObjB = HelperFunctions.FindObjectInFigure(ifm, objB.name);
+			GameObject objA, objB;
+			var routines = new List<IEnumerator>();
+			var objs = new List<string>();
 
-			rfmReferenceObjA.transform.parent = rfmReferenceObjB.transform;
-			var diff = rfmReferenceObjA.transform.localPosition;
-			var rfmFinalPosition = objB.transform.TransformPoint(diff);
-			rfmReferenceObjB.transform.parent = rfmReferenceObjA.transform.parent;
-			
-			ifmReferenceObjA.transform.parent = ifmReferenceObjB.transform;
-			diff = ifmReferenceObjA.transform.localPosition;
-			var ifmFinalPosition = objB.transform.TransformPoint(diff);
-			ifmReferenceObjB.transform.parent = ifmReferenceObjA.transform.parent;
-			
-			var routines = new List<IEnumerator>
+			foreach (var action in actionsList)
 			{
-				RotateObjectCoroutine(objA, objB.transform.rotation, 0.5f),
-				DelayCoroutine(0.5f),
-				AdjustStructureCoroutine(objA, objB),
-				MoveObjectCoroutine(objA, rfmFinalPosition, 0.5f),
-				DelayCoroutine(0.5f)
-			};
+				objA = HelperFunctions.FindObjectInFigure(figure, action.Components[0]);
+				objB = HelperFunctions.FindObjectInFigure(figure, action.Components[1]);
+			
+				objs.Add(objA.name);
+				objs.Add(objB.name);
+				
+				FocusObject(objA, objB);
 
-			switch (type)
-			{
-				case GeneralConstants.AttachTypes.SmoothInstall:
-				case GeneralConstants.AttachTypes.Align:
-					routines.Add(MoveObjectCoroutine(objA, ifmFinalPosition, 1.0f));
-					break;
-				case GeneralConstants.AttachTypes.StepInstall:
-					delta = ifmFinalPosition - rfmFinalPosition;
+				var rfmReferenceObjA = HelperFunctions.FindObjectInFigure(rfm, objA.name);
+				var rfmReferenceObjB = HelperFunctions.FindObjectInFigure(rfm, objB.name);
+				var ifmReferenceObjA = HelperFunctions.FindObjectInFigure(ifm, objA.name);
+				var ifmReferenceObjB = HelperFunctions.FindObjectInFigure(ifm, objB.name);
+
+				rfmReferenceObjA.transform.parent = rfmReferenceObjB.transform;
+				var diff = rfmReferenceObjA.transform.localPosition;
+				var rfmFinalPosition = objB.transform.TransformPoint(diff);
+				rfmReferenceObjB.transform.parent = rfmReferenceObjA.transform.parent;
+			
+				ifmReferenceObjA.transform.parent = ifmReferenceObjB.transform;
+				diff = ifmReferenceObjA.transform.localPosition;
+				var ifmFinalPosition = objB.transform.TransformPoint(diff);
+				ifmReferenceObjB.transform.parent = ifmReferenceObjA.transform.parent;
+			
+				routines.Add(RotateObjectCoroutine(objA, objB.transform.rotation, 0.5f));
+				routines.Add(DelayCoroutine(0.5f));
+				routines.Add(AdjustStructureCoroutine(objA, objB));
+				routines.Add(MoveObjectCoroutine(objA, rfmFinalPosition, 0.5f));
+				routines.Add(DelayCoroutine(0.5f));
+
+				switch (type)
+				{
+					case GeneralConstants.AttachTypes.SmoothInstall:
+					case GeneralConstants.AttachTypes.Align:
+						routines.Add(MoveObjectCoroutine(objA, ifmFinalPosition, 1.0f));
+						break;
+					case GeneralConstants.AttachTypes.StepInstall:
+						delta = ifmFinalPosition - rfmFinalPosition;
 					
-					for (var i = 1; i <= steps; i++)
-					{
-						routines.Add(MoveObjectCoroutine(objA, rfmFinalPosition + delta * i / steps, 0.5f));
-						routines.Add(DelayCoroutine(0.3f));
-					}
+						for (var i = 1; i <= steps; i++)
+						{
+							routines.Add(MoveObjectCoroutine(objA, rfmFinalPosition + delta * i / steps, 0.5f));
+							routines.Add(DelayCoroutine(0.3f));
+						}
 			
-					break;
-				case GeneralConstants.AttachTypes.SmoothScrew:
-					rotationAxis = objA.GetComponent<ObjectMeta>().AttachRotationAxis;
+						break;
+					case GeneralConstants.AttachTypes.SmoothScrew:
+						rotationAxis = objA.GetComponent<ObjectMeta>().AttachRotationAxis;
 					
-					routines.Add(MoveObjectWithRotationCoroutine(objA, ifmFinalPosition, 2.0f, GetScrewVector(rotationAxis)));
-					break;
-				case GeneralConstants.AttachTypes.StepScrew:
-					delta = ifmFinalPosition - rfmFinalPosition;
-					rotationAxis = objA.GetComponent<ObjectMeta>().AttachRotationAxis;
+						routines.Add(MoveObjectWithRotationCoroutine(objA, ifmFinalPosition, 2.0f, GetScrewVector(rotationAxis)));
+						break;
+					case GeneralConstants.AttachTypes.StepScrew:
+						delta = ifmFinalPosition - rfmFinalPosition;
+						rotationAxis = objA.GetComponent<ObjectMeta>().AttachRotationAxis;
 			
-					for (var i = 1; i <= steps; i++)
-					{
-						routines.Add(MoveObjectWithRotationCoroutine(objA, rfmFinalPosition + delta * i / steps, 0.5f, GetScrewVector(rotationAxis)));
-						routines.Add(DelayCoroutine(0.3f));
-					}
+						for (var i = 1; i <= steps; i++)
+						{
+							routines.Add(MoveObjectWithRotationCoroutine(objA, rfmFinalPosition + delta * i / steps, 0.5f, GetScrewVector(rotationAxis)));
+							routines.Add(DelayCoroutine(0.3f));
+						}
 			
-					break;
-				default:
-					routines.Add(MoveObjectCoroutine(objA, ifmFinalPosition, 1.0f));
-					break;
+						break;
+					default:
+						routines.Add(MoveObjectCoroutine(objA, ifmFinalPosition, 1.0f));
+						break;
+				}
+				
+				routines.Add(DelayCoroutine(0.5f));
 			}
 
 			StartCoroutine(Sequence(routines, 1.0f));
 
-			yield return null;
+			return new Response(new Dictionary<string, dynamic>
+			{
+				{"name", "attach"}
+			}, objs.Distinct().ToList(), new Dictionary<string, dynamic>());
 		}
 
 		private static void FocusObject(GameObject objA, GameObject objB)

@@ -5,15 +5,15 @@ namespace Constants
 {
 	public class Response
 	{
-		public Dictionary<string, dynamic> operation;
-		public List<GameObject> objects;
-		public Dictionary<string, dynamic> extra;
+		public readonly Dictionary<string, dynamic> Operation;
+		public readonly List<string> Objects;
+		public readonly Dictionary<string, dynamic> Extra;
 
-		public Response(Dictionary<string, dynamic> op, List<GameObject> objs, Dictionary<string, dynamic> ex)
+		public Response(Dictionary<string, dynamic> op, List<string> objs, Dictionary<string, dynamic> ex)
 		{
-			operation = op;
-			objects = objs;
-			extra = ex;
+			Operation = op;
+			Objects = objs;
+			Extra = ex;
 		}
 	}
 }

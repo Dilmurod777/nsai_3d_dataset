@@ -67,11 +67,10 @@ public class FunctionalProgramsExecutor
         if (Context.Instance.Prev is Response)
         {
             var response = (Response) Context.Instance.Prev;
-            var operation = response.operation;
-            var objects = response.objects;
-            var extra = response.extra;
+            var operation = response.Operation;
+            var objects = response.Objects;
+            var extra = response.Extra;
 
-            var parsedObjects = objects.ToArray().Select(obj => obj.name).ToList();
             var parsedExtra = new List<string>();
             foreach (var key in extra.Keys)
             {
@@ -90,7 +89,7 @@ public class FunctionalProgramsExecutor
             }
             
             var operationPart = HelperFunctions.GetOperationForResponse(operation["name"], operation.ContainsKey("extra") ? operation["extra"] : null);
-            var objectsPart = string.Join(", ", parsedObjects);
+            var objectsPart = string.Join(", ", objects);
             var extraPart = string.Join(" ", parsedExtra);
             output = operationPart + " " + objectsPart + " " + extraPart;
         }
