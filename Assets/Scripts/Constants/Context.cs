@@ -12,7 +12,7 @@ public class Context
 	public string[] Programs;
 	public string CurrentTaskID;
 	public string CurrentSubtaskID;
-	public string CurrentInstructionOrder;
+	public int CurrentInstructionOrder;
 	public string CurrentFigureID;
 	public dynamic Prev;
 	public object Var1;

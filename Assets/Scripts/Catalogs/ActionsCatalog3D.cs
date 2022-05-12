@@ -56,12 +56,13 @@ namespace Catalogs
 
 		public List<GameObject> Filter3DAttr(string args)
 		{
-			Debug.Log("Filter3DAttr");
+			ScriptExecutor.AddNewProgram("Filter3DAttr " + args.Replace(GeneralConstants.ArgsSeparator.ToString(), " "));
+			
 			var argsList = args.Split(GeneralConstants.ArgsSeparator);
 			var attrName = argsList[0];
 			var prev = Context.HasAttribute(argsList[1]) ? Context.GetAttribute(argsList[1]) : argsList[1];
 			var parent = new List<GameObject>();
-			if (argsList[2] != "root")
+			if (argsList[2] != "root3D")
 			{
 				parent = Context.GetAttribute(argsList[2]);
 			}
@@ -138,6 +139,8 @@ namespace Catalogs
 
 		public Response Rotate(string args)
 		{
+			ScriptExecutor.AddNewProgram("Rotate " + args.Replace(GeneralConstants.ArgsSeparator.ToString(), " "));
+			
 			var argsList = args.Split(GeneralConstants.ArgsSeparator);
 			GameObject obj = Context.GetAttribute(argsList[0]);
 			if (obj == null) return null;
@@ -167,6 +170,8 @@ namespace Catalogs
 
 		public Response Scale(string args)
 		{
+			ScriptExecutor.AddNewProgram("Scale " + args.Replace(GeneralConstants.ArgsSeparator.ToString(), " "));
+			
 			var argsList = args.Split(GeneralConstants.ArgsSeparator);
 			GameObject obj = Context.GetAttribute(argsList[1]);
 			if (obj == null) return null;
@@ -203,6 +208,8 @@ namespace Catalogs
 		// ReSharper disable once Unity.IncorrectMethodSignature
 		public Response Reset(string args)
 		{
+			ScriptExecutor.AddNewProgram("Reset " + args.Replace(GeneralConstants.ArgsSeparator.ToString(), " "));
+			
 			var argsList = args.Split(GeneralConstants.ArgsSeparator);
 
 			GameObject obj = Context.GetAttribute(argsList[0]);
@@ -230,8 +237,9 @@ namespace Catalogs
 
 		public Response Highlight(string args)
 		{
+			ScriptExecutor.AddNewProgram("Highlight " + args.Replace(GeneralConstants.ArgsSeparator.ToString(), " "));
+			
 			var argsList = args.Split(GeneralConstants.ArgsSeparator);
-
 			var state = argsList[0];
 
 			List<GameObject> objs = Context.GetAttribute(argsList[1]);
@@ -268,8 +276,9 @@ namespace Catalogs
 
 		public Response ShowSide(string args)
 		{
+			ScriptExecutor.AddNewProgram("ShowSide " + args.Replace(GeneralConstants.ArgsSeparator.ToString(), " "));
+			
 			var argsList = args.Split(GeneralConstants.ArgsSeparator);
-
 			GameObject obj = Context.GetAttribute(argsList[1]);
 			if (obj == null) return null;
 
@@ -305,6 +314,8 @@ namespace Catalogs
 
 		public Response SideBySideLook(string args)
 		{
+			ScriptExecutor.AddNewProgram("SideBySideLook " + args.Replace(GeneralConstants.ArgsSeparator.ToString(), " "));
+			
 			var argsList = args.Split(' ');
 			GameObject fig = Context.GetAttribute(argsList[0]);
 			if (fig == null) return null;
@@ -327,8 +338,9 @@ namespace Catalogs
 
 		public Response CloseLook(string args)
 		{
+			ScriptExecutor.AddNewProgram("CloseLook " + args.Replace(GeneralConstants.ArgsSeparator.ToString(), " "));
+			
 			var argsList = args.Split(GeneralConstants.ArgsSeparator);
-
 			List<GameObject> objs = Context.GetAttribute(argsList[0]);
 			if (objs.Count == 0) return null;
 
@@ -344,6 +356,8 @@ namespace Catalogs
 
 		public Response Animate(string args)
 		{
+			ScriptExecutor.AddNewProgram("Animate " + args.Replace(GeneralConstants.ArgsSeparator.ToString(), " "));
+			
 			var argsList = args.Split(GeneralConstants.ArgsSeparator);
 			GameObject fig = Context.GetAttribute(argsList[1]);
 			if (fig == null) return null;
@@ -391,6 +405,8 @@ namespace Catalogs
 
 		public Response Visibility(string args)
 		{
+			ScriptExecutor.AddNewProgram("Visibility " + args.Replace(GeneralConstants.ArgsSeparator.ToString(), " "));
+			
 			var argsList = args.Split(GeneralConstants.ArgsSeparator);
 			List<GameObject> objs = Context.GetAttribute(argsList[1]);
 			if (objs.Count == 0) return null;
@@ -413,32 +429,43 @@ namespace Catalogs
 
 		public Response SmoothInstall(string args)
 		{
+			ScriptExecutor.AddNewProgram("SmoothInstall " + args.Replace(GeneralConstants.ArgsSeparator.ToString(), " "));
+			
 			return Attach(args, GeneralConstants.AttachTypes.SmoothInstall);
 		}
 		
 		public Response Align(string args)
 		{
+			ScriptExecutor.AddNewProgram("Align " + args.Replace(GeneralConstants.ArgsSeparator.ToString(), " "));
+			
 			return Attach(args, GeneralConstants.AttachTypes.Align);
 		}
 		
 		public Response StepInstall(string args)
 		{
+			ScriptExecutor.AddNewProgram("StepInstall " + args.Replace(GeneralConstants.ArgsSeparator.ToString(), " "));
+			
 			return Attach(args, GeneralConstants.AttachTypes.StepInstall);
 		}
 		
 		public Response SmoothScrew(string args)
 		{
+			ScriptExecutor.AddNewProgram("SmoothScrew " + args.Replace(GeneralConstants.ArgsSeparator.ToString(), " "));
+			
 			return Attach(args, GeneralConstants.AttachTypes.SmoothScrew);
 		}
 		
 		public Response StepScrew(string args)
 		{
+			ScriptExecutor.AddNewProgram("StepScrew " + args.Replace(GeneralConstants.ArgsSeparator.ToString(), " "));
+			
 			return Attach(args, GeneralConstants.AttachTypes.StepScrew);
 		}
 
 		public List<Action> CreateActions(string args)
 		{
-			Debug.Log("CreateActions");
+			ScriptExecutor.AddNewProgram("CreateActions " + args.Replace(GeneralConstants.ArgsSeparator.ToString(), " "));
+			
 			var argsList = args.Split(GeneralConstants.ArgsSeparator);
 			var actionType = argsList[0];
 			var refSpecified = argsList[1]; // always true for now
@@ -465,7 +492,8 @@ namespace Catalogs
 
 		public string CheckActionsValidity(string args)
 		{
-			Debug.Log("CheckActionsValidity " + args);
+			ScriptExecutor.AddNewProgram("CheckActionsValidity " + args.Replace(GeneralConstants.ArgsSeparator.ToString(), " "));
+			
 			var argsList = args.Split(GeneralConstants.ArgsSeparator);
 			List<Action> a = Context.GetAttribute(argsList[0]);
 			List<JSONNode> b = Context.GetAttribute(argsList[1]);
@@ -486,7 +514,6 @@ namespace Catalogs
 						}
 					});
 				}
-				
 			}
 
 			// comparison logic
@@ -526,15 +553,14 @@ namespace Catalogs
 
 			var rfm = GameObject.Find(figureRfmName);
 			var ifm = GameObject.Find(figureIfmName);
-			
-			GameObject objA, objB;
+
 			var routines = new List<IEnumerator>();
 			var objs = new List<string>();
 
 			foreach (var action in actionsList)
 			{
-				objA = HelperFunctions.FindObjectInFigure(figure, action.Components[0]);
-				objB = HelperFunctions.FindObjectInFigure(figure, action.Components[1]);
+				var objA = HelperFunctions.FindObjectInFigure(figure, action.Components[0]);
+				var objB = HelperFunctions.FindObjectInFigure(figure, action.Components[1]);
 			
 				objs.Add(objA.name);
 				objs.Add(objB.name);
@@ -549,12 +575,12 @@ namespace Catalogs
 				rfmReferenceObjA.transform.parent = rfmReferenceObjB.transform;
 				var diff = rfmReferenceObjA.transform.localPosition;
 				var rfmFinalPosition = objB.transform.TransformPoint(diff);
-				rfmReferenceObjB.transform.parent = rfmReferenceObjA.transform.parent;
+				rfmReferenceObjA.transform.parent = rfmReferenceObjB.transform.parent;
 			
 				ifmReferenceObjA.transform.parent = ifmReferenceObjB.transform;
 				diff = ifmReferenceObjA.transform.localPosition;
 				var ifmFinalPosition = objB.transform.TransformPoint(diff);
-				ifmReferenceObjB.transform.parent = ifmReferenceObjA.transform.parent;
+				ifmReferenceObjA.transform.parent = ifmReferenceObjB.transform.parent;
 			
 				routines.Add(RotateObjectCoroutine(objA, objB.transform.rotation, 0.5f));
 				routines.Add(DelayCoroutine(0.5f));

@@ -15,7 +15,6 @@
       "CheckActionsValidity var1 prev",
       "Align prev var1"
     ],
-    "knowledge": "Put the upper side strut assembly [3] in its position for connection to the strut assembly, lower [8].",
     "reply": "[3], [8]"
   },
   {
@@ -38,7 +37,7 @@
     "reply": "[7], [8]"
   },
   {
-    "query": "Attach objects [9], [7]",
+    "query": "Attach objects [9], [10], [7]",
     "programs": [
       "ExtractID object query",
       "CreateActions attach yes prev",
@@ -57,23 +56,18 @@
     "reply": "[9], [7]"
   },
   {
-    "query": "Attach objects [10], [7]",
-    "programs": [
-      "ExtractID object query",
-      "CreateActions attach yes prev",
-      "SaveVal2Var prev var1",
-      "CheckActionsValidity var1 prev",
-      "SmoothInstall prev var1"
-    ],
-    "knowledge": "Install the end cap [10] on the side strut pin [7].",
-    "reply": "[10], [7]"
-  },
-  {
     "query": "Attach objects [11], [7]",
     "programs": [
       "ExtractID object query",
       "CreateActions attach yes prev",
       "SaveVal2Var prev var1",
+      "FilterType tasks root",
+      "FilterAttr task_id CurrentTaskID prev",
+      "FilterType subtasks prev",
+      "FilterAttr subtask_id CurrentSubtaskID prev",
+      "FilterType instructions prev",
+      "FilterAttr order CurrentInstructionOrder prev",
+      "FilterType actions prev",
       "CheckActionsValidity var1 prev",
       "SmoothScrew prev var1"
     ],
@@ -81,28 +75,23 @@
     "reply": "[11], [7]"
   },
   {
-    "query": "Attach objects [12], [11]",
+    "query": "Attach objects [12], [14], [11]",
     "programs": [
       "ExtractID object query",
       "CreateActions attach yes prev",
       "SaveVal2Var prev var1",
+      "FilterType tasks root",
+      "FilterAttr task_id CurrentTaskID prev",
+      "FilterType subtasks prev",
+      "FilterAttr subtask_id CurrentSubtaskID prev",
+      "FilterType instructions prev",
+      "FilterAttr order CurrentInstructionOrder prev",
+      "FilterType actions prev",
       "CheckActionsValidity var1 prev",
       "SmoothInstall prev var1"
     ],
-    "knowledge": "Install the washer [12] on the bolt [11].",
+    "knowledge": "Install the washer [12], and the nut [14] on the bolt [11]. ",
     "reply": "[12], [11]"
-  },
-  {
-    "query": "Attach objects [14], [11]",
-    "programs": [
-      "ExtractID object query",
-      "CreateActions attach yes prev",
-      "SaveVal2Var prev var1",
-      "CheckActionsValidity var1 prev",
-      "StepScrew prev var1"
-    ],
-    "knowledge": "Install the nut [14] on the bolt [11].",
-    "reply": "[14], [11]"
   },
   {
     "query": "Attach objects [13], [11]",
@@ -110,6 +99,13 @@
       "ExtractID object query",
       "CreateActions attach yes prev",
       "SaveVal2Var prev var1",
+      "FilterType tasks root",
+      "FilterAttr task_id CurrentTaskID prev",
+      "FilterType subtasks prev",
+      "FilterAttr subtask_id CurrentSubtaskID prev",
+      "FilterType instructions prev",
+      "FilterAttr order CurrentInstructionOrder prev",
+      "FilterType actions prev",
       "CheckActionsValidity var1 prev",
       "SmoothScrew prev var1"
     ],

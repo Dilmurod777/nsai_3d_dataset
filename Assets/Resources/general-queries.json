@@ -15,6 +15,23 @@
     "reply": "402-32-11-61-990-802-A"
   },
   {
+    "query": "Rotate the figure by 35 degrees in Y axis",
+    "programs": [
+      "ExtractNumbers query",
+      "SaveVal2Var prev var1",
+      "FilterType tasks root",
+      "FilterAttr task_id CurrentTaskID prev",
+      "FilterType subtasks prev",
+      "FilterAttr subtask_id CurrentSubtaskID prev",
+      "Unique prev",
+      "QueryAttr figure prev",
+      "Filter3DAttr name prev root3D",
+      "Unique prev",
+      "Rotate prev var1"
+    ],
+    "reply": "402-32-11-61-990-802-A"
+  },
+  {
     "query": "Rotate 402-32-11-61-990-802-A by 90 degrees in X axis",
     "programs": [
       "ExtractNumbers query",

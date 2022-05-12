@@ -5,6 +5,13 @@
       "ExtractID object query",
       "CreateActions attach yes prev",
       "SaveVal2Var prev var1",
+      "FilterType tasks root",
+      "FilterAttr task_id CurrentTaskID prev",
+      "FilterType subtasks prev",
+      "FilterAttr subtask_id CurrentSubtaskID prev",
+      "FilterType instructions prev",
+      "FilterAttr order CurrentInstructionOrder prev",
+      "FilterType actions prev",
       "CheckActionsValidity var1 prev",
       "Align prev var1"
     ],
@@ -17,6 +24,13 @@
       "ExtractID object query",
       "CreateActions attach yes prev",
       "SaveVal2Var prev var1",
+      "FilterType tasks root",
+      "FilterAttr task_id CurrentTaskID prev",
+      "FilterType subtasks prev",
+      "FilterAttr subtask_id CurrentSubtaskID prev",
+      "FilterType instructions prev",
+      "FilterAttr order CurrentInstructionOrder prev",
+      "FilterType actions prev",
       "CheckActionsValidity var1 prev",
       "StepInstall prev var1"
     ],
@@ -29,6 +43,13 @@
       "ExtractID object query",
       "CreateActions attach yes prev",
       "SaveVal2Var prev var1",
+      "FilterType tasks root",
+      "FilterAttr task_id CurrentTaskID prev",
+      "FilterType subtasks prev",
+      "FilterAttr subtask_id CurrentSubtaskID prev",
+      "FilterType instructions prev",
+      "FilterAttr order CurrentInstructionOrder prev",
+      "FilterType actions prev",
       "CheckActionsValidity var1 prev",
       "SmoothInstall prev var1"
     ],
@@ -41,6 +62,13 @@
       "ExtractID object query",
       "CreateActions attach yes prev",
       "SaveVal2Var prev var1",
+      "FilterType tasks root",
+      "FilterAttr task_id CurrentTaskID prev",
+      "FilterType subtasks prev",
+      "FilterAttr subtask_id CurrentSubtaskID prev",
+      "FilterType instructions prev",
+      "FilterAttr order CurrentInstructionOrder prev",
+      "FilterType actions prev",
       "CheckActionsValidity var1 prev",
       "SmoothScrew prev var1"
     ],
@@ -48,39 +76,22 @@
     "reply": "[46], [8]"
   },
   {
-    "query": "Attach objects [43], [46]",
+    "query": "Attach objects [43], [42], [46]",
     "programs": [
       "ExtractID object query",
       "CreateActions attach yes prev",
       "SaveVal2Var prev var1",
+      "FilterType tasks root",
+      "FilterAttr task_id CurrentTaskID prev",
+      "FilterType subtasks prev",
+      "FilterAttr subtask_id CurrentSubtaskID prev",
+      "FilterType instructions prev",
+      "FilterAttr order CurrentInstructionOrder prev",
+      "FilterType actions prev",
       "CheckActionsValidity var1 prev",
       "SmoothInstall prev var1"
     ],
-    "knowledge": "Install the washer [43] on the bolt [46].",
-    "reply": "[43], [46]"
-  },
-  {
-    "query": "Attach objects [42], [46]",
-    "programs": [
-      "ExtractID object query",
-      "CreateActions attach yes prev",
-      "SaveVal2Var prev var1",
-      "CheckActionsValidity var1 prev",
-      "StepScrew prev var1"
-    ],
-    "knowledge":  "Install the nut [42] on the bolt [46].",
-    "reply": "[42], [46]"
-  },
-  {
-    "query": "Attach objects [42], [46]",
-    "programs": [
-      "ExtractID object query",
-      "CreateActions attach yes prev",
-      "SaveVal2Var prev var1",
-      "CheckActionsValidity var1 prev",
-      "StepScrew prev var1"
-    ],
-    "knowledge":  "Install the nut [42] on the bolt [46].",
-    "reply": "[42], [46]"
+    "knowledge": "Install the washer [43], and nut [42] on the bolt [46].",
+    "reply": "[43], [42], [46]"
   }
 ]

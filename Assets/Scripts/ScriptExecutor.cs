@@ -6,11 +6,12 @@ using UnityEngine.UI;
 public class ScriptExecutor : MonoBehaviour
 {
     public static bool IsInAction = false;
-
+    
     private static Text _queryText;
     private static Text _replyText;
-    private static Text _programsText;
     private static Text _knowledgeText;
+    private static Text _programsText;
+    private static List<string> _programs = new List<string>(); 
 
     private static List<QueryMeta> _queryMetas;
     private static int _currentQueryMetaId;
@@ -21,7 +22,7 @@ public class ScriptExecutor : MonoBehaviour
         Context.Instance.CurrentFigureID = "402-32-11-61-990-802-C";
         Context.Instance.CurrentTaskID = "32-11-61-400-802";
         Context.Instance.CurrentSubtaskID = "32-11-61-420-014";
-        Context.Instance.CurrentInstructionOrder = "1";
+        Context.Instance.CurrentInstructionOrder = 1;
         
         var textObjects = FindObjectsOfType<Text>();
 
@@ -83,6 +84,24 @@ public class ScriptExecutor : MonoBehaviour
     {
         _queryMetas = Queries.GetAllQueries();
 
+        switch (Context.Instance.CurrentFigureID)
+        {
+            case "402-32-11-61-990-802-C":
+                Context.Instance.CurrentSubtaskID = "32-11-61-420-014";
+                break;
+            case "402-32-11-61-990-802-B":
+                Context.Instance.CurrentSubtaskID = "32-11-61-420-006";
+                break;
+            case "402-32-11-61-990-802-A":
+                Context.Instance.CurrentSubtaskID = "32-11-61-420-007";
+                break;
+            default:
+                Context.Instance.CurrentSubtaskID = "32-11-61-420-007";
+                break;
+        }
+
+        Context.Instance.CurrentInstructionOrder = 1;
+        
         _currentQueryMetaId = 0;
         _queryText.text = _queryMetas[_currentQueryMetaId].Query;
         
@@ -154,12 +173,16 @@ public class ScriptExecutor : MonoBehaviour
         var currentQueryMeta = _queryMetas[_currentQueryMetaId];
             
         _queryText.text = currentQueryMeta.Query;
-        _programsText.text = string.Join("\n", currentQueryMeta.Programs);
-        _knowledgeText.text = currentQueryMeta.Knowledge;
+        _programs.Clear();
 
         var result = FunctionalProgramsExecutor.Instance.Execute(currentQueryMeta);
-        print($"result: {result}");
-        _replyText.text = result;
+        _programsText.text = string.Join("\n", _programs);
+        _replyText.text = result + "\n" + (string.Join("#", _programs) == string.Join("#", currentQueryMeta.Programs) ? "Correct Programs" : "Wrong Programs");
+
+        if (result == "None")
+        {
+            Context.Instance.CurrentInstructionOrder -= 1;
+        }
     }
     
     public static void NextInstruction()
@@ -188,5 +211,15 @@ public class ScriptExecutor : MonoBehaviour
         _queryText.text = _queryMetas[_currentQueryMetaId].Query;
         _programsText.text = "";
         _replyText.text = "";
+    }
+
+    public static void SetKnowledgeText(string text)
+    {
+        _knowledgeText.text = text;
+    }
+
+    public static void AddNewProgram(string program)
+    {
+        _programs.Add(program);
     }
 }

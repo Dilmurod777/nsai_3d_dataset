@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using SimpleJSON;
 using UnityEngine;
 
 public class HelperFunctions : MonoBehaviour
@@ -82,5 +83,15 @@ public class HelperFunctions : MonoBehaviour
         }
 
         return null;
+    }
+
+    public static string GetValueFromJSONNodeByKey(string key, JSONNode node)
+    {
+        foreach (var item in node)
+        {
+            if (item.Key == key) return item.Value;
+        }
+
+        return "";
     }
 }
