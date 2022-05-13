@@ -10,6 +10,7 @@ public class ScriptExecutor : MonoBehaviour
     private static Text _queryText;
     private static Text _replyText;
     private static Text _knowledgeText;
+    private static Text _knowledgeInfo;
     private static Text _programsText;
     private static List<string> _programs = new List<string>(); 
 
@@ -19,9 +20,9 @@ public class ScriptExecutor : MonoBehaviour
 
     private void Start()
     {
-        Context.Instance.CurrentFigureID = "402-32-11-61-990-802-C";
+        Context.Instance.CurrentFigureID = "402-32-11-61-990-802-A";
         Context.Instance.CurrentTaskID = "32-11-61-400-802";
-        Context.Instance.CurrentSubtaskID = "32-11-61-420-014";
+        Context.Instance.CurrentSubtaskID = "32-11-61-420-007";
         Context.Instance.CurrentInstructionOrder = 1;
         
         var textObjects = FindObjectsOfType<Text>();
@@ -41,6 +42,9 @@ public class ScriptExecutor : MonoBehaviour
                     break;
                 case "KnowledgeText":
                     _knowledgeText = textObj;
+                    break;
+                case "KnowledgeInfo":
+                    _knowledgeInfo = textObj;
                     break;
             }
         }
@@ -101,7 +105,8 @@ public class ScriptExecutor : MonoBehaviour
         }
 
         Context.Instance.CurrentInstructionOrder = 1;
-        
+        SetKnowledgeInfo();
+
         _currentQueryMetaId = 0;
         _queryText.text = _queryMetas[_currentQueryMetaId].Query;
         
@@ -177,7 +182,7 @@ public class ScriptExecutor : MonoBehaviour
 
         var result = FunctionalProgramsExecutor.Instance.Execute(currentQueryMeta);
         _programsText.text = string.Join("\n", _programs);
-        _replyText.text = result + "\n" + (string.Join("#", _programs) == string.Join("#", currentQueryMeta.Programs) ? "Correct Programs" : "Wrong Programs");
+        _replyText.text = result;
 
         if (result == "None")
         {
@@ -216,6 +221,11 @@ public class ScriptExecutor : MonoBehaviour
     public static void SetKnowledgeText(string text)
     {
         _knowledgeText.text = text;
+    }
+    
+    public static void SetKnowledgeInfo()
+    {
+        _knowledgeInfo.text = "TASK " + Context.Instance.CurrentTaskID + "\nSUBTASK " + Context.Instance.CurrentSubtaskID;
     }
 
     public static void AddNewProgram(string program)

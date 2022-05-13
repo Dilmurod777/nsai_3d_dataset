@@ -79,6 +79,13 @@ namespace Catalogs
 				{
 					resultObjects.Add(dataObjects[i]);
 					ScriptExecutor.SetKnowledgeText(HelperFunctions.GetValueFromJSONNodeByKey("content", dataObjects[i]));
+					ScriptExecutor.SetKnowledgeInfo();
+
+
+					if (attr == "order")
+					{
+						Context.Instance.CurrentInstructionOrder += 1;
+					}
 				}
 			}
 

@@ -91,7 +91,7 @@
       "SmoothInstall prev var1"
     ],
     "knowledge": "Install the washer [12], and the nut [14] on the bolt [11]. ",
-    "reply": "[12], [11]"
+    "reply": "[12], [14], [11]"
   },
   {
     "query": "Attach objects [13], [11]",

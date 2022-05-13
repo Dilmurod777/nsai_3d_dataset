@@ -588,6 +588,13 @@ namespace Catalogs
 				routines.Add(MoveObjectCoroutine(objA, rfmFinalPosition, 0.5f));
 				routines.Add(DelayCoroutine(0.5f));
 
+				var objAObjectMeta = objA.GetComponent<ObjectMeta>();
+				if (objAObjectMeta != null && objAObjectMeta.RotationType == GeneralConstants.AttachTypes.StepScrew)
+				{
+					type = GeneralConstants.AttachTypes.StepScrew;
+				}
+				Debug.Log(type);
+				
 				switch (type)
 				{
 					case GeneralConstants.AttachTypes.SmoothInstall:

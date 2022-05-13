@@ -15,5 +15,6 @@ namespace Constants
 	{
 		public RotationAxisEnum AttachRotationAxis;
 		public RotationAxisEnum DettachRotationAxis;
+		public GeneralConstants.AttachTypes RotationType;
 	}
 }
