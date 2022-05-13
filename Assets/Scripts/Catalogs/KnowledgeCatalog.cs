@@ -22,40 +22,15 @@ namespace Catalogs
 			InitRoot();
 		}
 
-		private void Update()
-		{
-			// if (Input.GetKeyDown(KeyCode.C))
-			// {
-			//     List<JSONNode> dataObjects1 = FilterType("tasks", root);
-			//     List<JSONNode> dataObjects2 = FilterType("subtasks", dataObjects1);
-			//     List<JSONNode> dataObjects3 = FilterType("instructions", dataObjects2);
-			//     List<JSONNode> dataObjects4 = FilterType("actions", dataObjects3);
-			//     
-			//     foreach (JSONNode dataObject in dataObjects4)
-			//     {
-			//         Debug.Log(dataObject);
-			//     }
-			// }
-			//
-			// if (Input.GetKeyDown(KeyCode.V))
-			// {
-			//     List<JSONNode> dataObjects1 = FilterType("tasks", root);
-			//     List<JSONNode> dataObjects2 = FilterType("subtasks", dataObjects1);
-			//     List<JSONNode> dataObjects3 = FilterAttr("subtask_id", "32-11-61-020-007", dataObjects2);
-			//     string res = ShowInfo(dataObjects3);
-			//     Debug.Log(res);
-			// }
-		}
-
-		private void InitRoot()
+		private static void InitRoot()
 		{
 			Debug.Log("InitRoot");
 			Context.Instance.Root = new List<JSONNode>();
 
-			string jsonDocument = "knowledge-v3";
+			const string jsonDocument = "knowledge-v3";
 			var jsonContent = Resources.Load<TextAsset>(jsonDocument);
 
-			JSONNode items = JSON.Parse(jsonContent.ToString());
+			var items = JSON.Parse(jsonContent.ToString());
 
 			foreach (JSONNode item in items)
 			{
@@ -65,8 +40,6 @@ namespace Catalogs
 
 		public List<JSONNode> FilterAttr(string args)
 		{
-			ScriptExecutor.AddNewProgram("FilterAttr " + args.Replace(GeneralConstants.ArgsSeparator.ToString(), " "));
-			
 			var argsList = args.Split(GeneralConstants.ArgsSeparator);
 			var attr = argsList[0];
 			var attrValue = Context.GetAttribute(argsList[1]).ToString();
@@ -94,8 +67,6 @@ namespace Catalogs
 
 		public List<JSONNode> FilterType(string args)
 		{
-			ScriptExecutor.AddNewProgram("FilterType " + args.Replace(GeneralConstants.ArgsSeparator.ToString(), " "));
-
 			var argsList = args.Split(GeneralConstants.ArgsSeparator);
 			var type = argsList[0];
 			List<JSONNode> dataObjects = Context.GetAttribute(argsList[1]);
@@ -114,8 +85,6 @@ namespace Catalogs
 
 		public string QueryAttr(string args)
 		{
-			ScriptExecutor.AddNewProgram("QueryAttr " + args.Replace(GeneralConstants.ArgsSeparator.ToString(), " "));
-			
 			var argsList = args.Split(GeneralConstants.ArgsSeparator);
 			var attr = argsList[0];
 			JSONNode dataObject = Context.GetAttribute(argsList[1]);
@@ -126,7 +95,7 @@ namespace Catalogs
 
 		public string ShowInfo(List<JSONNode> dataObjects)
 		{
-			string result = "";
+			var result = "";
 			foreach (JSONNode dataObject in dataObjects)
 			{
 				foreach (var item in dataObject)

@@ -12,7 +12,6 @@ public class ScriptExecutor : MonoBehaviour
     private static Text _knowledgeText;
     private static Text _knowledgeInfo;
     private static Text _programsText;
-    private static List<string> _programs = new List<string>(); 
 
     private static List<QueryMeta> _queryMetas;
     private static int _currentQueryMetaId;
@@ -20,7 +19,7 @@ public class ScriptExecutor : MonoBehaviour
 
     private void Start()
     {
-        Context.Instance.CurrentFigureID = "402-32-11-61-990-802-A";
+        Context.Instance.CurrentFigureID = "402-32-11-61-990-802-C";
         Context.Instance.CurrentTaskID = "32-11-61-400-802";
         Context.Instance.CurrentSubtaskID = "32-11-61-420-007";
         Context.Instance.CurrentInstructionOrder = 1;
@@ -178,10 +177,9 @@ public class ScriptExecutor : MonoBehaviour
         var currentQueryMeta = _queryMetas[_currentQueryMetaId];
             
         _queryText.text = currentQueryMeta.Query;
-        _programs.Clear();
 
         var result = FunctionalProgramsExecutor.Instance.Execute(currentQueryMeta);
-        _programsText.text = string.Join("\n", _programs);
+        _programsText.text = string.Join("\n", currentQueryMeta.Programs);
         _replyText.text = result;
 
         if (result == "None")
@@ -226,10 +224,5 @@ public class ScriptExecutor : MonoBehaviour
     public static void SetKnowledgeInfo()
     {
         _knowledgeInfo.text = "TASK " + Context.Instance.CurrentTaskID + "\nSUBTASK " + Context.Instance.CurrentSubtaskID;
-    }
-
-    public static void AddNewProgram(string program)
-    {
-        _programs.Add(program);
     }
 }

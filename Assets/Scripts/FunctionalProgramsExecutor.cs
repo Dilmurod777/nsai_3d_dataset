@@ -87,11 +87,30 @@ public class FunctionalProgramsExecutor
                         break;
                 }
             }
+
+            string objectsPart;
+            string referenceObj = null;
+            if (operation["name"] == "attach")
+            {
+                objectsPart = string.Join(", ", objects.Take(objects.Count - 1));
+                referenceObj = objects[objects.Count - 1];
+            }
+            else
+            {
+                objectsPart = string.Join(", ", objects);
+            }
             
             var operationPart = HelperFunctions.GetOperationForResponse(operation["name"], operation.ContainsKey("extra") ? operation["extra"] : null);
-            var objectsPart = string.Join(", ", objects);
             var extraPart = string.Join(" ", parsedExtra);
-            output = operationPart + " " + objectsPart + " " + extraPart;
+
+            if (referenceObj != null)
+            {
+                output = operationPart + " " + objectsPart + " to " + referenceObj + " " + extraPart;
+            }
+            else
+            {
+                output = operationPart + " " + objectsPart + " " + extraPart;
+            }
         }
         else
         {

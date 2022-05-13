@@ -13,9 +13,8 @@
       "FilterAttr order CurrentInstructionOrder prev",
       "FilterType actions prev",
       "CheckActionsValidity var1 prev",
-      "Align prev var1"
+      "Attach prev var1"
     ],
-    "knowledge": "Put the strut assembly, lower [8] in its position for attachment to the shock strut [51].",
     "reply": "[8], [51]"
   },
   {
@@ -32,9 +31,8 @@
       "FilterAttr order CurrentInstructionOrder prev",
       "FilterType actions prev",
       "CheckActionsValidity var1 prev",
-      "SmoothScrew prev var1"
+      "Attach prev var1"
     ],
-    "knowledge": "Put the side strut pin [52] through the strut assembly, lower [8] and the clevis on the shock strut [51].",
     "reply": "[52], [51]"
   },
   {
@@ -51,9 +49,8 @@
       "FilterAttr order CurrentInstructionOrder prev",
       "FilterType actions prev",
       "CheckActionsValidity var1 prev",
-      "SmoothInstall prev var1"
+      "Attach prev var1"
     ],
-    "knowledge": "Install the side strut washer [53] and the side strut nut [54] on the side strut pin [52].",
     "reply": "[53], [54], [52]"
   },
   {
@@ -70,9 +67,8 @@
       "FilterAttr order CurrentInstructionOrder prev",
       "FilterType actions prev",
       "CheckActionsValidity var1 prev",
-      "SmoothScrew prev var1"
+      "Attach prev var1"
     ],
-    "knowledge": "Install the cross bolt [47] with the bolt head inboard in the side strut pin [52].",
     "reply": "[47], [52]"
   },
   {
@@ -89,9 +85,8 @@
       "FilterAttr order CurrentInstructionOrder prev",
       "FilterType actions prev",
       "CheckActionsValidity var1 prev",
-      "SmoothInstall prev var1"
+      "Attach prev var1"
     ],
-    "knowledge":  "Install the washer [48], and the nut [50] on the cross bolt [47].",
     "reply": "[48], [50], [47]"
   },
   {
@@ -108,9 +103,8 @@
       "FilterAttr order CurrentInstructionOrder prev",
       "FilterType actions prev",
       "CheckActionsValidity var1 prev",
-      "SmoothScrew prev var1"
+      "Attach prev var1"
     ],
-    "knowledge":  "Install the pin [49] in the cross bolt [47].",
     "reply": "[49], [47]"
   }
 ]

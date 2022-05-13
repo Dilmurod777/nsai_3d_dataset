@@ -13,7 +13,7 @@
       "FilterAttr order CurrentInstructionOrder prev",
       "FilterType actions prev",      
       "CheckActionsValidity var1 prev",
-      "Align prev var1"
+      "Attach prev var1"
     ],
     "reply": "[3], [8]"
   },
@@ -31,9 +31,8 @@
       "FilterAttr order CurrentInstructionOrder prev",
       "FilterType actions prev",
       "CheckActionsValidity var1 prev",
-      "StepInstall prev var1"
+      "Attach prev var1"
     ],
-    "knowledge": "Put the side strut pin [7] through the upper side strut assembly [3] and the strut assembly, lower [8].",
     "reply": "[7], [8]"
   },
   {
@@ -50,9 +49,8 @@
       "FilterAttr order CurrentInstructionOrder prev",
       "FilterType actions prev",
       "CheckActionsValidity var1 prev",
-      "SmoothInstall prev var1"
+      "Attach prev var1"
     ],
-    "knowledge": "Install the end cap [9] on the side strut pin [7].",
     "reply": "[9], [7]"
   },
   {
@@ -69,9 +67,8 @@
       "FilterAttr order CurrentInstructionOrder prev",
       "FilterType actions prev",
       "CheckActionsValidity var1 prev",
-      "SmoothScrew prev var1"
+      "Attach prev var1"
     ],
-    "knowledge": "Install the bolt [11] in the side strut pin [7].",
     "reply": "[11], [7]"
   },
   {
@@ -88,9 +85,8 @@
       "FilterAttr order CurrentInstructionOrder prev",
       "FilterType actions prev",
       "CheckActionsValidity var1 prev",
-      "SmoothInstall prev var1"
+      "Attach prev var1"
     ],
-    "knowledge": "Install the washer [12], and the nut [14] on the bolt [11]. ",
     "reply": "[12], [14], [11]"
   },
   {
@@ -107,9 +103,8 @@
       "FilterAttr order CurrentInstructionOrder prev",
       "FilterType actions prev",
       "CheckActionsValidity var1 prev",
-      "SmoothScrew prev var1"
+      "Attach prev var1"
     ],
-    "knowledge": "Install the cotter pin [13] in the bolt [11].",
     "reply": "[13], [11]"
   }
 ]

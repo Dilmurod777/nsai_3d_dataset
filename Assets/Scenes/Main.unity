@@ -748,7 +748,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AttachRotationAxis: 1
   DettachRotationAxis: 4
-  RotationType: 0
+  AttachType: 3
+  DetachType: 3
 --- !u!4 &255207147 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d877662139cf37c47be3792aa70ba948, type: 3}
@@ -954,6 +955,27 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 335045803}
   m_CullTransparentMesh: 1
+--- !u!1 &359200142 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 850745579222112391, guid: 2ad4017448cdbca4f97290d5b5f4be31, type: 3}
+  m_PrefabInstance: {fileID: 380604468}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &359200146
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 359200142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce21a7c9737b482da35c3504d19e413d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AttachRotationAxis: 1
+  DettachRotationAxis: 1
+  AttachType: 0
+  DetachType: 0
 --- !u!1001 &380604468
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1531,7 +1553,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AttachRotationAxis: 2
   DettachRotationAxis: 5
-  RotationType: 2
+  AttachType: 2
+  DetachType: 2
 --- !u!1 &506590865
 GameObject:
   m_ObjectHideFlags: 0
@@ -1550,7 +1573,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &506590866
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1744,6 +1767,27 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 516593403}
   m_CullTransparentMesh: 1
+--- !u!1 &549918274 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6033287831625508522, guid: 2ad4017448cdbca4f97290d5b5f4be31, type: 3}
+  m_PrefabInstance: {fileID: 380604468}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &549918278
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 549918274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce21a7c9737b482da35c3504d19e413d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AttachRotationAxis: 1
+  DettachRotationAxis: 4
+  AttachType: 4
+  DetachType: 4
 --- !u!1 &589915302
 GameObject:
   m_ObjectHideFlags: 0
@@ -1859,6 +1903,27 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -20, y: -20}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &615932397 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -2422874584783153588, guid: 2ad4017448cdbca4f97290d5b5f4be31, type: 3}
+  m_PrefabInstance: {fileID: 380604468}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &615932401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 615932397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce21a7c9737b482da35c3504d19e413d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AttachRotationAxis: 1
+  DettachRotationAxis: 4
+  AttachType: 0
+  DetachType: 0
 --- !u!1 &703868039 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7386894085769663136, guid: 2ad4017448cdbca4f97290d5b5f4be31, type: 3}
@@ -1878,7 +1943,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AttachRotationAxis: 1
   DettachRotationAxis: 4
-  RotationType: 0
+  AttachType: 0
+  DetachType: 0
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -2058,6 +2124,27 @@ Transform:
   m_Father: {fileID: 313074191}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 11.973, y: 0, z: 0}
+--- !u!1 &742590291 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1930546209036528062, guid: d877662139cf37c47be3792aa70ba948, type: 3}
+  m_PrefabInstance: {fileID: 1684253688}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &742590295
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 742590291}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce21a7c9737b482da35c3504d19e413d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AttachRotationAxis: 2
+  DettachRotationAxis: 5
+  AttachType: 0
+  DetachType: 0
 --- !u!1 &744594310
 GameObject:
   m_ObjectHideFlags: 0
@@ -2260,7 +2347,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AttachRotationAxis: 1
   DettachRotationAxis: 4
-  RotationType: 0
+  AttachType: 3
+  DetachType: 3
 --- !u!1001 &906557229
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2513,7 +2601,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AttachRotationAxis: 2
   DettachRotationAxis: 5
-  RotationType: 0
+  AttachType: 3
+  DetachType: 3
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -2690,6 +2779,27 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 976653071}
   m_CullTransparentMesh: 1
+--- !u!1 &1011857538 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5169307851798278741, guid: d877662139cf37c47be3792aa70ba948, type: 3}
+  m_PrefabInstance: {fileID: 1684253688}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1011857542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1011857538}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce21a7c9737b482da35c3504d19e413d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AttachRotationAxis: 2
+  DettachRotationAxis: 5
+  AttachType: 0
+  DetachType: 0
 --- !u!1 &1107088140
 GameObject:
   m_ObjectHideFlags: 0
@@ -3374,6 +3484,27 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: -1
   m_Mesh: {fileID: 4655823783536951366, guid: d877662139cf37c47be3792aa70ba948, type: 3}
+--- !u!1 &1203632000 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6180136775536764070, guid: fabd5bb0af227fb4093fc1af6db86a5d, type: 3}
+  m_PrefabInstance: {fileID: 1136460072}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1203632004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1203632000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce21a7c9737b482da35c3504d19e413d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AttachRotationAxis: 0
+  DettachRotationAxis: 3
+  AttachType: 3
+  DetachType: 3
 --- !u!1 &1257973669
 GameObject:
   m_ObjectHideFlags: 0
@@ -3599,7 +3730,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1268710478
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3890,7 +4021,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AttachRotationAxis: 1
   DettachRotationAxis: 4
-  RotationType: 0
+  AttachType: 3
+  DetachType: 3
 --- !u!4 &1399688437 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d877662139cf37c47be3792aa70ba948, type: 3}
@@ -3915,7 +4047,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AttachRotationAxis: 0
   DettachRotationAxis: 3
-  RotationType: 3
+  AttachType: 3
+  DetachType: 3
 --- !u!1 &1446055248
 GameObject:
   m_ObjectHideFlags: 0
@@ -3996,6 +4129,27 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -1820, y: -980}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1461240490 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -8320435798982483735, guid: d877662139cf37c47be3792aa70ba948, type: 3}
+  m_PrefabInstance: {fileID: 1684253688}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1461240494
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1461240490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce21a7c9737b482da35c3504d19e413d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AttachRotationAxis: 2
+  DettachRotationAxis: 5
+  AttachType: 4
+  DetachType: 4
 --- !u!1 &1480292723
 GameObject:
   m_ObjectHideFlags: 0
@@ -4083,7 +4237,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AttachRotationAxis: 1
   DettachRotationAxis: 4
-  RotationType: 2
+  AttachType: 2
+  DetachType: 2
 --- !u!1 &1575697104 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6337128786783807074, guid: fabd5bb0af227fb4093fc1af6db86a5d, type: 3}
@@ -4103,7 +4258,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AttachRotationAxis: 1
   DettachRotationAxis: 4
-  RotationType: 2
+  AttachType: 2
+  DetachType: 2
 --- !u!65 &1575697109
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4136,7 +4292,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AttachRotationAxis: 0
   DettachRotationAxis: 3
-  RotationType: 0
+  AttachType: 3
+  DetachType: 3
 --- !u!1 &1592081649
 GameObject:
   m_ObjectHideFlags: 0
@@ -5508,7 +5665,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1932818242
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5642,7 +5799,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AttachRotationAxis: 0
   DettachRotationAxis: 3
-  RotationType: 0
+  AttachType: 2
+  DetachType: 2
 --- !u!1 &1990372374 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8643819742733186953, guid: 2ad4017448cdbca4f97290d5b5f4be31, type: 3}
@@ -5662,7 +5820,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AttachRotationAxis: 1
   DettachRotationAxis: 4
-  RotationType: 0
+  AttachType: 3
+  DetachType: 3
 --- !u!1 &2014583246 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -1764412016663369618, guid: d877662139cf37c47be3792aa70ba948, type: 3}
@@ -5682,7 +5841,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AttachRotationAxis: 3
   DettachRotationAxis: 3
-  RotationType: 0
+  AttachType: 0
+  DetachType: 0
 --- !u!1 &2015952269
 GameObject:
   m_ObjectHideFlags: 0

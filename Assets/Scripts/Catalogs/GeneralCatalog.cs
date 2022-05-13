@@ -21,8 +21,6 @@ namespace Catalogs
 	{
 		public object SaveVal2Var(string args)
 		{
-			ScriptExecutor.AddNewProgram("SaveVal2Var " + args.Replace(GeneralConstants.ArgsSeparator.ToString(), " "));
-			
 			var argsList = args.Split(GeneralConstants.ArgsSeparator);
 			var source = Context.GetAttribute(argsList[0]);
 			var varName = argsList[1];
@@ -54,8 +52,6 @@ namespace Catalogs
 
 		public object Unique(string args)
 		{
-			ScriptExecutor.AddNewProgram("Unique " + args.Replace(GeneralConstants.ArgsSeparator.ToString(), " "));
-			
 			var argsList = args.Split(GeneralConstants.ArgsSeparator);
 			var prev = Context.GetAttribute(argsList[0]);
 			return prev.Count > 0 ? prev[0] : null;
@@ -63,8 +59,6 @@ namespace Catalogs
 
 		public List<string> ExtractNumbers(string args)
 		{
-			ScriptExecutor.AddNewProgram("ExtractNumbers " + args.Replace(GeneralConstants.ArgsSeparator.ToString(), " "));
-			
 			var argsList = args.Split(GeneralConstants.ArgsSeparator);
 			string query = Context.GetAttribute(argsList[0]);
 			
@@ -93,8 +87,6 @@ namespace Catalogs
 
 		public List<string> ExtractID(string args)
 		{
-			ScriptExecutor.AddNewProgram("ExtractID " + args.Replace(GeneralConstants.ArgsSeparator.ToString(), " "));
-			
 			var argsList = args.Split(GeneralConstants.ArgsSeparator);
 			var attrId = argsList[0];
 			var source = Context.GetAttribute(argsList[1]);
@@ -134,8 +126,6 @@ namespace Catalogs
 
 		public string Same(string args)
 		{
-			ScriptExecutor.AddNewProgram("Same " + args.Replace(GeneralConstants.ArgsSeparator.ToString(), " "));
-			
 			var argsList = args.Split(GeneralConstants.ArgsSeparator);
 			var var1 = Context.GetAttribute(argsList[0]);
 			var var2 = Context.GetAttribute(argsList[1]);
