@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using Constants;
+using UnityEngine;
 
-public class ControlsExecutor: MonoBehaviour
+public class ControlsExecutor : MonoBehaviour
 {
 	public void LeftButtonClickHandler()
 	{
@@ -21,11 +22,29 @@ public class ControlsExecutor: MonoBehaviour
 	{
 		// disable old figure
 		GameObject.Find(Context.Instance.CurrentFigureID + "-Wrapper").transform.localScale = Vector3.zero;
-		
+
 		// enable new figure
 		Context.Instance.CurrentFigureID = figureName;
-		GameObject.Find(figureName+ "-Wrapper").transform.localScale = Vector3.one;
-		
+		GameObject.Find(figureName + "-Wrapper").transform.localScale = Vector3.one;
+
+		ScriptExecutor.InitProgram();
+	}
+
+	public void SwitchQueryType(string type)
+	{
+		switch (type)
+		{
+			case "general":
+				ScriptExecutor.QueryType = GeneralConstants.QueryType.General;
+				break;
+			case "knowledge":
+				ScriptExecutor.QueryType = GeneralConstants.QueryType.Knowledge;
+				break;
+			default:
+				ScriptExecutor.QueryType = GeneralConstants.QueryType.General;
+				break;
+		}
+
 		ScriptExecutor.InitProgram();
 	}
 }

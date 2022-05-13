@@ -729,7 +729,7 @@ namespace Catalogs
 				yield return null;
 			}
 		}
-		
+
 		// smoothly move object
 		private static IEnumerator MoveObjectCoroutine(GameObject obj, Vector3 finalPosition, float duration)
 		{
@@ -743,7 +743,7 @@ namespace Catalogs
 				counter += Time.deltaTime / duration;
 
 				obj.transform.position = Vector3.Lerp(currentPos, finalPosition, counter);
-				yield return null;
+				yield return new WaitForSeconds(0.0001f);
 			}
 
 			ScriptExecutor.IsInAction = false;

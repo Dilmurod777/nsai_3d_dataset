@@ -74,7 +74,7 @@ namespace Catalogs
 			var resultObjects = new List<JSONNode>();
 			foreach (var dataObject in dataObjects)
 			{
-				foreach (JSONNode item in dataObject[type])
+				foreach (var item in dataObject[type])
 				{
 					resultObjects.Add(item);
 				}
@@ -96,7 +96,7 @@ namespace Catalogs
 		public string ShowInfo(List<JSONNode> dataObjects)
 		{
 			var result = "";
-			foreach (JSONNode dataObject in dataObjects)
+			foreach (var dataObject in dataObjects)
 			{
 				foreach (var item in dataObject)
 				{
