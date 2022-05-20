@@ -12,48 +12,14 @@ public class Testing : MonoBehaviour
 	private List<Action> _actions;
 	private int _activeIndex;
 	private GameObject _figure, _rfm, _ifm;
-	private List<string> ifmHierarchy;
-	private bool _isTheSame;
-
-	private Image _isCompleteIndicatorPanel;
-	public static bool IsInitialized = false;
-
-
-	public Testing(List<string> ifmHierarchy)
-	{
-		this.ifmHierarchy = ifmHierarchy;
-	}
+	private Robot _robot;
 
 	private IEnumerator Sequence(List<IEnumerator> coroutines, float delay = 0.0f)
 	{
 		yield return new WaitForSeconds(delay);
 		foreach (var c in coroutines) yield return StartCoroutine(c);
 	}
-	
-	private IEnumerator CheckIsFigureCompleteCoroutine()
-	{
-		var figureHierarchy = CreateHierarchy(_figure);
 
-		_isTheSame = true;
-		for (var i = 0; i < ifmHierarchy.Count; i++)
-		{
-			if (figureHierarchy.Contains(ifmHierarchy[i])) continue;
-			_isTheSame = false;
-			break;
-		}
-
-		if (_isTheSame)
-		{
-			_isCompleteIndicatorPanel.color = Color.green;
-		}
-		else
-		{
-			_isCompleteIndicatorPanel.color = Color.red;
-		}
-
-		yield return null;
-	}
-	
 	private static IEnumerator DelayCoroutine(float duration, State.VoidFunction method = null)
 	{
 		yield return new WaitForSeconds(duration);
@@ -109,17 +75,10 @@ public class Testing : MonoBehaviour
 		}
 	}
 
-	private static IEnumerator AdjustStructureCoroutine(GameObject objA, GameObject objB, float duration = 0.1f)
+	private static IEnumerator AdjustStructureCoroutine(GameObject objA, GameObject objB)
 	{
 		objA.transform.parent = objB.transform;
-
-		float elapsedTime = 0;
-		while (elapsedTime <= duration)
-		{
-			objA.transform.parent = objB.transform;
-			elapsedTime += Time.deltaTime;
-			yield return null;
-		}
+		yield return null;
 	}
 
 	// smoothly move object
@@ -242,19 +201,19 @@ public class Testing : MonoBehaviour
 			Destroy(cloneObj);
 		}
 	}
-	
+
 	private void Start()
 	{
-		_activeIndex = 0;
-		_actions = new List<Action>
-		{
-			// new Action {Name = "attach", Components = new List<string> {"[41]", "[8]"}},
-			// new Action {Name = "attach", Components = new List<string> {"[45]", "[8]"}},
-			// new Action {Name = "attach", Components = new List<string> {"[44]", "[46]"}},
-			// new Action {Name = "attach", Components = new List<string> {"[46]", "[8]"}},
-			// new Action {Name = "attach", Components = new List<string> {"[43]", "[46]"}},
-			new Action {Name = "attach", Components = new List<string> {"[42]", "[46]"}}
-		};
+		// _activeIndex = 0;
+		// _actions = new List<Action>
+		// {
+		// 	// new Action {Name = "attach", Components = new List<string> {"[41]", "[8]"}},
+		// 	// new Action {Name = "attach", Components = new List<string> {"[45]", "[8]"}},
+		// 	// new Action {Name = "attach", Components = new List<string> {"[44]", "[46]"}},
+		// 	// new Action {Name = "attach", Components = new List<string> {"[46]", "[8]"}},
+		// 	// new Action {Name = "attach", Components = new List<string> {"[43]", "[46]"}},
+		// 	new Action {Name = "attach", Components = new List<string> {"[42]", "[46]"}}
+		// };
 
 		var figureName = "402-32-11-61-990-802-A";
 		var figureRfmName = figureName + "-RFM";
@@ -264,68 +223,207 @@ public class Testing : MonoBehaviour
 		_rfm = GameObject.Find(figureRfmName);
 		_ifm = GameObject.Find(figureIfmName);
 
-		ifmHierarchy = CreateHierarchy(_ifm);
-
-		// _isCompleteIndicatorPanel = GameObject.Find("IsCompleteIndicator").GetComponent<Image>();
+		_robot = new Robot();
 	}
 
 	private void Update()
 	{
 		if (Input.GetKeyDown(KeyCode.E))
 		{
-			Attach(_actions[_activeIndex]);
-			_activeIndex += 1;
+			// Attach(_actions[_activeIndex]);
+			// _activeIndex += 1;
+
+			var objA = HelperFunctions.FindObjectInFigure(_figure, "[42] NUT");
+			var objB = HelperFunctions.FindObjectInFigure(_figure, "[46] BOLT");
+
+			if (objA != null && objB != null)
+			{
+				// Performer(SmoothInstall(objA, objB));
+				// Performer(StepInstall(objA, objB));
+				// Performer(StepScrew(objA, objB));
+			}
+			else
+			{
+				Debug.Log("Some of objects were not found.");
+			}
 		}
 	}
 
-	private void Attach(Action action)
+	private List<IEnumerator> SmoothInstall(GameObject objA, GameObject objB)
 	{
-		// _isCompleteIndicatorPanel.color = Color.gray;
+		var primitives = new List<IEnumerator>();
 
-		var routines = new List<IEnumerator>();
+		primitives.Add(AdjustStructureCoroutine(objA, objB));
 
-		var objA = HelperFunctions.FindObjectInFigure(_figure, action.Components[0]);
-		var objB = HelperFunctions.FindObjectInFigure(_figure, action.Components[1]);
-
+		// rfm
+		var rfmDuration = 1.0f;
 		var rfmReferenceObjA = HelperFunctions.FindObjectInFigure(_rfm, objA.name);
 		var rfmReferenceObjB = HelperFunctions.FindObjectInFigure(_rfm, objB.name);
+
+		rfmReferenceObjA.transform.parent = rfmReferenceObjB.transform;
+		var rfmDiff = rfmReferenceObjA.transform.localPosition;
+		var rfmFinalPosition = objB.transform.TransformPoint(rfmDiff);
+		rfmReferenceObjA.transform.parent = rfmReferenceObjB.transform.parent;
+
+		var rfmDistance = Vector3.Distance(objA.transform.position, rfmFinalPosition);
+		var rfmNewSpeed = rfmDistance / rfmDuration;
+		primitives.Add(_robot.SetMoveSpeed(rfmNewSpeed));
+		var rfmCount = rfmDuration / (_robot.GetMoveDistance() / rfmNewSpeed);
+
+		for (var i = 0; i < Mathf.CeilToInt(rfmCount); i++)
+		{
+			primitives.Add(_robot.Move(objA, rfmFinalPosition));
+		}
+
+		// delay
+		primitives.Add(_robot.Stop(0.5f));
+
+		// ifm
+		var ifmDuration = 1.0f;
 		var ifmReferenceObjA = HelperFunctions.FindObjectInFigure(_ifm, objA.name);
 		var ifmReferenceObjB = HelperFunctions.FindObjectInFigure(_ifm, objB.name);
 
-		rfmReferenceObjA.transform.parent = rfmReferenceObjB.transform;
-		var diff = rfmReferenceObjA.transform.localPosition;
-		var rfmFinalPosition = objB.transform.TransformPoint(diff);
-		rfmReferenceObjA.transform.parent = rfmReferenceObjB.transform.parent;
-			
 		ifmReferenceObjA.transform.parent = ifmReferenceObjB.transform;
-		diff = ifmReferenceObjA.transform.localPosition;
-		var ifmFinalPosition = objB.transform.TransformPoint(diff);
+		var ifmDiff = ifmReferenceObjA.transform.localPosition;
+		var ifmFinalPosition = objB.transform.TransformPoint(ifmDiff);
 		ifmReferenceObjA.transform.parent = ifmReferenceObjB.transform.parent;
 
-		routines.Add(DelayCoroutine(0.3f));
-		routines.Add(RotateObjectCoroutine(objA, objB.transform.rotation, 1.0f));
-		routines.Add(DelayCoroutine(0.3f));
-		routines.Add(MoveObjectCoroutine(objA, rfmFinalPosition, 1.0f));
-		routines.Add(DelayCoroutine(0.3f));
-		// routines.Add(MoveObjectCoroutine(objA, ifmFinalPosition, 1.0f));
-		// routines.Add(MoveObjectWithRotationCoroutine(objA, ifmFinalPosition, 2.0f, Vector3.forward));
-		// for (var i = 1; i <= 3; i++)
-		// {
-		// 	var delta = ifmFinalPosition - rfmFinalPosition;
-		// 	routines.Add(MoveObjectCoroutine(objA, rfmFinalPosition + delta * i / 3, 0.5f));
-		// 	routines.Add(DelayCoroutine(0.3f));
-		// }
-		
-		for (var i = 1; i <= 3; i++)
-		{
-			var delta = ifmFinalPosition - rfmFinalPosition;
-			routines.Add(MoveObjectWithRotationCoroutine(objA, rfmFinalPosition + delta * i / 3, 0.5f, Vector3.forward));
-			routines.Add(DelayCoroutine(0.3f));
-		}
-		
-		// routines.Add(AdjustStructureCoroutine(objA, objB));
-		// routines.Add(CheckIsFigureCompleteCoroutine());
+		var ifmDistance = Vector3.Distance(rfmFinalPosition, ifmFinalPosition);
+		var ifmNewSpeed = ifmDistance / ifmDuration;
+		primitives.Add(_robot.SetMoveSpeed(ifmNewSpeed));
+		var ifmCount = Mathf.CeilToInt(ifmDuration / (_robot.GetMoveDistance() / ifmNewSpeed));
 
-		StartCoroutine(Sequence(routines));
+		for (var i = 0; i < ifmCount; i++)
+		{
+			primitives.Add(_robot.Move(objA, ifmFinalPosition));
+		}
+
+		return primitives;
+	}
+
+	private List<IEnumerator> StepScrew(GameObject objA, GameObject objB)
+	{
+		var primitives = new List<IEnumerator>();
+
+		primitives.Add(AdjustStructureCoroutine(objA, objB));
+
+		// rfm
+		var rfmDuration = 1.0f;
+		var rfmReferenceObjA = HelperFunctions.FindObjectInFigure(_rfm, objA.name);
+		var rfmReferenceObjB = HelperFunctions.FindObjectInFigure(_rfm, objB.name);
+
+		rfmReferenceObjA.transform.parent = rfmReferenceObjB.transform;
+		var rfmDiff = rfmReferenceObjA.transform.localPosition;
+		var rfmFinalPosition = objB.transform.TransformPoint(rfmDiff);
+		rfmReferenceObjA.transform.parent = rfmReferenceObjB.transform.parent;
+
+		var rfmDistance = Vector3.Distance(objA.transform.position, rfmFinalPosition);
+		var rfmNewSpeed = rfmDistance / rfmDuration;
+		primitives.Add(_robot.SetMoveSpeed(rfmNewSpeed));
+		var rfmCount = rfmDuration / (_robot.GetMoveDistance() / rfmNewSpeed);
+
+		for (var i = 0; i < Mathf.CeilToInt(rfmCount); i++)
+		{
+			primitives.Add(_robot.Move(objA, rfmFinalPosition));
+		}
+
+		// delay
+		primitives.Add(_robot.Stop(0.5f));
+
+		// ifm
+		var ifmDuration = 1.0f;
+		var ifmReferenceObjA = HelperFunctions.FindObjectInFigure(_ifm, objA.name);
+		var ifmReferenceObjB = HelperFunctions.FindObjectInFigure(_ifm, objB.name);
+
+		ifmReferenceObjA.transform.parent = ifmReferenceObjB.transform;
+		var ifmDiff = ifmReferenceObjA.transform.localPosition;
+		var ifmFinalPosition = objB.transform.TransformPoint(ifmDiff);
+		ifmReferenceObjA.transform.parent = ifmReferenceObjB.transform.parent;
+
+		var ifmDistance = Vector3.Distance(rfmFinalPosition, ifmFinalPosition);
+		var ifmNewSpeed = ifmDistance / ifmDuration;
+		primitives.Add(_robot.SetMoveSpeed(ifmNewSpeed));
+		var ifmCount = ifmDuration / (_robot.GetMoveDistance() / ifmNewSpeed);
+
+		for (var i = 0; i < Mathf.CeilToInt(ifmCount); i++)
+		{
+			primitives.Add(_robot.MoveWithRotation(objA, ifmFinalPosition, Vector3.forward));
+		}
+
+		return primitives;
+	}
+
+	private List<IEnumerator> StepInstall(GameObject objA, GameObject objB)
+	{
+		var primitives = new List<IEnumerator>();
+
+		primitives.Add(AdjustStructureCoroutine(objA, objB));
+
+		// rfm
+		var rfmDuration = 1.0f;
+		var rfmReferenceObjA = HelperFunctions.FindObjectInFigure(_rfm, objA.name);
+		var rfmReferenceObjB = HelperFunctions.FindObjectInFigure(_rfm, objB.name);
+
+		rfmReferenceObjA.transform.parent = rfmReferenceObjB.transform;
+		var rfmDiff = rfmReferenceObjA.transform.localPosition;
+		var rfmFinalPosition = objB.transform.TransformPoint(rfmDiff);
+		rfmReferenceObjA.transform.parent = rfmReferenceObjB.transform.parent;
+
+		var rfmDistance = Vector3.Distance(objA.transform.position, rfmFinalPosition);
+		var rfmNewSpeed = rfmDistance / rfmDuration;
+		primitives.Add(_robot.SetMoveSpeed(rfmNewSpeed));
+		var rfmCount = rfmDuration / (_robot.GetMoveDistance() / rfmNewSpeed);
+
+		var steps1 = 4;
+		var delayDelta1 = Mathf.CeilToInt(rfmCount / steps1);
+		var delayCounter1 = 1;
+		for (var i = 0; i < Mathf.CeilToInt(rfmCount); i++)
+		{
+			if (i == delayDelta1 * delayCounter1)
+			{
+				delayCounter1 += 1;
+				primitives.Add(_robot.Stop(0.5f));
+			}
+			primitives.Add(_robot.Move(objA, rfmFinalPosition));
+		}
+
+		// delay
+		primitives.Add(_robot.Stop(0.5f));
+
+		// ifm
+		var ifmDuration = 1.0f;
+		var ifmReferenceObjA = HelperFunctions.FindObjectInFigure(_ifm, objA.name);
+		var ifmReferenceObjB = HelperFunctions.FindObjectInFigure(_ifm, objB.name);
+
+		ifmReferenceObjA.transform.parent = ifmReferenceObjB.transform;
+		var ifmDiff = ifmReferenceObjA.transform.localPosition;
+		var ifmFinalPosition = objB.transform.TransformPoint(ifmDiff);
+		ifmReferenceObjA.transform.parent = ifmReferenceObjB.transform.parent;
+
+		var ifmDistance = Vector3.Distance(rfmFinalPosition, ifmFinalPosition);
+		var ifmNewSpeed = ifmDistance / ifmDuration;
+		primitives.Add(_robot.SetMoveSpeed(ifmNewSpeed));
+		var ifmCount = Mathf.CeilToInt(ifmDuration / (_robot.GetMoveDistance() / ifmNewSpeed));
+
+		// var steps = 3;
+		// var delayDelta = Mathf.CeilToInt(ifmCount / steps);
+		// var delayCounter = 1;
+		for (var i = 0; i < ifmCount; i++)
+		{
+			// if (i == delayDelta * delayCounter)
+			// {
+			// 	delayCounter += 1;
+			// 	primitives.Add(_robot.Stop(0.5f));
+			// }
+			
+			primitives.Add(_robot.Move(objA, ifmFinalPosition));
+		}
+
+		return primitives;
+	}
+
+	private void Performer(List<IEnumerator> primitives)
+	{
+		StartCoroutine(Sequence(primitives));
 	}
 }
