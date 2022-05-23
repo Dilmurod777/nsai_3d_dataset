@@ -8,9 +8,9 @@ public class Robot
 	private float _rotateDegree;
 	private bool _isForceStopped;
 
-	private float _moveThreshold = 0.3f;
+	private float _moveThreshold = 0.05f;
 
-	public Robot(float moveDistance = 1.0f, float moveSpeed = 1.0f, float rotateDegree = 3.0f)
+	public Robot(float moveDistance = 0.1f, float moveSpeed = 1.0f, float rotateDegree = 3.0f)
 	{
 		_moveDistance = moveDistance;
 		_moveSpeed = moveSpeed;

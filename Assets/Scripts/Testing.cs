@@ -240,6 +240,7 @@ public class Testing : MonoBehaviour
 			{
 				// Performer(SmoothInstall(objA, objB));
 				// Performer(StepInstall(objA, objB));
+				// Performer(SmoothScrew(objA, objB));
 				// Performer(StepScrew(objA, objB));
 			}
 			else
@@ -301,7 +302,7 @@ public class Testing : MonoBehaviour
 		return primitives;
 	}
 
-	private List<IEnumerator> StepScrew(GameObject objA, GameObject objB)
+	private List<IEnumerator> SmoothScrew(GameObject objA, GameObject objB)
 	{
 		var primitives = new List<IEnumerator>();
 
@@ -353,7 +354,7 @@ public class Testing : MonoBehaviour
 		return primitives;
 	}
 
-	private List<IEnumerator> StepInstall(GameObject objA, GameObject objB)
+	private List<IEnumerator> StepInstall(GameObject objA, GameObject objB, int steps = 3)
 	{
 		var primitives = new List<IEnumerator>();
 
@@ -374,16 +375,9 @@ public class Testing : MonoBehaviour
 		primitives.Add(_robot.SetMoveSpeed(rfmNewSpeed));
 		var rfmCount = rfmDuration / (_robot.GetMoveDistance() / rfmNewSpeed);
 
-		var steps1 = 4;
-		var delayDelta1 = Mathf.CeilToInt(rfmCount / steps1);
-		var delayCounter1 = 1;
+		
 		for (var i = 0; i < Mathf.CeilToInt(rfmCount); i++)
 		{
-			if (i == delayDelta1 * delayCounter1)
-			{
-				delayCounter1 += 1;
-				primitives.Add(_robot.Stop(0.5f));
-			}
 			primitives.Add(_robot.Move(objA, rfmFinalPosition));
 		}
 
@@ -405,16 +399,15 @@ public class Testing : MonoBehaviour
 		primitives.Add(_robot.SetMoveSpeed(ifmNewSpeed));
 		var ifmCount = Mathf.CeilToInt(ifmDuration / (_robot.GetMoveDistance() / ifmNewSpeed));
 
-		// var steps = 3;
-		// var delayDelta = Mathf.CeilToInt(ifmCount / steps);
-		// var delayCounter = 1;
+		var delayDelta = Mathf.CeilToInt(ifmCount / steps);
+		var delayCounter = 1;
 		for (var i = 0; i < ifmCount; i++)
 		{
-			// if (i == delayDelta * delayCounter)
-			// {
-			// 	delayCounter += 1;
-			// 	primitives.Add(_robot.Stop(0.5f));
-			// }
+			if (i == delayDelta * delayCounter)
+			{
+				delayCounter += 1;
+				primitives.Add(_robot.Stop(0.5f));
+			}
 			
 			primitives.Add(_robot.Move(objA, ifmFinalPosition));
 		}
@@ -422,6 +415,66 @@ public class Testing : MonoBehaviour
 		return primitives;
 	}
 
+	private List<IEnumerator> StepScrew(GameObject objA, GameObject objB, int steps = 3)
+	{
+		var primitives = new List<IEnumerator>();
+
+		primitives.Add(AdjustStructureCoroutine(objA, objB));
+
+		// rfm
+		var rfmDuration = 1.0f;
+		var rfmReferenceObjA = HelperFunctions.FindObjectInFigure(_rfm, objA.name);
+		var rfmReferenceObjB = HelperFunctions.FindObjectInFigure(_rfm, objB.name);
+
+		rfmReferenceObjA.transform.parent = rfmReferenceObjB.transform;
+		var rfmDiff = rfmReferenceObjA.transform.localPosition;
+		var rfmFinalPosition = objB.transform.TransformPoint(rfmDiff);
+		rfmReferenceObjA.transform.parent = rfmReferenceObjB.transform.parent;
+
+		var rfmDistance = Vector3.Distance(objA.transform.position, rfmFinalPosition);
+		var rfmNewSpeed = rfmDistance / rfmDuration;
+		primitives.Add(_robot.SetMoveSpeed(rfmNewSpeed));
+		var rfmCount = rfmDistance / _robot.GetMoveDistance();
+
+		for (var i = 0; i < Mathf.CeilToInt(rfmCount); i++)
+		{
+			primitives.Add(_robot.Move(objA, rfmFinalPosition));
+		}
+
+		// delay
+		primitives.Add(_robot.Stop(0.5f));
+
+		// ifm
+		var ifmDuration = 1.0f;
+		var ifmReferenceObjA = HelperFunctions.FindObjectInFigure(_ifm, objA.name);
+		var ifmReferenceObjB = HelperFunctions.FindObjectInFigure(_ifm, objB.name);
+
+		ifmReferenceObjA.transform.parent = ifmReferenceObjB.transform;
+		var ifmDiff = ifmReferenceObjA.transform.localPosition;
+		var ifmFinalPosition = objB.transform.TransformPoint(ifmDiff);
+		ifmReferenceObjA.transform.parent = ifmReferenceObjB.transform.parent;
+
+		var ifmDistance = Vector3.Distance(rfmFinalPosition, ifmFinalPosition);
+		var ifmNewSpeed = ifmDistance / ifmDuration;
+		primitives.Add(_robot.SetMoveSpeed(ifmNewSpeed));
+		var ifmCount = ifmDistance / _robot.GetMoveDistance();
+		
+		var delayDelta = Mathf.CeilToInt(ifmCount / steps);
+		var delayCounter = 1;
+		for (var i = 0; i < Mathf.CeilToInt(ifmCount); i++)
+		{
+			if (i == delayDelta * delayCounter)
+			{
+				delayCounter += 1;
+				primitives.Add(_robot.Stop(0.5f));
+			}
+			
+			primitives.Add(_robot.MoveWithRotation(objA, ifmFinalPosition, Vector3.forward));
+		}
+
+		return primitives;
+	}
+	
 	private void Performer(List<IEnumerator> primitives)
 	{
 		StartCoroutine(Sequence(primitives));
