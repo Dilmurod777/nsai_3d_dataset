@@ -16,4 +16,40 @@ namespace Constants
 			Extra = ex;
 		}
 	}
+
+	public class TestingResponse
+	{
+		public enum TestingResponseTypes
+		{
+			Move,
+			Rotate,
+			Stop,
+			MoveWithRotation,
+			SetMoveSpeed,
+			SetRotateSpeed
+		}
+
+		public readonly TestingResponseTypes Type;
+		public readonly string ObjectName;
+		public readonly Vector3 CurrentPosition;
+		public readonly Vector3 CurrentRotation;
+		public readonly Vector3 FinalPosition;
+		public readonly Vector3 FinalRotation;
+		public readonly float PreviousMoveSpeed;
+		public readonly float CurrentMoveSpeed;
+
+		public TestingResponse(TestingResponseTypes t, string name = default, Vector3 cp = default, Vector3 cr = default,
+			Vector3 fp = default,
+			Vector3 fr = default, float prevms = default, float curms = default)
+		{
+			Type = t;
+			ObjectName = name;
+			CurrentPosition = cp;
+			CurrentRotation = cr;
+			FinalPosition = fp;
+			FinalRotation = fr;
+			CurrentMoveSpeed = curms;
+			PreviousMoveSpeed = prevms;
+		}
+	}
 }
