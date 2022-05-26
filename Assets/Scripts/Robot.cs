@@ -6,41 +6,20 @@ using UnityEngine;
 public class Robot
 {
 	private float _moveDistance;
-	private float _moveSpeed;
 	private float _rotateDegree;
-	private float _rotateSpeed;
+	private float _moveDuration;
+	private float _rotateDuration;
 	private bool _isForceStopped;
 
-	private const float MoveThreshold = 0.05f;
-	private const float RotateThreshold = 0.05f;
+	private const float MoveThreshold = 0.01f;
+	private const float RotateThreshold = 0.2f;
 
-	public Robot(float moveDistance = 1.0f, float moveSpeed = 1.0f, float rotateDegree = 1.0f, float rotateSpeed = 1.0f)
+	public Robot(float moveDistance = 0.1f, float moveDuration = 1.0f, float rotateDegree = 0.1f, float rotateDuration = 1.0f)
 	{
 		_moveDistance = moveDistance;
-		_moveSpeed = moveSpeed;
 		_rotateDegree = rotateDegree;
-		_rotateSpeed = rotateSpeed;
-	}
-
-	public void SetMoveDistance(float distance)
-	{
-		_moveDistance = distance;
-	}
-
-	public IEnumerator SetMoveSpeed(float speed)
-	{
-		var previousMoveSpeed = _moveSpeed;
-		_moveSpeed = speed;
-		yield return new TestingResponse(TestingResponse.TestingResponseTypes.SetMoveSpeed, prevms: previousMoveSpeed,
-			curms: speed);
-	}
-
-	public IEnumerator SetRotateSpeed(float speed)
-	{
-		var previousRotateSpeed = speed;
-		_rotateSpeed = speed;
-		yield return new TestingResponse(TestingResponse.TestingResponseTypes.SetRotateSpeed, prevms: previousRotateSpeed,
-			curms: speed);
+		_moveDuration = moveDuration;
+		_rotateDuration = rotateDuration;
 	}
 
 	public float GetMoveDistance()
@@ -48,128 +27,99 @@ public class Robot
 		return _moveDistance;
 	}
 
-	public float GetMoveSpeed()
-	{
-		return _moveSpeed;
-	}
-
 	public float GetRotateDegree()
 	{
 		return _rotateDegree;
 	}
-
-	public float GetRotateSpeed()
+	
+	public float GetMoveDuration()
 	{
-		return _rotateSpeed;
+		return _moveDuration;
+	}
+	
+	public float GetRotateDuration()
+	{
+		return _rotateDuration;
+	}
+
+	public IEnumerator SetMoveDistance(float distance)
+	{
+		_moveDistance = distance;
+		yield return null;
+	}
+
+	public IEnumerator SetRotateDegree(float degree)
+	{
+		_rotateDegree = degree;
+		yield return null;
 	}
 
 	public IEnumerator Move(GameObject sourceObject, Vector3 finalPosition)
 	{
-		var duration = GetMoveDistance() / GetMoveSpeed();
 		var initialPosition = sourceObject.transform.position;
 
 		var delta = finalPosition - initialPosition;
+		var temp = initialPosition + delta.normalized * GetMoveDistance();
 
-		var count = 0.0f;
-
-		while (count < 1)
+		if (Vector3.Distance(temp, finalPosition) < MoveThreshold)
 		{
-			if (_isForceStopped) break;
-
-			count += Time.deltaTime / duration;
-			var temp = initialPosition + delta.normalized * GetMoveDistance();
-
-			if (Vector3.Distance(temp, finalPosition) < MoveThreshold)
-			{
-				temp = finalPosition;
-			}
-
-			sourceObject.transform.position = Vector3.Lerp(initialPosition,
-				temp, count);
-
-			if (Vector3.Distance(sourceObject.transform.position, finalPosition) < 0.01)
-			{
-				break;
-			}
-
-			yield return null;
+			temp = finalPosition;
 		}
 
-		yield return new TestingResponse(TestingResponse.TestingResponseTypes.Move, sourceObject.name,
-			cp: sourceObject.transform.position, fp: finalPosition);
+		sourceObject.transform.position = temp;
+
+		yield return new TestingResponse(
+			TestingResponse.TestingResponseTypes.Move,
+			sourceObject.name,
+			ip: initialPosition,
+			cp: sourceObject.transform.position,
+			fp: finalPosition
+		);
 	}
 
-	public IEnumerator Rotate(GameObject sourceObject, Vector3 finalRotation, Vector3 rotationAxis)
+	public IEnumerator Rotate(GameObject sourceObject, Vector3 finalRotation, Vector3 rotationAxis = default)
 	{
-		var duration = GetRotateDegree() / GetRotateSpeed();
 		var initialRotation = sourceObject.transform.rotation;
-		var delta = finalRotation - initialRotation.eulerAngles;
+		
+		// sourceObject.transform.Rotate(rotationAxis, GetRotateDegree()); 
+		
+		sourceObject.transform.rotation = Quaternion.RotateTowards(initialRotation, Quaternion.Euler(finalRotation), GetRotateDegree());
 
-		var count = 0.0f;
-		while (count < 1)
-		{
-			if (_isForceStopped) break;
-
-			count += Time.deltaTime / duration;
-			// var temp = Vector3.MoveTowards(initialRotation.eulerAngles, finalRotation, _rotateDegree);
-			var temp = initialRotation.eulerAngles + new Vector3(delta.normalized.x * rotationAxis.x,
-				delta.normalized.y * rotationAxis.y, delta.normalized.z * rotationAxis.z) * GetRotateDegree();
-
-			if (Vector3.Angle(temp, finalRotation) < RotateThreshold)
-			{
-				temp = finalRotation;
-			}
-
-			sourceObject.transform.rotation = Quaternion.Slerp(initialRotation, Quaternion.Euler(temp), count);
-
-			if (Vector3.Angle(sourceObject.transform.rotation.eulerAngles, finalRotation) < 0.01)
-			{
-				break;
-			}
-
-			yield return null;
-		}
-
-		yield return new TestingResponse(TestingResponse.TestingResponseTypes.Rotate, sourceObject.name,
-			cr: sourceObject.transform.rotation.eulerAngles, fp: finalRotation);
+		yield return new TestingResponse(
+			TestingResponse.TestingResponseTypes.Rotate,
+			sourceObject.name,
+			ir: initialRotation.eulerAngles,
+			cr: sourceObject.transform.rotation.eulerAngles,
+			fp: finalRotation
+		);
 	}
 
 	public IEnumerator MoveWithRotation(GameObject sourceObject, Vector3 finalPosition, Vector3 rotationAxis)
 	{
-		var duration = GetMoveDistance() / GetMoveSpeed();
 		var initialPosition = sourceObject.transform.position;
+		var initialRotation = sourceObject.transform.eulerAngles;
 
 		var delta = finalPosition - initialPosition;
 
-		var count = 0.0f;
+		var temp = initialPosition + delta.normalized * GetMoveDistance();
 
-		while (count < 1)
+		if (Vector3.Distance(temp, finalPosition) < MoveThreshold)
 		{
-			if (_isForceStopped) break;
-
-			count += Time.deltaTime / duration;
-			var temp = initialPosition + delta.normalized * GetMoveDistance();
-
-			if (Vector3.Distance(temp, finalPosition) < MoveThreshold)
-			{
-				temp = finalPosition;
-			}
-
-			sourceObject.transform.position = Vector3.Lerp(initialPosition,
-				temp, count);
-			sourceObject.transform.rotation =
-				Quaternion.Euler(sourceObject.transform.rotation.eulerAngles + rotationAxis * _rotateDegree);
-
-			if (Vector3.Distance(sourceObject.transform.position, finalPosition) < 0.01)
-			{
-				break;
-			}
-
-			yield return null;
+			temp = finalPosition;
 		}
 
-		yield return new TestingResponse(TestingResponse.TestingResponseTypes.MoveWithRotation, sourceObject.name,
-			cp: sourceObject.transform.position, cr: sourceObject.transform.rotation.eulerAngles, fp: finalPosition);
+		sourceObject.transform.position = temp;
+		sourceObject.transform.Rotate(rotationAxis, GetRotateDegree());
+
+		yield return new TestingResponse(
+			TestingResponse.TestingResponseTypes.MoveWithRotation,
+			sourceObject.name,
+			ip: initialPosition,
+			ir: initialRotation,
+			cp: sourceObject.transform.position,
+			cr: sourceObject.transform.rotation.eulerAngles,
+			fp: finalPosition
+		);
 	}
 
 	public IEnumerator Stop(float duration = 0.0f)

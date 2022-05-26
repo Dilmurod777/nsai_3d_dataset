@@ -31,6 +31,8 @@ namespace Constants
 
 		public readonly TestingResponseTypes Type;
 		public readonly string ObjectName;
+		public readonly Vector3 InitialPosition;
+		public readonly Vector3 InitialRotation;
 		public readonly Vector3 CurrentPosition;
 		public readonly Vector3 CurrentRotation;
 		public readonly Vector3 FinalPosition;
@@ -39,11 +41,13 @@ namespace Constants
 		public readonly float CurrentMoveSpeed;
 
 		public TestingResponse(TestingResponseTypes t, string name = default, Vector3 cp = default, Vector3 cr = default,
-			Vector3 fp = default,
+			Vector3 fp = default, Vector3 ip = default, Vector3 ir = default,
 			Vector3 fr = default, float prevms = default, float curms = default)
 		{
 			Type = t;
 			ObjectName = name;
+			InitialPosition = ip;
+			InitialRotation = ir;
 			CurrentPosition = cp;
 			CurrentRotation = cr;
 			FinalPosition = fp;
