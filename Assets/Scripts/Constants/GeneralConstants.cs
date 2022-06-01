@@ -10,7 +10,6 @@
 		public enum AttachTypes
 		{
 			SmoothInstall,
-			Align,
 			StepScrew,
 			SmoothScrew,
 			StepInstall
@@ -21,5 +20,7 @@
 			Knowledge,
 			General
 		}
+		
+		public enum AttachingObjectState {Initial, InProgress, Completed}
 	}
 }

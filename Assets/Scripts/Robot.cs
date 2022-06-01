@@ -14,7 +14,7 @@ public class Robot
 	private const float MoveThreshold = 0.01f;
 	private const float RotateThreshold = 0.2f;
 
-	public Robot(float moveDistance = 0.1f, float moveDuration = 1.0f, float rotateDegree = 0.1f, float rotateDuration = 1.0f)
+	public Robot(float moveDistance = 0.01f, float moveDuration = 1.5f, float rotateDegree = 35.0f, float rotateDuration = 1.5f)
 	{
 		_moveDistance = moveDistance;
 		_rotateDegree = rotateDegree;

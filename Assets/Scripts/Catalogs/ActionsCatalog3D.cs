@@ -536,7 +536,6 @@ namespace Catalogs
 				switch (attachType)
 				{
 					case GeneralConstants.AttachTypes.SmoothInstall:
-					case GeneralConstants.AttachTypes.Align:
 						routines.Add(MoveObjectCoroutine(objA, ifmFinalPosition, 1.0f));
 						break;
 					case GeneralConstants.AttachTypes.StepInstall:
