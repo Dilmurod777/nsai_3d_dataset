@@ -37,6 +37,8 @@ public class Testing : MonoBehaviour
 	public Material InProgressMaterial;
 	public Material CompletedMaterial;
 	public TextMeshProUGUI ActionsText;
+	public GameObject Table;
+	public GameObject FigureImage;
 
 	private List<Action> _actions = new List<Action>();
 	private int _activeIndex;
@@ -44,8 +46,10 @@ public class Testing : MonoBehaviour
 	private Robot _robot;
 
 	private static bool _isPerforming;
+	private static bool _isInitilizing = true;
 	private List<Vector3> _cameraPositions = new List<Vector3>();
 	private List<Quaternion> _cameraRotations = new List<Quaternion>();
+	private string _fileName = "output.txt";
 
 
 	private static IEnumerator AdjustStructureCoroutine(GameObject objA, GameObject objB)
@@ -54,7 +58,7 @@ public class Testing : MonoBehaviour
 		yield return null;
 	}
 
-	private IEnumerator Sequence(List<IEnumerator> coroutines, float delay = 0.0f)
+	private IEnumerator SequenceCoroutine(List<IEnumerator> coroutines, float delay = 0.0f)
 	{
 		var responses = new List<TestingResponse>();
 
@@ -73,11 +77,17 @@ public class Testing : MonoBehaviour
 		yield return responses;
 	}
 
-	public void Performer(List<IEnumerator> primitives)
+	private static IEnumerator DelayCoroutine(float duration, State.VoidFunction method = null)
+	{
+		yield return new WaitForSeconds(duration);
+		method?.Invoke();
+	}
+
+	private void Performer(List<IEnumerator> primitives)
 	{
 		IEnumerator InnerPerformer(List<IEnumerator> p, Action<List<TestingResponse>> callback = null)
 		{
-			var coroutineWithResult = new CoroutineWithResult(this, Sequence(p));
+			var coroutineWithResult = new CoroutineWithResult(this, SequenceCoroutine(p));
 			yield return coroutineWithResult.coroutine;
 
 			callback?.Invoke(coroutineWithResult.result as List<TestingResponse>);
@@ -100,8 +110,8 @@ public class Testing : MonoBehaviour
 
 	private void PrintPrimitiveResponses(List<TestingResponse> responses)
 	{
-		const string path = "Assets/Resources/output.txt";
-		var writer = new StreamWriter(path);
+		string path = "Assets/Resources/" + _fileName;
+		var writer = new StreamWriter(path, true);
 		var output = "";
 
 		foreach (var response in responses)
@@ -158,33 +168,6 @@ public class Testing : MonoBehaviour
 
 		writer.Write(output);
 		writer.Close();
-	}
-
-	private List<string> CreateHierarchy(GameObject figure)
-	{
-		var hierarchy = new List<string>();
-
-		var figureName = figure.name;
-		foreach (var child in figure.GetComponentsInChildren<Transform>())
-		{
-			if (child.name == figureName) continue;
-
-			var id = Regex.Match(child.name, @"\d+").Value;
-
-			if (child.parent.name == figureName)
-			{
-				if (figureName.Contains("-RFM")) figureName = figureName.Replace("-RFM", "");
-				if (figureName.Contains("-IFM")) figureName = figureName.Replace("-IFM", "");
-				hierarchy.Add(figureName + "#" + id);
-			}
-			else
-			{
-				var parentId = Regex.Match(child.parent.name, @"\d+").Value;
-				hierarchy.Add(parentId + "#" + id);
-			}
-		}
-
-		return hierarchy;
 	}
 
 	private void Start()
@@ -291,6 +274,41 @@ public class Testing : MonoBehaviour
 				_cameraRotations.Add(positionsWrapper.transform.GetChild(i).rotation);
 			}
 		}
+
+		// hide reference objects
+		var referenceObjects = GameObject.FindGameObjectsWithTag("ReferenceObject");
+		foreach (var obj in referenceObjects)
+		{
+			var meshRenderer = obj.GetComponent<MeshRenderer>();
+			if (meshRenderer != null)
+			{
+				meshRenderer.enabled = false;
+			}
+		}
+
+		StartCoroutine(DelayCoroutine(1.5f, () =>
+		{
+			var objects = GameObject.FindGameObjectsWithTag("Object");
+
+			foreach (var obj in objects)
+			{
+				var rb = obj.GetComponent<Rigidbody>();
+
+				if (rb != null)
+				{
+					rb.isKinematic = true;
+					rb.useGravity = false;
+				}
+			}
+
+			_isInitilizing = false;
+		}));
+
+		// clear output file
+		string path = "Assets/Resources/" + _fileName;
+		var writer = new StreamWriter(path);
+		writer.Write("");
+		writer.Close();
 	}
 
 
@@ -298,10 +316,19 @@ public class Testing : MonoBehaviour
 	{
 		if (Input.GetKeyDown(KeyCode.E))
 		{
-			if (_isPerforming) return;
+			if (_isPerforming || _isInitilizing) return;
+
+			var imageComponent = FigureImage.GetComponent<Image>();
+
+			var figureASprite =  Resources.Load <Sprite>("Images/figure_a");      //FULL
+			if (imageComponent != null)
+			{
+				if (!imageComponent.enabled) imageComponent.enabled = true;
+
+				imageComponent.sprite = figureASprite;
+			}
 
 			var action = _actions[_activeIndex];
-
 			StartCoroutine(ExecuteAction(action));
 		}
 	}
@@ -326,6 +353,8 @@ public class Testing : MonoBehaviour
 
 				primitives.Add(AdaptCamera(_cameraPositions[_activeIndex], _cameraRotations[_activeIndex]));
 				primitives.Add(ChangeMaterialColor(attachingObj, GeneralConstants.AttachingObjectState.InProgress));
+
+				// primitives.AddRange(MoveObjectAwayFromTable(attachingObj));
 
 				if (objectMeta != null)
 				{
@@ -398,6 +427,45 @@ public class Testing : MonoBehaviour
 		yield return null;
 	}
 
+	private List<IEnumerator> MoveObjectAwayFromTable(GameObject objA)
+	{
+		var primitives = new List<IEnumerator>();
+
+		const float offset = 0.5f;
+		var duration = _robot.GetMoveDuration();
+		// var objAPosition = objA.transform.position;
+		// var direction = Table.transform.position - objAPosition;
+		// var angle = Vector3.Angle(direction, Table.transform.up);
+		// var finalDirection = (direction * Mathf.Cos(angle)).normalized;
+		// var finalPosition = objAPosition + finalDirection * offset;
+
+		var direction = Vector3.right;
+		if (Vector3.Dot(objA.transform.up, Vector3.up) > 0)
+		{
+			direction = Vector3.up;
+		}
+
+		if (Vector3.Dot(objA.transform.forward, Vector3.forward) > 0)
+		{
+			direction = Vector3.forward;
+		}
+
+		var finalPosition = objA.transform.position + direction * offset;
+		// var finalCount = duration / Time.fixedDeltaTime;
+
+		objA.transform.Translate(finalPosition);
+
+		// primitives.Add(_robot.SetMoveDistance(offset / finalCount));
+		// for (var i = 0; i < Mathf.CeilToInt(finalCount); i++)
+		// {
+		// 	primitives.Add(_robot.Move(objA, finalPosition));
+		// }
+
+		primitives.Add(_robot.Stop(0.1f));
+
+		return primitives;
+	}
+
 	private IEnumerator ChangeMaterialColor(GameObject obj, GeneralConstants.AttachingObjectState state)
 	{
 		var objRenderer = obj.GetComponent<Renderer>();
@@ -422,6 +490,9 @@ public class Testing : MonoBehaviour
 					for (var i = 0; i < objRenderer.materials.Length; i++)
 					{
 						newMaterials[i] = CompletedMaterial;
+						// newMaterials[i].color = new Color((newMaterials[i].color.r - i * 10) / 255, (newMaterials[i].color.g - i * 100)/255,
+						// 	(newMaterials[i].color.b - i * 10) / 255);
+						// Debug.Log(newMaterials[i].color);
 					}
 
 					break;

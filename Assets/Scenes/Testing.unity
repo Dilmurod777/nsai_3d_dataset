@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 5116369}
   m_Layer: 0
   m_Name: '[43] WASHER'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -217,7 +217,7 @@ GameObject:
   - component: {fileID: 22374128}
   m_Layer: 0
   m_Name: '[44] WASHER'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -298,7 +298,7 @@ GameObject:
   - component: {fileID: 54893742}
   m_Layer: 0
   m_Name: '[8] LOWER SIDE STRUT'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -459,7 +459,7 @@ GameObject:
   - component: {fileID: 82233519}
   m_Layer: 0
   m_Name: '[20] SIDE STRUT NUT'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -527,6 +527,132 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 82233517}
   m_Mesh: {fileID: 1197820061803110174, guid: f2769b4f7e9841541a0828fcdc4eeb9a, type: 3}
+--- !u!1 &169325334
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 169325339}
+  - component: {fileID: 169325338}
+  - component: {fileID: 169325337}
+  - component: {fileID: 169325336}
+  - component: {fileID: 169325335}
+  - component: {fileID: 169325340}
+  m_Layer: 0
+  m_Name: Table
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!54 &169325335
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 169325334}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &169325336
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 169325334}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &169325337
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 169325334}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 0724a0ee7c9061e40a0a89b13de914c9, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &169325338
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 169325334}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &169325339
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 169325334}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 66.66, y: 19.82, z: -24.91}
+  m_LocalScale: {x: 9.243986, y: 0.3249568, z: 10.240183}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &169325340
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 169325334}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.99999994, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &189860493
 GameObject:
   m_ObjectHideFlags: 0
@@ -540,7 +666,7 @@ GameObject:
   - component: {fileID: 189860495}
   m_Layer: 0
   m_Name: '[1] DOWN LOCK STRUT'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -683,7 +809,7 @@ GameObject:
   - component: {fileID: 248434149}
   m_Layer: 0
   m_Name: '[19] SIDE STRUT WASHER'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -794,7 +920,7 @@ GameObject:
   - component: {fileID: 260623487}
   m_Layer: 0
   m_Name: '[15] REACTION LINK ASSEMBLY'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -876,7 +1002,7 @@ GameObject:
   - component: {fileID: 263860096}
   m_Layer: 0
   m_Name: '[3] UPPER SIDE STRUT'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -958,7 +1084,7 @@ GameObject:
   - component: {fileID: 264513732}
   m_Layer: 0
   m_Name: '[10] END CAP'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1106,7 +1232,7 @@ GameObject:
   - component: {fileID: 353177040}
   m_Layer: 0
   m_Name: '[50] NUT'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1187,7 +1313,7 @@ GameObject:
   - component: {fileID: 374284655}
   m_Layer: 0
   m_Name: '[11] BOLT'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1268,7 +1394,7 @@ GameObject:
   - component: {fileID: 381949176}
   m_Layer: 0
   m_Name: '[22] SIDE STRUT PIN'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1546,7 +1672,7 @@ GameObject:
   - component: {fileID: 445521112}
   m_Layer: 0
   m_Name: '[44] WASHER'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1627,7 +1753,7 @@ GameObject:
   - component: {fileID: 447431905}
   m_Layer: 0
   m_Name: '[22] SIDE STRUT PIN'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1709,7 +1835,7 @@ GameObject:
   - component: {fileID: 459874476}
   m_Layer: 0
   m_Name: '[45] BUSHING'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1872,7 +1998,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 10, y: 0.00012207031}
+  m_AnchoredPosition: {x: 10, y: -0.00036621094}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &509241054
@@ -2029,7 +2155,7 @@ GameObject:
   - component: {fileID: 547381059}
   m_Layer: 0
   m_Name: '[46] BOLT'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2110,7 +2236,7 @@ GameObject:
   - component: {fileID: 574647440}
   m_Layer: 0
   m_Name: '[6] PIN'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2191,7 +2317,7 @@ GameObject:
   - component: {fileID: 577940391}
   m_Layer: 0
   m_Name: '[4] WASHER'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2326,8 +2452,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 682.86945, y: 4.3707}
-  m_SizeDelta: {x: 497.1612, y: 1018.9087}
+  m_AnchoredPosition: {x: 596.50397, y: 231.67264}
+  m_SizeDelta: {x: 669.8922, y: 564.3048}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &613891158
 MonoBehaviour:
@@ -2440,7 +2566,7 @@ GameObject:
   - component: {fileID: 669369725}
   m_Layer: 0
   m_Name: '[19] COTTER PIN'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2521,7 +2647,7 @@ GameObject:
   - component: {fileID: 670788502}
   m_Layer: 0
   m_Name: '[19] COTTER PIN'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2602,7 +2728,7 @@ GameObject:
   - component: {fileID: 680821539}
   m_Layer: 0
   m_Name: '[16] CROSSBOLT'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2683,7 +2809,7 @@ GameObject:
   - component: {fileID: 704248898}
   m_Layer: 0
   m_Name: '[53] SIDE STRUT WASHER'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2764,7 +2890,7 @@ GameObject:
   - component: {fileID: 746501659}
   m_Layer: 0
   m_Name: '[51] SHOCK STRUT MAIN LANDING GEAR'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2856,7 +2982,7 @@ GameObject:
   - component: {fileID: 780404699}
   m_Layer: 0
   m_Name: '[7] SIDE STRUT PIN'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2956,6 +3082,8 @@ MonoBehaviour:
   InProgressMaterial: {fileID: 2100000, guid: e81a9cd2f2956d547b11f4dbdfe9b89b, type: 2}
   CompletedMaterial: {fileID: 2100000, guid: c564da68f10a39547b31bbb6918fe697, type: 2}
   ActionsText: {fileID: 509241054}
+  Table: {fileID: 169325334}
+  FigureImage: {fileID: 1434733187}
 --- !u!4 &785362220
 Transform:
   m_ObjectHideFlags: 0
@@ -2983,7 +3111,7 @@ GameObject:
   - component: {fileID: 828426687}
   m_Layer: 0
   m_Name: '[9] END CAP'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3064,7 +3192,7 @@ GameObject:
   - component: {fileID: 835054207}
   m_Layer: 0
   m_Name: '[10] END CAP'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3145,7 +3273,7 @@ GameObject:
   - component: {fileID: 839958279}
   m_Layer: 0
   m_Name: '[2] DOWN LOCK LINK PIN'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3256,7 +3384,7 @@ GameObject:
   - component: {fileID: 884959691}
   m_Layer: 0
   m_Name: '[54] SIDE STRUT NUT'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3337,7 +3465,7 @@ GameObject:
   - component: {fileID: 897803563}
   m_Layer: 0
   m_Name: '[46] BOLT'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3418,7 +3546,7 @@ GameObject:
   - component: {fileID: 909318446}
   m_Layer: 0
   m_Name: '[3] UPPER SIDE STRUT'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3500,7 +3628,7 @@ GameObject:
   - component: {fileID: 934714881}
   m_Layer: 0
   m_Name: '[14] NUT'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3581,7 +3709,7 @@ GameObject:
   - component: {fileID: 943983806}
   m_Layer: 0
   m_Name: '[47] CROSSBOLT'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3729,7 +3857,7 @@ GameObject:
   - component: {fileID: 1011543375}
   m_Layer: 0
   m_Name: '[52] SIDE STRUT PIN'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3812,7 +3940,7 @@ GameObject:
   - component: {fileID: 1012858898}
   m_Layer: 0
   m_Name: '[52] SIDE STRUT PIN'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3895,7 +4023,7 @@ GameObject:
   - component: {fileID: 1050310566}
   m_Layer: 0
   m_Name: '[2] DOWN LOCK LINK PIN'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3976,7 +4104,7 @@ GameObject:
   - component: {fileID: 1064219902}
   m_Layer: 0
   m_Name: '[19] SIDE STRUT WASHER'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4044,81 +4172,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1064219900}
   m_Mesh: {fileID: 4141634184077063584, guid: f2769b4f7e9841541a0828fcdc4eeb9a, type: 3}
---- !u!1 &1082703385
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1082703386}
-  - component: {fileID: 1082703388}
-  - component: {fileID: 1082703387}
-  m_Layer: 5
-  m_Name: ActionsPanel
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!224 &1082703386
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1082703385}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1938397182}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -283.15918, y: -500.20752}
-  m_SizeDelta: {x: 509.2228, y: 948.0657}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1082703387
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1082703385}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.64705884}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &1082703388
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1082703385}
-  m_CullTransparentMesh: 1
 --- !u!1 &1096966533
 GameObject:
   m_ObjectHideFlags: 0
@@ -4132,7 +4185,7 @@ GameObject:
   - component: {fileID: 1096966535}
   m_Layer: 0
   m_Name: '[4] WASHER'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4306,7 +4359,7 @@ GameObject:
   - component: {fileID: 1167512482}
   m_Layer: 0
   m_Name: '[5] NUT'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4387,7 +4440,7 @@ GameObject:
   - component: {fileID: 1168620020}
   m_Layer: 0
   m_Name: '[18] NUT'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4468,7 +4521,7 @@ GameObject:
   - component: {fileID: 1174888451}
   m_Layer: 0
   m_Name: '[49] COTTER PIN'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4618,7 +4671,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 442438457}
   m_HandleRect: {fileID: 442438456}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -4675,7 +4728,7 @@ GameObject:
   - component: {fileID: 1187588859}
   m_Layer: 0
   m_Name: '[45] BUSHING'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4756,7 +4809,7 @@ GameObject:
   - component: {fileID: 1207600383}
   m_Layer: 0
   m_Name: '[49] COTTER PIN'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4914,7 +4967,7 @@ GameObject:
   - component: {fileID: 1238162746}
   m_Layer: 0
   m_Name: '[12] WASHER'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4995,7 +5048,7 @@ GameObject:
   - component: {fileID: 1300620137}
   m_Layer: 0
   m_Name: '[13] COTTER PIN'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5106,7 +5159,7 @@ GameObject:
   - component: {fileID: 1319130949}
   m_Layer: 0
   m_Name: '[50] NUT'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5187,7 +5240,7 @@ GameObject:
   - component: {fileID: 1338755872}
   m_Layer: 0
   m_Name: '[8] LOWER SIDE STRUT'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5269,7 +5322,7 @@ GameObject:
   - component: {fileID: 1423450889}
   m_Layer: 0
   m_Name: '[20] SIDE STRUT NUT'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5337,6 +5390,81 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1423450887}
   m_Mesh: {fileID: 1197820061803110174, guid: f2769b4f7e9841541a0828fcdc4eeb9a, type: 3}
+--- !u!1 &1434733187
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1434733188}
+  - component: {fileID: 1434733190}
+  - component: {fileID: 1434733189}
+  m_Layer: 5
+  m_Name: Image
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1434733188
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1434733187}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1938397182}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 596.5, y: -293.0188}
+  m_SizeDelta: {x: 669.89, y: 458.2073}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1434733189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1434733187}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1434733190
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1434733187}
+  m_CullTransparentMesh: 1
 --- !u!1 &1438617373
 GameObject:
   m_ObjectHideFlags: 0
@@ -5350,7 +5478,7 @@ GameObject:
   - component: {fileID: 1438617375}
   m_Layer: 0
   m_Name: '[18] NUT'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5431,7 +5559,7 @@ GameObject:
   - component: {fileID: 1465105360}
   m_Layer: 0
   m_Name: '[43] WASHER'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5572,7 +5700,7 @@ GameObject:
   - component: {fileID: 1551887155}
   m_Layer: 0
   m_Name: '[16] CROSSBOLT'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5653,7 +5781,7 @@ GameObject:
   - component: {fileID: 1554714498}
   m_Layer: 0
   m_Name: '[48] WASHER'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5734,7 +5862,7 @@ GameObject:
   - component: {fileID: 1573539402}
   m_Layer: 0
   m_Name: '[42] NUT'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5815,7 +5943,7 @@ GameObject:
   - component: {fileID: 1574421952}
   m_Layer: 0
   m_Name: '[11] BOLT'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5896,7 +6024,7 @@ GameObject:
   - component: {fileID: 1587375020}
   m_Layer: 0
   m_Name: '[47] CROSSBOLT'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6007,7 +6135,7 @@ GameObject:
   - component: {fileID: 1615040279}
   m_Layer: 0
   m_Name: '[1] DOWN LOCK STRUT'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6090,7 +6218,7 @@ GameObject:
   - component: {fileID: 1652843030}
   m_Layer: 0
   m_Name: '[42] NUT'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6171,7 +6299,7 @@ GameObject:
   - component: {fileID: 1696160413}
   m_Layer: 0
   m_Name: '[6] PIN'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6372,7 +6500,7 @@ GameObject:
   - component: {fileID: 1719065095}
   m_Layer: 0
   m_Name: '[21] SIDE STRUT WASHER'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6453,7 +6581,7 @@ GameObject:
   - component: {fileID: 1719566082}
   m_Layer: 0
   m_Name: '[41] PUSHROD'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6534,7 +6662,7 @@ GameObject:
   - component: {fileID: 1794234218}
   m_Layer: 0
   m_Name: '[9] END CAP'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6615,7 +6743,7 @@ GameObject:
   - component: {fileID: 1802695859}
   m_Layer: 0
   m_Name: '[15] REACTION LINK ASSEMBLY'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6697,7 +6825,7 @@ GameObject:
   - component: {fileID: 1863949517}
   m_Layer: 0
   m_Name: '[17] WASHER'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6778,7 +6906,7 @@ GameObject:
   - component: {fileID: 1865773284}
   m_Layer: 0
   m_Name: '[21] SIDE STRUT WASHER'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6895,7 +7023,7 @@ GameObject:
   - component: {fileID: 1905050183}
   m_Layer: 0
   m_Name: '[48] WASHER'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7055,7 +7183,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 613891157}
-  - {fileID: 1082703386}
+  - {fileID: 1434733188}
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -7077,7 +7205,7 @@ GameObject:
   - component: {fileID: 1944704651}
   m_Layer: 0
   m_Name: '[54] SIDE STRUT NUT'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7158,7 +7286,7 @@ GameObject:
   - component: {fileID: 1966617813}
   m_Layer: 0
   m_Name: '[13] COTTER PIN'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7239,7 +7367,7 @@ GameObject:
   - component: {fileID: 1969420085}
   m_Layer: 0
   m_Name: '[51] SHOCK STRUT MAIN LANDING GEAR'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7331,7 +7459,7 @@ GameObject:
   - component: {fileID: 1975263205}
   m_Layer: 0
   m_Name: '[14] NUT'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7442,7 +7570,7 @@ GameObject:
   - component: {fileID: 2004899378}
   m_Layer: 0
   m_Name: '[5] NUT'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7523,7 +7651,7 @@ GameObject:
   - component: {fileID: 2019571981}
   m_Layer: 0
   m_Name: '[7] SIDE STRUT PIN'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7604,7 +7732,7 @@ GameObject:
   - component: {fileID: 2020934308}
   m_Layer: 0
   m_Name: '[53] SIDE STRUT WASHER'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7802,7 +7930,7 @@ GameObject:
   - component: {fileID: 2089482559}
   m_Layer: 0
   m_Name: '[12] WASHER'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7913,7 +8041,7 @@ GameObject:
   - component: {fileID: 2124618711}
   m_Layer: 0
   m_Name: '[17] WASHER'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7994,7 +8122,7 @@ GameObject:
   - component: {fileID: 2142583454}
   m_Layer: 0
   m_Name: '[41] PUSHROD'
-  m_TagString: Untagged
+  m_TagString: ReferenceObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8149,7 +8277,7 @@ GameObject:
   - component: {fileID: 243814716488564270}
   m_Layer: 0
   m_Name: '[54] SIDE STRUT NUT'
-  m_TagString: Untagged
+  m_TagString: Object
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8244,7 +8372,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2666586130890466721}
   m_LocalRotation: {x: 0.021446744, y: 0.97828764, z: 0.19120292, w: 0.07703785}
-  m_LocalPosition: {x: 3.8534, y: 1.58, z: -1.8218}
+  m_LocalPosition: {x: 3.5701, y: 1.5293, z: -1.6878}
   m_LocalScale: {x: 0.2025893, y: 0.20258941, z: 0.20258945}
   m_Children: []
   m_Father: {fileID: 543450653222453862}
@@ -8367,9 +8495,11 @@ GameObject:
   - component: {fileID: 4902170955010381737}
   - component: {fileID: 7229009147786756476}
   - component: {fileID: 524156064728724473}
+  - component: {fileID: 524156064728724474}
+  - component: {fileID: 524156064728724475}
   m_Layer: 0
   m_Name: '[18] NUT'
-  m_TagString: Untagged
+  m_TagString: Object
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8390,6 +8520,35 @@ MonoBehaviour:
   DettachRotationAxis: 0
   AttachType: 1
   DetachType: 1
+--- !u!54 &524156064728724474
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 524156064728724472}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &524156064728724475
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 524156064728724472}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.0054465504, y: 0.011761165, z: 0.013705874}
+  m_Center: {x: -0.0000019454164, y: -0.000001927605, z: -0.0000018307474}
 --- !u!23 &526124324094887283
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -8485,7 +8644,7 @@ GameObject:
   - component: {fileID: 2687464599654754237}
   m_Layer: 0
   m_Name: '[47] CROSSBOLT'
-  m_TagString: Untagged
+  m_TagString: Object
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8585,7 +8744,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4098846751787763971}
   m_LocalRotation: {x: -0.54649293, y: 0.44871548, z: 0.44871545, w: 0.5464929}
-  m_LocalPosition: {x: 3.8499, y: 1.486, z: -1.9126}
+  m_LocalPosition: {x: 3.5108, y: 1.486, z: -1.5736}
   m_LocalScale: {x: 0.2025893, y: 0.20258941, z: 0.20258945}
   m_Children: []
   m_Father: {fileID: 543450653222453862}
@@ -8634,9 +8793,11 @@ GameObject:
   - component: {fileID: 2925843194242013530}
   - component: {fileID: 3387791296084928879}
   - component: {fileID: 617070473281077678}
+  - component: {fileID: 617070473281077679}
+  - component: {fileID: 617070473281077680}
   m_Layer: 0
   m_Name: '[4] WASHER'
-  m_TagString: Untagged
+  m_TagString: Object
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8657,6 +8818,35 @@ MonoBehaviour:
   DettachRotationAxis: 1
   AttachType: 0
   DetachType: 0
+--- !u!54 &617070473281077679
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 617070473281077677}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &617070473281077680
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 617070473281077677}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.029094325, y: 0.0027880063, z: 0.0291147}
+  m_Center: {x: 0.0000019073486, y: -0.0000043013715, z: 0.0000009918585}
 --- !u!33 &707281456073195463
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -8687,7 +8877,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 867436523305824758}
   m_LocalRotation: {x: -0.5649698, y: -0.117140114, z: -0.6803037, w: 0.45196718}
-  m_LocalPosition: {x: 3.693, y: 1.31, z: -1.741}
+  m_LocalPosition: {x: 3.498, y: 1.458, z: -1.649}
   m_LocalScale: {x: 0.2025893, y: 0.20258941, z: 0.20258945}
   m_Children: []
   m_Father: {fileID: 543450653222453862}
@@ -8705,9 +8895,11 @@ GameObject:
   - component: {fileID: 8708065684951937636}
   - component: {fileID: 182493564561158126}
   - component: {fileID: 867436523305824759}
+  - component: {fileID: 867436523305824760}
+  - component: {fileID: 867436523305824761}
   m_Layer: 0
   m_Name: '[7] SIDE STRUT PIN'
-  m_TagString: Untagged
+  m_TagString: Object
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8728,6 +8920,35 @@ MonoBehaviour:
   DettachRotationAxis: 1
   AttachType: 3
   DetachType: 3
+--- !u!54 &867436523305824760
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 867436523305824758}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &867436523305824761
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 867436523305824758}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.04766636, y: 0.105651096, z: 0.04840043}
+  m_Center: {x: -0.0000019073486, y: 0.0000028703362, z: 0.0000019073486}
 --- !u!1 &902936236665615922
 GameObject:
   m_ObjectHideFlags: 0
@@ -8820,7 +9041,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1888667209417133793}
   m_LocalRotation: {x: -0.7053865, y: 0.2942394, z: 0.46945986, w: 0.44210908}
-  m_LocalPosition: {x: 3.7767, y: 1.5827, z: -1.81}
+  m_LocalPosition: {x: 3.3943, y: 1.6063, z: -1.5799}
   m_LocalScale: {x: 0.2025893, y: 0.20258941, z: 0.20258945}
   m_Children: []
   m_Father: {fileID: 543450653222453862}
@@ -8937,7 +9158,7 @@ GameObject:
   - component: {fileID: 5277740241405237455}
   m_Layer: 0
   m_Name: '[48] WASHER'
-  m_TagString: Untagged
+  m_TagString: Object
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8968,9 +9189,11 @@ GameObject:
   - component: {fileID: 1083355381196660505}
   - component: {fileID: 7211503831700265039}
   - component: {fileID: 1192346286820830784}
+  - component: {fileID: 1192346286820830785}
+  - component: {fileID: 1192346286820830786}
   m_Layer: 0
   m_Name: '[11] BOLT'
-  m_TagString: Untagged
+  m_TagString: Object
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8991,6 +9214,35 @@ MonoBehaviour:
   DettachRotationAxis: 4
   AttachType: 2
   DetachType: 2
+--- !u!54 &1192346286820830785
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1192346286820830783}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &1192346286820830786
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1192346286820830783}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.029740768, y: 0.163176, z: 0.029855862}
+  m_Center: {x: 0.0000019138615, y: -0.000019725418, z: -0.00053932617}
 --- !u!33 &1213502949511418710
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -9159,9 +9411,11 @@ GameObject:
   - component: {fileID: 5987344376515204035}
   - component: {fileID: 1471500300555461710}
   - component: {fileID: 1578251877040869057}
+  - component: {fileID: 1578251877040869058}
+  - component: {fileID: 1578251877040869059}
   m_Layer: 0
   m_Name: '[13] COTTER PIN'
-  m_TagString: Untagged
+  m_TagString: Object
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9182,6 +9436,35 @@ MonoBehaviour:
   DettachRotationAxis: 0
   AttachType: 2
   DetachType: 2
+--- !u!54 &1578251877040869058
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1578251877040869056}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &1578251877040869059
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1578251877040869056}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.027003149, y: 0.0065764133, z: 0.0037224784}
+  m_Center: {x: 0.0000019264417, y: 0.000005555459, z: -0.000000092958764}
 --- !u!4 &1676446219469834128
 Transform:
   m_ObjectHideFlags: 0
@@ -9190,7 +9473,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8562378871716400457}
   m_LocalRotation: {x: 0.14270756, y: 0.45379403, z: -0.073884875, w: 0.8764967}
-  m_LocalPosition: {x: 3.731, y: 1.287, z: -1.707}
+  m_LocalPosition: {x: 3.59, y: 1.393, z: -1.598}
   m_LocalScale: {x: 0.2025893, y: 0.20258941, z: 0.20258945}
   m_Children: []
   m_Father: {fileID: 543450653222453862}
@@ -9208,9 +9491,11 @@ GameObject:
   - component: {fileID: 7552047873942036541}
   - component: {fileID: 1790025499094901426}
   - component: {fileID: 1771493273983388357}
+  - component: {fileID: 1771493273983388358}
+  - component: {fileID: 1771493273983388359}
   m_Layer: 0
   m_Name: '[2] DOWN LOCK LINK PIN'
-  m_TagString: Untagged
+  m_TagString: Object
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9231,6 +9516,35 @@ MonoBehaviour:
   DettachRotationAxis: 1
   AttachType: 2
   DetachType: 2
+--- !u!54 &1771493273983388358
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1771493273983388356}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &1771493273983388359
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1771493273983388356}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.026156683, y: 0.14917153, z: 0.028981715}
+  m_Center: {x: -0.0000028750221, y: -0.0000108218965, z: -0.0004948906}
 --- !u!23 &1790025499094901426
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -9280,7 +9594,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9036607077508694019}
   m_LocalRotation: {x: -0.475498, y: 0.07772558, z: 0.21406133, w: 0.8497282}
-  m_LocalPosition: {x: 3.579, y: 1.402, z: -1.715}
+  m_LocalPosition: {x: 3.506, y: 1.493, z: -1.481}
   m_LocalScale: {x: 0.20258927, y: 0.2025894, z: 0.20258945}
   m_Children: []
   m_Father: {fileID: 543450653222453862}
@@ -9339,9 +9653,11 @@ GameObject:
   - component: {fileID: 8261407792378518728}
   - component: {fileID: 5604212812122394048}
   - component: {fileID: 1888667209417133794}
+  - component: {fileID: 1888667209417133795}
+  - component: {fileID: 1888667209417133796}
   m_Layer: 0
   m_Name: '[19] COTTER PIN'
-  m_TagString: Untagged
+  m_TagString: Object
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9362,6 +9678,35 @@ MonoBehaviour:
   DettachRotationAxis: 1
   AttachType: 2
   DetachType: 2
+--- !u!54 &1888667209417133795
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1888667209417133793}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &1888667209417133796
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1888667209417133793}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.0006187445, y: 0.01398004, z: 0.0030660278}
+  m_Center: {x: 0.000005722542, y: -0.0000030279662, z: -0.00003832049}
 --- !u!1 &1900044731933365311
 GameObject:
   m_ObjectHideFlags: 0
@@ -9503,9 +9848,11 @@ GameObject:
   - component: {fileID: 7686059232809521132}
   - component: {fileID: 7688190244837143036}
   - component: {fileID: 2119301406525820520}
+  - component: {fileID: 2119301406525820521}
+  - component: {fileID: 2119301406525820522}
   m_Layer: 0
   m_Name: '[1] DOWN LOCK STRUT'
-  m_TagString: Untagged
+  m_TagString: Object
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9526,6 +9873,35 @@ MonoBehaviour:
   DettachRotationAxis: 1
   AttachType: 0
   DetachType: 0
+--- !u!54 &2119301406525820521
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2119301406525820519}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &2119301406525820522
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2119301406525820519}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.07696541, y: 0.11994987, z: 0.28057247}
+  m_Center: {x: 0.011592463, y: -0.0095651, z: 0.11340693}
 --- !u!33 &2141248598184674675
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -9547,7 +9923,7 @@ GameObject:
   - component: {fileID: 5465162210259566258}
   m_Layer: 0
   m_Name: '[44] WASHER'
-  m_TagString: Untagged
+  m_TagString: Object
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9625,7 +10001,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7619438550923700976}
   m_LocalRotation: {x: -0.38141304, y: 0.019405603, z: 0.012458667, w: 0.9241171}
-  m_LocalPosition: {x: 3.341, y: 1.084, z: -2.266}
+  m_LocalPosition: {x: 3.375, y: 1.506, z: -1.808}
   m_LocalScale: {x: 0.2025893, y: 0.20258941, z: 0.20258945}
   m_Children: []
   m_Father: {fileID: 543450653222453862}
@@ -9651,9 +10027,11 @@ GameObject:
   - component: {fileID: 4904367104589630759}
   - component: {fileID: 8215293825637507216}
   - component: {fileID: 2666586130890466722}
+  - component: {fileID: 2666586130890466723}
+  - component: {fileID: 2666586130890466724}
   m_Layer: 0
   m_Name: '[17] WASHER'
-  m_TagString: Untagged
+  m_TagString: Object
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9674,6 +10052,35 @@ MonoBehaviour:
   DettachRotationAxis: 0
   AttachType: 0
   DetachType: 0
+--- !u!54 &2666586130890466723
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2666586130890466721}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &2666586130890466724
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2666586130890466721}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.0035176876, y: 0.01522321, z: 0.015354247}
+  m_Center: {x: -0.0000048064976, y: -0.0000009352807, z: 0.0000038146973}
 --- !u!23 &2687464599654754237
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -9772,9 +10179,11 @@ GameObject:
   - component: {fileID: 8642879246795138237}
   - component: {fileID: 1024849146564193623}
   - component: {fileID: 2793530977923354312}
+  - component: {fileID: 2793530977923354313}
+  - component: {fileID: 2793530977923354314}
   m_Layer: 0
   m_Name: '[16] CROSSBOLT'
-  m_TagString: Untagged
+  m_TagString: Object
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9795,6 +10204,35 @@ MonoBehaviour:
   DettachRotationAxis: 0
   AttachType: 2
   DetachType: 2
+--- !u!54 &2793530977923354313
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2793530977923354311}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &2793530977923354314
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2793530977923354311}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.05742447, y: 0.014594923, z: 0.0135025885}
+  m_Center: {x: -0.0000019073461, y: -0.0000008880188, z: -0.000013217563}
 --- !u!33 &2801000695872177863
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -9888,9 +10326,11 @@ GameObject:
   - component: {fileID: 2449480935076459394}
   - component: {fileID: 4298197750389480227}
   - component: {fileID: 2947168625045547877}
+  - component: {fileID: 2947168625045547878}
+  - component: {fileID: 2947168625045547879}
   m_Layer: 0
   m_Name: '[14] NUT'
-  m_TagString: Untagged
+  m_TagString: Object
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9911,6 +10351,35 @@ MonoBehaviour:
   DettachRotationAxis: 1
   AttachType: 1
   DetachType: 1
+--- !u!54 &2947168625045547878
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2947168625045547876}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &2947168625045547879
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2947168625045547876}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.036355063, y: 0.014390401, z: 0.036260583}
+  m_Center: {x: -0.0000019064177, y: -0.000024939895, z: -0.00003851765}
 --- !u!4 &3295561880779336842
 Transform:
   m_ObjectHideFlags: 0
@@ -10051,7 +10520,7 @@ GameObject:
   - component: {fileID: 1448287002640419237}
   m_Layer: 0
   m_Name: '[42] NUT'
-  m_TagString: Untagged
+  m_TagString: Object
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10064,7 +10533,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4412037091232361797}
   m_LocalRotation: {x: 0.25831053, y: 0.63509274, z: -0.23852313, w: 0.6877787}
-  m_LocalPosition: {x: 3.7814, y: 1.5583, z: -1.7298}
+  m_LocalPosition: {x: 3.495, y: 1.524, z: -1.452}
   m_LocalScale: {x: 0.20258929, y: 0.20258942, z: 0.20258945}
   m_Children: []
   m_Father: {fileID: 543450653222453862}
@@ -10078,7 +10547,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8713978764160595871}
   m_LocalRotation: {x: -0.3881998, y: 0.2401318, z: 0.6884343, w: 0.5636452}
-  m_LocalPosition: {x: 3.6634, y: 1.4907, z: -1.807}
+  m_LocalPosition: {x: 3.585, y: 1.47, z: -1.816}
   m_LocalScale: {x: 0.2025893, y: 0.20258941, z: 0.20258945}
   m_Children: []
   m_Father: {fileID: 543450653222453862}
@@ -10279,9 +10748,11 @@ GameObject:
   - component: {fileID: 707281456073195463}
   - component: {fileID: 5775626057025368963}
   - component: {fileID: 4098846751787763972}
+  - component: {fileID: 4098846751787763973}
+  - component: {fileID: 4098846751787763974}
   m_Layer: 0
   m_Name: '[12] WASHER'
-  m_TagString: Untagged
+  m_TagString: Object
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10302,6 +10773,35 @@ MonoBehaviour:
   DettachRotationAxis: 4
   AttachType: 0
   DetachType: 0
+--- !u!54 &4098846751787763973
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4098846751787763971}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &4098846751787763974
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4098846751787763971}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.03588637, y: 0.004583014, z: 0.035915766}
+  m_Center: {x: 0.0000018887222, y: -0.0000042938627, z: 0.00000047683716}
 --- !u!1 &4120279521602906265
 GameObject:
   m_ObjectHideFlags: 0
@@ -10315,7 +10815,7 @@ GameObject:
   - component: {fileID: 2866892733533318428}
   m_Layer: 0
   m_Name: '[53] SIDE STRUT WASHER'
-  m_TagString: Untagged
+  m_TagString: Object
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10433,9 +10933,11 @@ GameObject:
   - component: {fileID: 89421661458305032}
   - component: {fileID: 303648614414070152}
   - component: {fileID: 4412037091232361798}
+  - component: {fileID: 4412037091232361799}
+  - component: {fileID: 4412037091232361800}
   m_Layer: 0
   m_Name: '[21] SIDE STRUT WASHER'
-  m_TagString: Untagged
+  m_TagString: Object
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10456,6 +10958,35 @@ MonoBehaviour:
   DettachRotationAxis: 4
   AttachType: 0
   DetachType: 0
+--- !u!54 &4412037091232361799
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4412037091232361797}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &4412037091232361800
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4412037091232361797}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.054377675, y: 0.0051403358, z: 0.05440981}
+  m_Center: {x: 0.00000003818423, y: 0.0000024025794, z: 0.0000010300428}
 --- !u!4 &4517454054431384156
 Transform:
   m_ObjectHideFlags: 0
@@ -10464,7 +10995,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1192346286820830783}
   m_LocalRotation: {x: -0.5360543, y: 0.35812578, z: 0.5670823, w: 0.5126494}
-  m_LocalPosition: {x: 3.9199, y: 1.4438, z: -1.7933}
+  m_LocalPosition: {x: 3.5152, y: 1.4234, z: -1.8386}
   m_LocalScale: {x: 0.2025893, y: 0.20258941, z: 0.20258945}
   m_Children: []
   m_Father: {fileID: 543450653222453862}
@@ -10616,9 +11147,11 @@ GameObject:
   - component: {fileID: 2475611170713763153}
   - component: {fileID: 6587366136766316404}
   - component: {fileID: 4739733663642274476}
+  - component: {fileID: 4739733663642274477}
+  - component: {fileID: 4739733663642274478}
   m_Layer: 0
   m_Name: '[19] SIDE STRUT WASHER'
-  m_TagString: Untagged
+  m_TagString: Object
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10639,6 +11172,35 @@ MonoBehaviour:
   DettachRotationAxis: 1
   AttachType: 0
   DetachType: 0
+--- !u!54 &4739733663642274477
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4739733663642274475}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &4739733663642274478
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4739733663642274475}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.054377686, y: 0.005140326, z: 0.05440982}
+  m_Center: {x: 0.00000003818424, y: 0.0000019257423, z: 0.0000038910657}
 --- !u!4 &4757168291412204676
 Transform:
   m_ObjectHideFlags: 0
@@ -10776,7 +11338,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 524156064728724472}
   m_LocalRotation: {x: -0.33499998, y: 0.46163583, z: 0.8195445, w: -0.05490137}
-  m_LocalPosition: {x: 3.8105, y: 1.5513, z: -1.8246}
+  m_LocalPosition: {x: 3.378, y: 1.39, z: -1.46}
   m_LocalScale: {x: 0.2025893, y: 0.20258941, z: 0.20258945}
   m_Children: []
   m_Father: {fileID: 543450653222453862}
@@ -10876,9 +11438,11 @@ GameObject:
   - component: {fileID: 954767642633654754}
   - component: {fileID: 5613677606254061462}
   - component: {fileID: 5398471981885526150}
+  - component: {fileID: 5398471981885526151}
+  - component: {fileID: 5398471981885526152}
   m_Layer: 0
   m_Name: '[9] END CAP'
-  m_TagString: Untagged
+  m_TagString: Object
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10899,6 +11463,35 @@ MonoBehaviour:
   DettachRotationAxis: 4
   AttachType: 0
   DetachType: 0
+--- !u!54 &5398471981885526151
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5398471981885526149}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &5398471981885526152
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5398471981885526149}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.06405079, y: 0.010278814, z: 0.064049155}
+  m_Center: {x: 0.0000019073486, y: -0.000003823545, z: -0.000001469627}
 --- !u!33 &5402270376497592110
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -10920,7 +11513,7 @@ GameObject:
   - component: {fileID: 3766221695954594353}
   m_Layer: 0
   m_Name: '[52] SIDE STRUT PIN'
-  m_TagString: Untagged
+  m_TagString: Object
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -11024,7 +11617,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8706733230436284408}
   m_LocalRotation: {x: -0.6889837, y: 0.1590646, z: 0.1590646, w: 0.6889837}
-  m_LocalPosition: {x: 3.745, y: 1.4203606, z: -1.921}
+  m_LocalPosition: {x: 3.6621, y: 1.4203606, z: -2.0909}
   m_LocalScale: {x: 0.20258929, y: 0.2025894, z: 0.20258944}
   m_Children: []
   m_Father: {fileID: 543450653222453862}
@@ -11190,7 +11783,7 @@ GameObject:
   - component: {fileID: 7353429449727634719}
   m_Layer: 0
   m_Name: '[49] COTTER PIN'
-  m_TagString: Untagged
+  m_TagString: Object
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -11207,9 +11800,11 @@ GameObject:
   - component: {fileID: 334073154998914154}
   - component: {fileID: 7242421464702027608}
   - component: {fileID: 5962996028054843857}
+  - component: {fileID: 5962996028054843858}
+  - component: {fileID: 5962996028054843859}
   m_Layer: 0
   m_Name: '[8] LOWER SIDE STRUT'
-  m_TagString: Untagged
+  m_TagString: Object
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -11230,6 +11825,35 @@ MonoBehaviour:
   DettachRotationAxis: 1
   AttachType: 0
   DetachType: 0
+--- !u!54 &5962996028054843858
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5962996028054843856}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &5962996028054843859
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5962996028054843856}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.86089253, y: 0.055584338, z: 0.49832624}
+  m_Center: {x: 0.38902783, y: 0.0014118453, z: -0.20717853}
 --- !u!33 &5987344376515204035
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -11252,7 +11876,7 @@ GameObject:
   - component: {fileID: 6088853902009882406}
   m_Layer: 0
   m_Name: '[15] REACTION LINK ASSEMBLY'
-  m_TagString: Untagged
+  m_TagString: Object
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -11363,7 +11987,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2793530977923354311}
   m_LocalRotation: {x: -0.35619926, y: 0.22542185, z: 0.79973143, w: 0.42747703}
-  m_LocalPosition: {x: 3.7843, y: 1.5656, z: -1.8068}
+  m_LocalPosition: {x: 3.6127, y: 1.454, z: -1.6409}
   m_LocalScale: {x: 0.2025893, y: 0.20258941, z: 0.20258945}
   m_Children: []
   m_Father: {fileID: 543450653222453862}
@@ -11567,7 +12191,7 @@ GameObject:
   - component: {fileID: 2510258043346670115}
   m_Layer: 0
   m_Name: '[46] BOLT'
-  m_TagString: Untagged
+  m_TagString: Object
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -11780,7 +12404,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5962996028054843856}
   m_LocalRotation: {x: 0.1740949, y: 0.6408193, z: -0.15241064, w: 0.73199224}
-  m_LocalPosition: {x: 3.779, y: 1.394, z: -1.737}
+  m_LocalPosition: {x: 3.658, y: 1.45, z: -1.659}
   m_LocalScale: {x: 0.2025893, y: 0.20258941, z: 0.20258945}
   m_Children: []
   m_Father: {fileID: 543450653222453862}
@@ -11951,7 +12575,7 @@ GameObject:
   - component: {fileID: 1883362093774827341}
   m_Layer: 0
   m_Name: '[45] BUSHING'
-  m_TagString: Untagged
+  m_TagString: Object
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12005,7 +12629,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5398471981885526149}
   m_LocalRotation: {x: -0.7476408, y: 0.22245026, z: 0.54686314, w: 0.3041216}
-  m_LocalPosition: {x: 3.7643, y: 1.4278, z: -1.7327}
+  m_LocalPosition: {x: 3.4703, y: 1.5299, z: -1.7826}
   m_LocalScale: {x: 0.2025893, y: 0.20258941, z: 0.20258945}
   m_Children: []
   m_Father: {fileID: 543450653222453862}
@@ -12116,9 +12740,11 @@ GameObject:
   - component: {fileID: 5607600261038362989}
   - component: {fileID: 1300426879466743171}
   - component: {fileID: 7619438550923700977}
+  - component: {fileID: 7619438550923700978}
+  - component: {fileID: 7619438550923700979}
   m_Layer: 0
   m_Name: '[3] UPPER SIDE STRUT'
-  m_TagString: Untagged
+  m_TagString: Object
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12139,6 +12765,35 @@ MonoBehaviour:
   DettachRotationAxis: 1
   AttachType: 0
   DetachType: 0
+--- !u!54 &7619438550923700978
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7619438550923700976}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &7619438550923700979
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7619438550923700976}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.6754717, y: 0.15253298, z: 0.50348604}
+  m_Center: {x: 0.29695603, y: 0.0061151786, z: -0.20960607}
 --- !u!33 &7686059232809521132
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -12200,9 +12855,11 @@ GameObject:
   - component: {fileID: 1270665296106726446}
   - component: {fileID: 1947594480871836204}
   - component: {fileID: 7736100839768578695}
+  - component: {fileID: 7736100839768578696}
+  - component: {fileID: 7736100839768578697}
   m_Layer: 0
   m_Name: '[6] PIN'
-  m_TagString: Untagged
+  m_TagString: Object
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12223,6 +12880,35 @@ MonoBehaviour:
   DettachRotationAxis: 0
   AttachType: 2
   DetachType: 2
+--- !u!54 &7736100839768578696
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7736100839768578694}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &7736100839768578697
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7736100839768578694}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.0310339, y: 0.007558056, z: 0.0042782053}
+  m_Center: {x: 0.000003318768, y: 0.000010483434, z: 0.0000008523939}
 --- !u!23 &7778783585003986386
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -12277,7 +12963,7 @@ GameObject:
   - component: {fileID: 7778783585003986386}
   m_Layer: 0
   m_Name: '[43] WASHER'
-  m_TagString: Untagged
+  m_TagString: Object
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12294,9 +12980,11 @@ GameObject:
   - component: {fileID: 2565233017556980269}
   - component: {fileID: 7389383752134195683}
   - component: {fileID: 7857433297141615210}
+  - component: {fileID: 7857433297141615211}
+  - component: {fileID: 7857433297141615212}
   m_Layer: 0
   m_Name: '[20] SIDE STRUT NUT'
-  m_TagString: Untagged
+  m_TagString: Object
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12317,6 +13005,35 @@ MonoBehaviour:
   DettachRotationAxis: 4
   AttachType: 1
   DetachType: 1
+--- !u!54 &7857433297141615211
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7857433297141615209}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &7857433297141615212
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7857433297141615209}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.0462375, y: 0.0184209, z: 0.05155967}
+  m_Center: {x: 0.0000019073495, y: -0.000035592366, z: -0.000019491648}
 --- !u!1 &7915509798934709362
 GameObject:
   m_ObjectHideFlags: 0
@@ -12330,7 +13047,7 @@ GameObject:
   - component: {fileID: 6733071887499281479}
   m_Layer: 0
   m_Name: '[50] NUT'
-  m_TagString: Untagged
+  m_TagString: Object
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12343,7 +13060,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2947168625045547876}
   m_LocalRotation: {x: 0.5550644, y: 0.42706332, z: 0.47280952, w: -0.53476316}
-  m_LocalPosition: {x: 3.8049, y: 1.45, z: -1.8906}
+  m_LocalPosition: {x: 3.5372, y: 1.4625, z: -1.5746}
   m_LocalScale: {x: 0.2025893, y: 0.20258941, z: 0.20258945}
   m_Children: []
   m_Father: {fileID: 543450653222453862}
@@ -12453,7 +13170,7 @@ GameObject:
   - component: {fileID: 71968678865328851}
   m_Layer: 0
   m_Name: '[51] SHOCK STRUT MAIN LANDING GEAR'
-  m_TagString: Untagged
+  m_TagString: Object
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12470,9 +13187,11 @@ GameObject:
   - component: {fileID: 9209079539944602542}
   - component: {fileID: 6853926181837523829}
   - component: {fileID: 8562378871716400458}
+  - component: {fileID: 8562378871716400459}
+  - component: {fileID: 8562378871716400460}
   m_Layer: 0
   m_Name: '[10] END CAP'
-  m_TagString: Untagged
+  m_TagString: Object
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12493,6 +13212,35 @@ MonoBehaviour:
   DettachRotationAxis: 4
   AttachType: 0
   DetachType: 0
+--- !u!54 &8562378871716400459
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8562378871716400457}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &8562378871716400460
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8562378871716400457}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.064050764, y: 0.010278796, z: 0.06404912}
+  m_Center: {x: 0.0000019073486, y: 0.000001905486, z: 0.0000037755817}
 --- !u!33 &8642879246795138237
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -12509,7 +13257,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1578251877040869056}
   m_LocalRotation: {x: -0.51587266, y: 0.41283754, z: 0.3119356, w: 0.6827422}
-  m_LocalPosition: {x: 3.869, y: 1.5078, z: -1.9212}
+  m_LocalPosition: {x: 3.5669, y: 1.5442, z: -1.621}
   m_LocalScale: {x: 0.2025893, y: 0.20258941, z: 0.20258945}
   m_Children: []
   m_Father: {fileID: 543450653222453862}
@@ -12528,7 +13276,7 @@ GameObject:
   - component: {fileID: 1082156923738837830}
   m_Layer: 0
   m_Name: '[41] PUSHROD'
-  m_TagString: Untagged
+  m_TagString: Object
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12553,9 +13301,11 @@ GameObject:
   - component: {fileID: 6645629803794646072}
   - component: {fileID: 9126180353752607639}
   - component: {fileID: 8713978764160595872}
+  - component: {fileID: 8713978764160595873}
+  - component: {fileID: 8713978764160595874}
   m_Layer: 0
   m_Name: '[5] NUT'
-  m_TagString: Untagged
+  m_TagString: Object
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12576,6 +13326,35 @@ MonoBehaviour:
   DettachRotationAxis: 4
   AttachType: 1
   DetachType: 1
+--- !u!54 &8713978764160595873
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8713978764160595871}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &8713978764160595874
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8713978764160595871}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.030378578, y: 0.01188722, z: 0.033165976}
+  m_Center: {x: -0.0000009536747, y: 0.00001610467, z: 0.000010940246}
 --- !u!4 &8801624177434075564
 Transform:
   m_ObjectHideFlags: 0
@@ -12584,7 +13363,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2119301406525820519}
   m_LocalRotation: {x: 0.09618559, y: 0.6956966, z: -0.094846286, w: 0.7055202}
-  m_LocalPosition: {x: 3.6758, y: 1.5292, z: -1.7117}
+  m_LocalPosition: {x: 3.478, y: 1.584, z: -1.714}
   m_LocalScale: {x: 0.2025893, y: 0.20258941, z: 0.20258945}
   m_Children: []
   m_Father: {fileID: 543450653222453862}
@@ -12598,7 +13377,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 617070473281077677}
   m_LocalRotation: {x: -0.40066916, y: 0.51342964, z: 0.48128498, w: 0.5867018}
-  m_LocalPosition: {x: 3.7016, y: 1.495, z: -1.8034}
+  m_LocalPosition: {x: 3.586, y: 1.619, z: -1.785}
   m_LocalScale: {x: 0.2025893, y: 0.20258941, z: 0.20258945}
   m_Children: []
   m_Father: {fileID: 543450653222453862}
@@ -12612,7 +13391,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4739733663642274475}
   m_LocalRotation: {x: 0.19829945, y: 0.47406664, z: -0.11050286, w: 0.8507216}
-  m_LocalPosition: {x: 3.8064, y: 1.5335, z: -1.7793}
+  m_LocalPosition: {x: 3.5099, y: 1.5887, z: -1.5129}
   m_LocalScale: {x: 0.2025893, y: 0.20258941, z: 0.20258945}
   m_Children: []
   m_Father: {fileID: 543450653222453862}
@@ -12626,7 +13405,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7857433297141615209}
   m_LocalRotation: {x: -0.36924526, y: 0.60304064, z: 0.6030406, w: 0.36924523}
-  m_LocalPosition: {x: 3.707, y: 1.5376, z: -1.7491}
+  m_LocalPosition: {x: 3.421, y: 1.5376, z: -1.603}
   m_LocalScale: {x: 0.2025893, y: 0.20258941, z: 0.20258945}
   m_Children: []
   m_Father: {fileID: 543450653222453862}
@@ -12644,9 +13423,11 @@ GameObject:
   - component: {fileID: 2857474422310415499}
   - component: {fileID: 3932734065874849171}
   - component: {fileID: 9036607077508694020}
+  - component: {fileID: 9036607077508694021}
+  - component: {fileID: 9036607077508694022}
   m_Layer: 0
   m_Name: '[22] SIDE STRUT PIN'
-  m_TagString: Untagged
+  m_TagString: Object
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12667,6 +13448,35 @@ MonoBehaviour:
   DettachRotationAxis: 4
   AttachType: 2
   DetachType: 2
+--- !u!54 &9036607077508694021
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9036607077508694019}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &9036607077508694022
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9036607077508694019}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.050581917, y: 0.20171414, z: 0.06170109}
+  m_Center: {x: 0.0000037690186, y: 0.000015817555, z: 0.00060371123}
 --- !u!23 &9126180353752607639
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -12716,7 +13526,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7736100839768578694}
   m_LocalRotation: {x: -0.74057645, y: 0.108792946, z: -0.10381554, w: 0.65492976}
-  m_LocalPosition: {x: 3.8515, y: 1.528, z: -1.9684}
+  m_LocalPosition: {x: 3.548, y: 1.464, z: -1.727}
   m_LocalScale: {x: 0.2025893, y: 0.20258941, z: 0.20258945}
   m_Children: []
   m_Father: {fileID: 543450653222453862}
