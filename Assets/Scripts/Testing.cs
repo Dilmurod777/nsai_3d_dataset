@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Constants;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Action = Constants.Action;
@@ -35,7 +36,7 @@ public class Testing : MonoBehaviour
 {
 	public Material InProgressMaterial;
 	public Material CompletedMaterial;
-	public Text ActionsText;
+	public TextMeshProUGUI ActionsText;
 
 	private List<Action> _actions = new List<Action>();
 	private int _activeIndex;
