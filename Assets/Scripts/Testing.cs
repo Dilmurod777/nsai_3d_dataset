@@ -3,12 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Constants;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Action = Constants.Action;
+using Random = UnityEngine.Random;
 
 public class CoroutineWithResult
 {
@@ -39,9 +39,12 @@ public class Testing : MonoBehaviour
 	public TextMeshProUGUI ActionsText;
 	public GameObject Table;
 	public GameObject FigureImage;
+	public Text CurrentInstructionText;
+	public Text CurrentTaskText;
 
-	private List<Action> _actions = new List<Action>();
-	private int _activeIndex;
+	private Dictionary<string, dynamic> _tasks = new Dictionary<string, dynamic>();
+	private int _subtaskIndex;
+	private int _taskIndex;
 	private GameObject _figure, _rfm, _ifm;
 	private Robot _robot;
 
@@ -50,6 +53,9 @@ public class Testing : MonoBehaviour
 	private List<Vector3> _cameraPositions = new List<Vector3>();
 	private List<Quaternion> _cameraRotations = new List<Quaternion>();
 	private string _fileName = "output.txt";
+	private float _moveAwayOffset = 0.5f;
+
+	private List<string> TaskIds;
 
 
 	private static IEnumerator AdjustStructureCoroutine(GameObject objA, GameObject objB)
@@ -172,8 +178,9 @@ public class Testing : MonoBehaviour
 
 	private void Start()
 	{
-		_activeIndex = 0;
-
+		_subtaskIndex = 0;
+		_taskIndex = 0;
+		
 		var upperSideInstallationActions = new List<Action>
 		{
 			new Action {Name = "Attach", Components = new List<string> {"[3]", "[15]"}}, // 1
@@ -249,7 +256,16 @@ public class Testing : MonoBehaviour
 			new Action {Name = "Attach", Components = new List<string> {"[6]", "[2]"}},
 		};
 
-		_actions.AddRange(upperSideInstallationActions);
+		_tasks = new Dictionary<string, dynamic>
+		{
+			{
+				"TASK 32-11-61-400-801", new Dictionary<string, dynamic>
+				{
+					{"figureImage", "figure_c"},
+					{"subtasks", upperSideInstallationActions}
+				}
+			}
+		};
 		// _actions.AddRange(lowerSideInstallationActions);
 		// _actions.AddRange(sideSideInstallationActions);
 
@@ -286,7 +302,7 @@ public class Testing : MonoBehaviour
 			}
 		}
 
-		StartCoroutine(DelayCoroutine(1.5f, () =>
+		StartCoroutine(DelayCoroutine(2.0f, () =>
 		{
 			var objects = GameObject.FindGameObjectsWithTag("Object");
 
@@ -320,7 +336,11 @@ public class Testing : MonoBehaviour
 
 			var imageComponent = FigureImage.GetComponent<Image>();
 
-			var figureASprite =  Resources.Load <Sprite>("Images/figure_a");      //FULL
+			var taskId = _tasks.Keys.ToList()[_taskIndex];
+			var task = _tasks[taskId];
+			var figureName = task["figureImage"];
+			
+			var figureASprite = Resources.Load<Sprite>("Images/" + figureName); //FULL
 			if (imageComponent != null)
 			{
 				if (!imageComponent.enabled) imageComponent.enabled = true;
@@ -328,7 +348,7 @@ public class Testing : MonoBehaviour
 				imageComponent.sprite = figureASprite;
 			}
 
-			var action = _actions[_activeIndex];
+			Action action = task["subtasks"][_subtaskIndex];
 			StartCoroutine(ExecuteAction(action));
 		}
 	}
@@ -349,12 +369,19 @@ public class Testing : MonoBehaviour
 			var primitives = new List<IEnumerator>();
 			foreach (var attachingObj in attachingObjs)
 			{
-				var objectMeta = attachingObj.GetComponent<ObjectMeta>();
-
-				primitives.Add(AdaptCamera(_cameraPositions[_activeIndex], _cameraRotations[_activeIndex]));
+				primitives.Add(AdaptCamera(_cameraPositions[_subtaskIndex], _cameraRotations[_subtaskIndex]));
 				primitives.Add(ChangeMaterialColor(attachingObj, GeneralConstants.AttachingObjectState.InProgress));
 
-				// primitives.AddRange(MoveObjectAwayFromTable(attachingObj));
+				primitives.AddRange(MoveObjectAwayFromTable(attachingObj));
+
+				primitives.AddRange(CreateRotatePrimitives(attachingObj, referenceObj));
+				primitives.Add(AdjustStructureCoroutine(attachingObj, referenceObj));
+
+				primitives.AddRange(CreateRfmMovePrimitives(attachingObj, referenceObj));
+
+				var objectMeta = attachingObj.GetComponent<ObjectMeta>();
+				// delay
+				primitives.Add(_robot.Stop(0.5f));
 
 				if (objectMeta != null)
 				{
@@ -371,7 +398,7 @@ public class Testing : MonoBehaviour
 						_ => Vector3.forward
 					};
 
-					var text = "- ";
+					var text = "";
 					var delimiter = " and ";
 					switch (objectMeta.AttachType)
 					{
@@ -399,12 +426,16 @@ public class Testing : MonoBehaviour
 					text += attachingObj.name + delimiter + referenceObj.name;
 					if (ActionsText.text.Trim() == "")
 					{
-						ActionsText.text = text;
+						ActionsText.text = "- " + text;
 					}
 					else
 					{
 						ActionsText.text += "\n" + text;
 					}
+
+					CurrentInstructionText.text = text;
+					
+					CurrentTaskText.text = _tasks.Keys.ToList()[_taskIndex];
 				}
 				else
 				{
@@ -417,7 +448,7 @@ public class Testing : MonoBehaviour
 
 			Performer(primitives);
 
-			_activeIndex += 1;
+			_subtaskIndex += 1;
 		}
 		else
 		{
@@ -431,36 +462,20 @@ public class Testing : MonoBehaviour
 	{
 		var primitives = new List<IEnumerator>();
 
-		const float offset = 0.5f;
 		var duration = _robot.GetMoveDuration();
-		// var objAPosition = objA.transform.position;
-		// var direction = Table.transform.position - objAPosition;
-		// var angle = Vector3.Angle(direction, Table.transform.up);
-		// var finalDirection = (direction * Mathf.Cos(angle)).normalized;
-		// var finalPosition = objAPosition + finalDirection * offset;
 
-		var direction = Vector3.right;
-		if (Vector3.Dot(objA.transform.up, Vector3.up) > 0)
+		var finalPosition = objA.transform.TransformPoint(objA.transform.up * _moveAwayOffset);
+		var finalCount = duration / Time.fixedDeltaTime;
+		var distance = Vector3.Distance(finalPosition, objA.transform.position);
+
+		var prevMoveDistance = _robot.GetMoveDistance();
+		primitives.Add(_robot.SetMoveDistance(distance / finalCount));
+		for (var i = 0; i < Mathf.CeilToInt(finalCount); i++)
 		{
-			direction = Vector3.up;
+			primitives.Add(_robot.Move(objA, finalPosition));
 		}
 
-		if (Vector3.Dot(objA.transform.forward, Vector3.forward) > 0)
-		{
-			direction = Vector3.forward;
-		}
-
-		var finalPosition = objA.transform.position + direction * offset;
-		// var finalCount = duration / Time.fixedDeltaTime;
-
-		objA.transform.Translate(finalPosition);
-
-		// primitives.Add(_robot.SetMoveDistance(offset / finalCount));
-		// for (var i = 0; i < Mathf.CeilToInt(finalCount); i++)
-		// {
-		// 	primitives.Add(_robot.Move(objA, finalPosition));
-		// }
-
+		primitives.Add(_robot.SetMoveDistance(prevMoveDistance));
 		primitives.Add(_robot.Stop(0.1f));
 
 		return primitives;
@@ -487,12 +502,12 @@ public class Testing : MonoBehaviour
 
 					break;
 				case GeneralConstants.AttachingObjectState.Completed:
+					var color = new Color(Random.Range(10, 200) / 255.0f, Random.Range(10, 200) / 255.0f,
+						Random.Range(10, 200) / 255.0f, 1);
 					for (var i = 0; i < objRenderer.materials.Length; i++)
 					{
-						newMaterials[i] = CompletedMaterial;
-						// newMaterials[i].color = new Color((newMaterials[i].color.r - i * 10) / 255, (newMaterials[i].color.g - i * 100)/255,
-						// 	(newMaterials[i].color.b - i * 10) / 255);
-						// Debug.Log(newMaterials[i].color);
+						newMaterials[i] = Instantiate(CompletedMaterial);
+						newMaterials[i].color = color;
 					}
 
 					break;
@@ -543,7 +558,6 @@ public class Testing : MonoBehaviour
 	{
 		var primitives = new List<IEnumerator>();
 
-		var initialRotation = objA.transform.eulerAngles;
 		var finalRotation = objB.transform.eulerAngles;
 		var angle = Quaternion.Angle(objA.transform.rotation, objB.transform.rotation);
 
@@ -566,13 +580,15 @@ public class Testing : MonoBehaviour
 		var rfmReferenceObjA = HelperFunctions.FindObjectInFigure(_rfm, objA.name);
 		var rfmReferenceObjB = HelperFunctions.FindObjectInFigure(_rfm, objB.name);
 
-		rfmReferenceObjA.transform.parent = rfmReferenceObjB.transform;
+		var previousParent = rfmReferenceObjA.transform.parent;
+		rfmReferenceObjA.transform.SetParent(rfmReferenceObjB.transform);
 		var rfmDiff = rfmReferenceObjA.transform.localPosition;
 		var rfmFinalPosition = objB.transform.TransformPoint(rfmDiff);
-		rfmReferenceObjA.transform.parent = rfmReferenceObjB.transform.parent;
+		rfmReferenceObjA.transform.SetParent(previousParent);
 
 		var duration = _robot.GetMoveDuration();
-		var rfmDistance = Vector3.Distance(objA.transform.position, rfmFinalPosition);
+		var objAPosition = objA.transform.TransformPoint(objA.transform.up * _moveAwayOffset);
+		var rfmDistance = Vector3.Distance(objAPosition, rfmFinalPosition);
 		var rfmCount = duration / Time.fixedDeltaTime;
 
 		primitives.Add(_robot.SetMoveDistance(rfmDistance / rfmCount));
@@ -588,25 +604,19 @@ public class Testing : MonoBehaviour
 	{
 		var primitives = new List<IEnumerator>();
 
-		primitives.AddRange(CreateRotatePrimitives(objA, objB));
-		primitives.Add(AdjustStructureCoroutine(objA, objB));
-
-		primitives.AddRange(CreateRfmMovePrimitives(objA, objB));
-
-		// delay
-		primitives.Add(_robot.Stop(0.5f));
-
 		// ifm
 		var ifmReferenceObjA = HelperFunctions.FindObjectInFigure(_ifm, objA.name);
 		var ifmReferenceObjB = HelperFunctions.FindObjectInFigure(_ifm, objB.name);
 		var rfmReferenceObjA = HelperFunctions.FindObjectInFigure(_rfm, objA.name);
 		var rfmReferenceObjB = HelperFunctions.FindObjectInFigure(_rfm, objB.name);
 
+		var prevParent = rfmReferenceObjA.transform.parent;
 		rfmReferenceObjA.transform.parent = rfmReferenceObjB.transform;
 		var rfmDiff = rfmReferenceObjA.transform.localPosition;
 		var rfmFinalPosition = objB.transform.TransformPoint(rfmDiff);
+		rfmReferenceObjA.transform.parent = prevParent;
 
-		var prevParent = ifmReferenceObjA.transform.parent;
+		prevParent = ifmReferenceObjA.transform.parent;
 		ifmReferenceObjA.transform.parent = ifmReferenceObjB.transform;
 		var ifmDiff = ifmReferenceObjA.transform.localPosition;
 		var ifmFinalPosition = objB.transform.TransformPoint(ifmDiff);
@@ -629,33 +639,27 @@ public class Testing : MonoBehaviour
 	{
 		var primitives = new List<IEnumerator>();
 
-		primitives.AddRange(CreateRotatePrimitives(objA, objB));
-		primitives.Add(AdjustStructureCoroutine(objA, objB));
-
-		primitives.AddRange(CreateRfmMovePrimitives(objA, objB));
-
-		// delay
-		primitives.Add(_robot.Stop(0.5f));
-
 		// ifm
-		var ifmDuration = _robot.GetMoveDuration();
 		var ifmReferenceObjA = HelperFunctions.FindObjectInFigure(_ifm, objA.name);
 		var ifmReferenceObjB = HelperFunctions.FindObjectInFigure(_ifm, objB.name);
 		var rfmReferenceObjA = HelperFunctions.FindObjectInFigure(_rfm, objA.name);
 		var rfmReferenceObjB = HelperFunctions.FindObjectInFigure(_rfm, objB.name);
 
+		var prevParent = rfmReferenceObjA.transform.parent;
 		rfmReferenceObjA.transform.parent = rfmReferenceObjB.transform;
 		var rfmDiff = rfmReferenceObjA.transform.localPosition;
 		var rfmFinalPosition = objB.transform.TransformPoint(rfmDiff);
+		rfmReferenceObjA.transform.parent = prevParent;
 
-		var prevParent = ifmReferenceObjA.transform.parent;
+		prevParent = ifmReferenceObjA.transform.parent;
 		ifmReferenceObjA.transform.parent = ifmReferenceObjB.transform;
 		var ifmDiff = ifmReferenceObjA.transform.localPosition;
 		var ifmFinalPosition = objB.transform.TransformPoint(ifmDiff);
 		ifmReferenceObjA.transform.parent = prevParent;
 
+		var duration = _robot.GetMoveDuration();
 		var ifmDistance = Vector3.Distance(rfmFinalPosition, ifmFinalPosition);
-		var ifmCount = ifmDuration / Time.fixedDeltaTime;
+		var ifmCount = duration / Time.fixedDeltaTime;
 
 		primitives.Add(_robot.SetMoveDistance(ifmDistance / ifmCount));
 		primitives.Add(_robot.SetRotateDegree(5.0f));
@@ -672,36 +676,28 @@ public class Testing : MonoBehaviour
 	{
 		var primitives = new List<IEnumerator>();
 
-		primitives.AddRange(CreateRotatePrimitives(objA, objB));
-		primitives.Add(AdjustStructureCoroutine(objA, objB));
-
-		primitives.AddRange(CreateRfmMovePrimitives(objA, objB));
-
-		// delay
-		primitives.Add(_robot.Stop(0.5f));
-
-		// ifm
-		var ifmDuration = _robot.GetMoveDuration();
 		var ifmReferenceObjA = HelperFunctions.FindObjectInFigure(_ifm, objA.name);
 		var ifmReferenceObjB = HelperFunctions.FindObjectInFigure(_ifm, objB.name);
 		var rfmReferenceObjA = HelperFunctions.FindObjectInFigure(_rfm, objA.name);
 		var rfmReferenceObjB = HelperFunctions.FindObjectInFigure(_rfm, objB.name);
 
+		var prevParent = rfmReferenceObjA.transform.parent;
 		rfmReferenceObjA.transform.parent = rfmReferenceObjB.transform;
 		var rfmDiff = rfmReferenceObjA.transform.localPosition;
 		var rfmFinalPosition = objB.transform.TransformPoint(rfmDiff);
+		rfmReferenceObjA.transform.parent = prevParent;
 
-		var prevParent = ifmReferenceObjA.transform.parent;
+		prevParent = ifmReferenceObjA.transform.parent;
 		ifmReferenceObjA.transform.parent = ifmReferenceObjB.transform;
 		var ifmDiff = ifmReferenceObjA.transform.localPosition;
 		var ifmFinalPosition = objB.transform.TransformPoint(ifmDiff);
 		ifmReferenceObjA.transform.parent = prevParent;
 
+		var duration = _robot.GetMoveDuration();
 		var ifmDistance = Vector3.Distance(rfmFinalPosition, ifmFinalPosition);
-		var ifmCount = ifmDuration / Time.fixedDeltaTime;
+		var ifmCount = duration / Time.fixedDeltaTime;
 
 		primitives.Add(_robot.SetMoveDistance(ifmDistance / ifmCount));
-
 		var delayDelta = Mathf.CeilToInt(ifmCount / steps);
 		var delayCounter = 1;
 		for (var i = 0; i < ifmCount; i++)
@@ -722,33 +718,26 @@ public class Testing : MonoBehaviour
 	{
 		var primitives = new List<IEnumerator>();
 
-		primitives.AddRange(CreateRotatePrimitives(objA, objB));
-		primitives.Add(AdjustStructureCoroutine(objA, objB));
-
-		primitives.AddRange(CreateRfmMovePrimitives(objA, objB));
-
-		// delay
-		primitives.Add(_robot.Stop(0.5f));
-
-		// ifm
-		var ifmDuration = _robot.GetMoveDuration();
 		var ifmReferenceObjA = HelperFunctions.FindObjectInFigure(_ifm, objA.name);
 		var ifmReferenceObjB = HelperFunctions.FindObjectInFigure(_ifm, objB.name);
 		var rfmReferenceObjA = HelperFunctions.FindObjectInFigure(_rfm, objA.name);
 		var rfmReferenceObjB = HelperFunctions.FindObjectInFigure(_rfm, objB.name);
 
+		var prevParent = rfmReferenceObjA.transform.parent;
 		rfmReferenceObjA.transform.parent = rfmReferenceObjB.transform;
 		var rfmDiff = rfmReferenceObjA.transform.localPosition;
 		var rfmFinalPosition = objB.transform.TransformPoint(rfmDiff);
+		rfmReferenceObjA.transform.parent = prevParent;
 
-		var prevParent = ifmReferenceObjA.transform.parent;
+		prevParent = ifmReferenceObjA.transform.parent;
 		ifmReferenceObjA.transform.parent = ifmReferenceObjB.transform;
 		var ifmDiff = ifmReferenceObjA.transform.localPosition;
 		var ifmFinalPosition = objB.transform.TransformPoint(ifmDiff);
 		ifmReferenceObjA.transform.parent = prevParent;
 
+		var duration = _robot.GetMoveDuration();
 		var ifmDistance = Vector3.Distance(rfmFinalPosition, ifmFinalPosition);
-		var ifmCount = ifmDuration / Time.fixedDeltaTime;
+		var ifmCount = duration / Time.fixedDeltaTime;
 
 		primitives.Add(_robot.SetMoveDistance(ifmDistance / ifmCount));
 		primitives.Add(_robot.SetRotateDegree(5.0f));

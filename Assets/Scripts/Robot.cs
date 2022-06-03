@@ -11,10 +11,10 @@ public class Robot
 	private float _rotateDuration;
 	private bool _isForceStopped;
 
-	private const float MoveThreshold = 0.01f;
+	private const float MoveThreshold = 1.5f;
 	private const float RotateThreshold = 0.2f;
 
-	public Robot(float moveDistance = 0.01f, float moveDuration = 1.5f, float rotateDegree = 35.0f, float rotateDuration = 1.5f)
+	public Robot(float moveDistance = 0.001f, float moveDuration = 1.5f, float rotateDegree = 35.0f, float rotateDuration = 1.5f)
 	{
 		_moveDistance = moveDistance;
 		_rotateDegree = rotateDegree;
@@ -61,7 +61,7 @@ public class Robot
 		var delta = finalPosition - initialPosition;
 		var temp = initialPosition + delta.normalized * GetMoveDistance();
 
-		if (Vector3.Distance(temp, finalPosition) < MoveThreshold)
+		if (Vector3.Distance(temp, finalPosition) < GetMoveDistance() * MoveThreshold)
 		{
 			temp = finalPosition;
 		}
@@ -103,7 +103,7 @@ public class Robot
 
 		var temp = initialPosition + delta.normalized * GetMoveDistance();
 
-		if (Vector3.Distance(temp, finalPosition) < MoveThreshold)
+		if (Vector3.Distance(temp, finalPosition) < GetMoveDistance() * MoveThreshold)
 		{
 			temp = finalPosition;
 		}
