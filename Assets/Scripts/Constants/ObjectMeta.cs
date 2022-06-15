@@ -7,15 +7,25 @@ namespace Constants
 		X,
 		Y,
 		Z,
-		negX, 
+		negX,
 		negY,
 		negZ
 	}
+
+	public enum Status
+	{
+		Initial,
+		Attached,
+		Dettached
+	}
+
 	public class ObjectMeta : MonoBehaviour
 	{
 		public RotationAxisEnum AttachRotationAxis;
 		public RotationAxisEnum DettachRotationAxis;
 		public GeneralConstants.AttachTypes AttachType;
 		public GeneralConstants.AttachTypes DetachType;
+
+		public Status currentStatus = Status.Initial;
 	}
 }

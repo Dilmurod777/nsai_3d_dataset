@@ -4,11 +4,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Constants;
-using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Action = Constants.Action;
 using Random = UnityEngine.Random;
+
+public enum TasksType {MLGInstallation, MLGRemoval}
 
 public class CoroutineWithResult
 {
@@ -32,17 +34,31 @@ public class CoroutineWithResult
 	}
 }
 
-public class Testing : MonoBehaviour
+public class TestingScriptExecutor : MonoBehaviour
 {
-	public Material InProgressMaterial;
-	public Material CompletedMaterial;
-	public TextMeshProUGUI ActionsText;
-	public GameObject Table;
-	public GameObject FigureImage;
-	public Text CurrentInstructionText;
-	public Text CurrentTaskText;
+	public TasksType tasksType;
+	
+	[FormerlySerializedAs("InProgressMaterial")]
+	public Material inProgressMaterial;
 
-	private Dictionary<string, dynamic> _tasks = new Dictionary<string, dynamic>();
+	[FormerlySerializedAs("CompletedMaterial")]
+	public Material completedMaterial;
+
+	[FormerlySerializedAs("ActionsText")] public Text actionsText;
+	[FormerlySerializedAs("FigureImage")] public GameObject figureImage;
+
+	[FormerlySerializedAs("CurrentInstructionText")]
+	public Text currentInstructionText;
+
+	[FormerlySerializedAs("CurrentTaskText")]
+	public Text currentTaskText;
+
+	[FormerlySerializedAs("ScrollRect")] public ScrollRect scrollRect;
+
+	public static GameObject CurrentAttachingObj;
+
+	private Dictionary<string, Dictionary<string, dynamic>> _tasks = new Dictionary<string, Dictionary<string, dynamic>>();
+	private int _instructionIndex;
 	private int _subtaskIndex;
 	private int _taskIndex;
 	private GameObject _figure, _rfm, _ifm;
@@ -50,13 +66,10 @@ public class Testing : MonoBehaviour
 
 	private static bool _isPerforming;
 	private static bool _isInitilizing = true;
-	private List<Vector3> _cameraPositions = new List<Vector3>();
-	private List<Quaternion> _cameraRotations = new List<Quaternion>();
+	private Dictionary<string, Dictionary<string, List<Vector3>>> _cameraPositions = new Dictionary<string, Dictionary<string, List<Vector3>>>();
+	private Dictionary<string, Dictionary<string, List<Quaternion>>> _cameraRotations = new Dictionary<string, Dictionary<string, List<Quaternion>>>();
 	private string _fileName = "output.txt";
-	private float _moveAwayOffset = 0.5f;
-
-	private List<string> TaskIds;
-
+	private float _moveAwayOffset = 2.0f;
 
 	private static IEnumerator AdjustStructureCoroutine(GameObject objA, GameObject objB)
 	{
@@ -87,6 +100,12 @@ public class Testing : MonoBehaviour
 	{
 		yield return new WaitForSeconds(duration);
 		method?.Invoke();
+	}
+
+	private static IEnumerator SetCurrentAttachingObject(GameObject obj)
+	{
+		CurrentAttachingObj = obj;
+		yield return null;
 	}
 
 	private void Performer(List<IEnumerator> primitives)
@@ -178,96 +197,16 @@ public class Testing : MonoBehaviour
 
 	private void Start()
 	{
+		_instructionIndex = 0;
 		_subtaskIndex = 0;
 		_taskIndex = 0;
-		
-		var upperSideInstallationActions = new List<Action>
+
+		_tasks = tasksType switch
 		{
-			new Action {Name = "Attach", Components = new List<string> {"[3]", "[15]"}}, // 1
-			new Action {Name = "Attach", Components = new List<string> {"[22]", "[3]"}}, // 2
-			new Action {Name = "Attach", Components = new List<string> {"[21]", "[20]", "[22]"}}, // 3
-			new Action {Name = "Attach", Components = new List<string> {"[16]", "[22]"}}, // 4
-			new Action {Name = "Attach", Components = new List<string> {"[17]", "[18]", "[16]"}}, // 5
-			new Action {Name = "Attach", Components = new List<string> {"[19]", "[16]"}}, // 6
-
-			new Action {Name = "Attach", Components = new List<string> {"[8]", "[3]"}}, // 7
-			new Action {Name = "Attach", Components = new List<string> {"[7]", "[8]"}}, // 8
-			new Action {Name = "Attach", Components = new List<string> {"[9]", "[7]"}}, // 9
-			new Action {Name = "Attach", Components = new List<string> {"[10]", "[7]"}}, // 10
-			new Action {Name = "Attach", Components = new List<string> {"[11]", "[7]"}}, // 11
-			new Action {Name = "Attach", Components = new List<string> {"[12]", "[14]", "[11]"}}, // 12
-			new Action {Name = "Attach", Components = new List<string> {"[13]", "[11]"}}, // 13
-
-			new Action {Name = "Attach", Components = new List<string> {"[1]", "[3]"}}, // 14
-			new Action {Name = "Attach", Components = new List<string> {"[2]", "[1]"}}, // 15
-			new Action {Name = "Attach", Components = new List<string> {"[4]", "[5]", "[2]"}}, // 16
-			new Action {Name = "Attach", Components = new List<string> {"[6]", "[2]"}} // 17
+			TasksType.MLGInstallation => MLGInstallationTasks.tasks,
+			TasksType.MLGRemoval => MLGRemovalTasks.tasks,
+			_ => MLGInstallationTasks.tasks
 		};
-
-		var lowerSideInstallationActions = new List<Action>
-		{
-			new Action {Name = "Attach", Components = new List<string> {"[3]", "[8]"}},
-			new Action {Name = "Attach", Components = new List<string> {"[7]", "[3]"}},
-			new Action {Name = "Attach", Components = new List<string> {"[9]", "[7]"}},
-			new Action {Name = "Attach", Components = new List<string> {"[11]", "[7]"}},
-			new Action {Name = "Attach", Components = new List<string> {"[12]", "[14]", "[11]"}},
-			new Action {Name = "Attach", Components = new List<string> {"[13]", "[11]"}},
-
-			new Action {Name = "Attach", Components = new List<string> {"[8]", "[51]"}},
-			new Action {Name = "Attach", Components = new List<string> {"[52]", "[8]"}},
-			new Action {Name = "Attach", Components = new List<string> {"[53]", "[54]", "[52]"}},
-			new Action {Name = "Attach", Components = new List<string> {"[47]", "[52]"}},
-			new Action {Name = "Attach", Components = new List<string> {"[48]", "[50]", "[47]"}},
-			new Action {Name = "Attach", Components = new List<string> {"[49]", "[47]"}},
-
-			new Action {Name = "Attach", Components = new List<string> {"[41]", "[8]"}},
-			new Action {Name = "Attach", Components = new List<string> {"[45]", "[41]"}},
-			new Action {Name = "Attach", Components = new List<string> {"[4]", "[46]"}},
-			new Action {Name = "Attach", Components = new List<string> {"[46]", "[41]"}},
-			new Action {Name = "Attach", Components = new List<string> {"[43]", "[42]", "[46]"}}
-		};
-
-		var sideSideInstallationActions = new List<Action>
-		{
-			new Action {Name = "Attach", Components = new List<string> {"[3]", "[15]"}},
-			new Action {Name = "Attach", Components = new List<string> {"[22]", "[3]"}},
-			new Action {Name = "Attach", Components = new List<string> {"[22]", "[3]"}},
-			new Action {Name = "Attach", Components = new List<string> {"[21]", "[20]", "[22]"}},
-			new Action {Name = "Attach", Components = new List<string> {"[16]", "[22]"}},
-			new Action {Name = "Attach", Components = new List<string> {"[17]", "[18]", "[16]"}},
-			new Action {Name = "Attach", Components = new List<string> {"[19]", "[16]"}},
-
-			new Action {Name = "Attach", Components = new List<string> {"[8]", "[51]"}},
-			new Action {Name = "Attach", Components = new List<string> {"[52]", "[8]"}},
-			new Action {Name = "Attach", Components = new List<string> {"[53]", "[54]", "[52]"}},
-			new Action {Name = "Attach", Components = new List<string> {"[47]", "[52]"}},
-			new Action {Name = "Attach", Components = new List<string> {"[48]", "[50]", "[47]"}},
-			new Action {Name = "Attach", Components = new List<string> {"[49]", "[47]"}},
-
-			new Action {Name = "Attach", Components = new List<string> {"[41]", "[8]"}},
-			new Action {Name = "Attach", Components = new List<string> {"[45]", "[41]"}},
-			new Action {Name = "Attach", Components = new List<string> {"[44]", "[46]"}},
-			new Action {Name = "Attach", Components = new List<string> {"[46]", "[41]"}},
-			new Action {Name = "Attach", Components = new List<string> {"[43]", "[42]", "[46]"}},
-
-			new Action {Name = "Attach", Components = new List<string> {"[1]", "[3]"}},
-			new Action {Name = "Attach", Components = new List<string> {"[2]", "[1]"}},
-			new Action {Name = "Attach", Components = new List<string> {"[4]", "[5]", "[2]"}},
-			new Action {Name = "Attach", Components = new List<string> {"[6]", "[2]"}},
-		};
-
-		_tasks = new Dictionary<string, dynamic>
-		{
-			{
-				"TASK 32-11-61-400-801", new Dictionary<string, dynamic>
-				{
-					{"figureImage", "figure_c"},
-					{"subtasks", upperSideInstallationActions}
-				}
-			}
-		};
-		// _actions.AddRange(lowerSideInstallationActions);
-		// _actions.AddRange(sideSideInstallationActions);
 
 		var figureName = "MainLandingGear";
 		var figureRfmName = figureName + "-RFM";
@@ -281,13 +220,42 @@ public class Testing : MonoBehaviour
 
 		var figureWrapper = GameObject.Find(figureName + "-Wrapper");
 		var positionsWrapper = HelperFunctions.FindObjectInFigure(figureWrapper, "CameraPositions");
-		Debug.Log(positionsWrapper);
+		var taskIds = _tasks.Keys.ToList();
 		if (positionsWrapper != null)
 		{
 			for (var i = 0; i < positionsWrapper.transform.childCount; i++)
 			{
-				_cameraPositions.Add(positionsWrapper.transform.GetChild(i).position);
-				_cameraRotations.Add(positionsWrapper.transform.GetChild(i).rotation);
+				for (var j = 0; j < taskIds.Count; j++)
+				{
+					var subtaskIds = new List<string>(_tasks[taskIds[j]]["subtasks"].Keys);
+
+					if (!_cameraPositions.ContainsKey(taskIds[j]))
+					{
+						_cameraPositions.Add(taskIds[j], new Dictionary<string, List<Vector3>>());
+						_cameraRotations.Add(taskIds[j], new Dictionary<string, List<Quaternion>>());
+					}
+
+					for (var k = 0; k < subtaskIds.Count; k++)
+					{
+						var taskCameraLocationsRange = _tasks[taskIds[j]]["subtasks"][subtaskIds[k]]["cameraLocationsRange"];
+						var start = taskCameraLocationsRange[0];
+						var end = taskCameraLocationsRange[1];
+
+						if (i >= start && i <= end)
+						{
+							if (_cameraPositions[taskIds[j]].ContainsKey(subtaskIds[k]))
+							{
+								_cameraPositions[taskIds[j]][subtaskIds[k]].Add(positionsWrapper.transform.GetChild(i).position);
+								_cameraRotations[taskIds[j]][subtaskIds[k]].Add(positionsWrapper.transform.GetChild(i).rotation);
+							}
+							else
+							{
+								_cameraPositions[taskIds[j]].Add(subtaskIds[k], new List<Vector3> {positionsWrapper.transform.GetChild(i).position});
+								_cameraRotations[taskIds[j]].Add(subtaskIds[k], new List<Quaternion> {positionsWrapper.transform.GetChild(i).rotation});
+							}
+						}
+					}
+				}
 			}
 		}
 
@@ -299,6 +267,28 @@ public class Testing : MonoBehaviour
 			if (meshRenderer != null)
 			{
 				meshRenderer.enabled = false;
+			}
+		}
+
+		var objects = GameObject.FindGameObjectsWithTag("Object");
+
+		foreach (var obj in objects)
+		{
+			var rb = obj.GetComponent<Rigidbody>();
+
+			if (rb == null)
+			{
+				rb = obj.AddComponent<Rigidbody>();
+				rb.mass = 1;
+				rb.drag = 0;
+				rb.useGravity = true;
+			}
+
+			var objCollider = obj.GetComponent<BoxCollider>();
+
+			if (objCollider == null)
+			{
+				obj.AddComponent<BoxCollider>();
 			}
 		}
 
@@ -334,12 +324,42 @@ public class Testing : MonoBehaviour
 		{
 			if (_isPerforming || _isInitilizing) return;
 
-			var imageComponent = FigureImage.GetComponent<Image>();
+			var imageComponent = figureImage.GetComponent<Image>();
 
 			var taskId = _tasks.Keys.ToList()[_taskIndex];
 			var task = _tasks[taskId];
-			var figureName = task["figureImage"];
-			
+			Dictionary<string, Dictionary<string, dynamic>> subtasks = task["subtasks"];
+			var subtaskId = subtasks.Keys.ToList()[_subtaskIndex];
+			var subtask = subtasks[subtaskId];
+			List<Action> instructions = subtask["instructions"];
+
+			if (_instructionIndex >= instructions.Count)
+			{
+				_subtaskIndex += 1;
+				_instructionIndex = 0;
+
+				if (_subtaskIndex >= subtasks.Count)
+				{
+					_taskIndex += 1;
+					_subtaskIndex = 0;
+
+					taskId = _tasks.Keys.ToList()[_taskIndex];
+					task = _tasks[taskId];
+					subtasks = task["subtasks"];
+					subtaskId = subtasks.Keys.ToList()[_subtaskIndex];
+					subtask = subtasks[subtaskId];
+					instructions = subtask["instructions"];
+				}
+				else
+				{
+					subtaskId = subtasks.Keys.ToList()[_subtaskIndex];
+					subtask = subtasks[subtaskId];
+					instructions = subtask["instructions"];
+				}
+			}
+
+			string figureName = subtask["figureImage"];
+
 			var figureASprite = Resources.Load<Sprite>("Images/" + figureName); //FULL
 			if (imageComponent != null)
 			{
@@ -348,7 +368,7 @@ public class Testing : MonoBehaviour
 				imageComponent.sprite = figureASprite;
 			}
 
-			Action action = task["subtasks"][_subtaskIndex];
+			var action = instructions[_instructionIndex];
 			StartCoroutine(ExecuteAction(action));
 		}
 	}
@@ -367,21 +387,68 @@ public class Testing : MonoBehaviour
 		if (attachingObjs.Count != 0 && referenceObj != null)
 		{
 			var primitives = new List<IEnumerator>();
+			var taskId = new List<string>(_tasks.Keys)[_taskIndex];
 			foreach (var attachingObj in attachingObjs)
 			{
-				primitives.Add(AdaptCamera(_cameraPositions[_subtaskIndex], _cameraRotations[_subtaskIndex]));
-				primitives.Add(ChangeMaterialColor(attachingObj, GeneralConstants.AttachingObjectState.InProgress));
-
-				primitives.AddRange(MoveObjectAwayFromTable(attachingObj));
-
-				primitives.AddRange(CreateRotatePrimitives(attachingObj, referenceObj));
-				primitives.Add(AdjustStructureCoroutine(attachingObj, referenceObj));
-
-				primitives.AddRange(CreateRfmMovePrimitives(attachingObj, referenceObj));
-
 				var objectMeta = attachingObj.GetComponent<ObjectMeta>();
-				// delay
-				primitives.Add(_robot.Stop(0.5f));
+
+				var shouldAddPrimitives = objectMeta.currentStatus == Status.Initial;
+
+				var text = "";
+				var delimiter = " and ";
+				switch (objectMeta.AttachType)
+				{
+					case GeneralConstants.AttachTypes.SmoothInstall:
+						text += "Smooth Install ";
+						break;
+					case GeneralConstants.AttachTypes.StepInstall:
+						text += "Step Install ";
+						break;
+					case GeneralConstants.AttachTypes.SmoothScrew:
+						text += "Smooth Screw ";
+						break;
+					case GeneralConstants.AttachTypes.StepScrew:
+						text += "Step Screw ";
+						break;
+					default:
+						text += "Smooth Install ";
+						break;
+				}
+
+				text += attachingObj.name + delimiter + referenceObj.name;
+				primitives.Add(UpdateText(actionsText, "- " + text, false));
+
+				primitives.Add(UpdateText(currentInstructionText, text));
+
+				var taskFullName = taskId + "\n" + _tasks[taskId]["title"];
+				var subtaskIds = new List<string>(_tasks[taskId]["subtasks"].Keys);
+				var subtaskId = subtaskIds[_subtaskIndex];
+				var subtaskFullName = _tasks[taskId]["subtasks"][subtaskId]["title"];
+				primitives.Add(UpdateText(currentTaskText, taskFullName + "\n" + subtaskFullName));
+
+				primitives.Add(SetCurrentAttachingObject(attachingObj));
+				primitives.Add(AdaptCamera(_cameraPositions[taskId][subtaskId][_instructionIndex],
+					_cameraRotations[taskId][subtaskId][_instructionIndex]));
+				// make status attached
+				if (shouldAddPrimitives)
+				{
+					objectMeta.currentStatus = Status.Attached;
+					primitives.Add(ChangeMaterialColor(attachingObj, GeneralConstants.AttachingObjectState.InProgress));
+
+					primitives.AddRange(MoveObjectAwayFromTable(attachingObj));
+
+					primitives.AddRange(CreateRotatePrimitives(attachingObj, referenceObj));
+					primitives.Add(AdjustStructureCoroutine(attachingObj, referenceObj));
+
+					primitives.AddRange(CreateRfmMovePrimitives(attachingObj, referenceObj));
+
+					// delay
+					primitives.Add(_robot.Stop(0.5f));
+				}
+				else
+				{
+					primitives.Add(SetCurrentAttachingObject(null));
+				}
 
 				if (objectMeta != null)
 				{
@@ -398,64 +465,99 @@ public class Testing : MonoBehaviour
 						_ => Vector3.forward
 					};
 
-					var text = "";
-					var delimiter = " and ";
-					switch (objectMeta.AttachType)
+					if (shouldAddPrimitives)
 					{
-						case GeneralConstants.AttachTypes.SmoothInstall:
-							text += "Smooth Install ";
-							primitives.AddRange(SmoothInstall(attachingObj, referenceObj));
-							break;
-						case GeneralConstants.AttachTypes.StepInstall:
-							text += "Step Install ";
-							primitives.AddRange(StepInstall(attachingObj, referenceObj));
-							break;
-						case GeneralConstants.AttachTypes.SmoothScrew:
-							text += "Smooth Screw ";
-							primitives.AddRange(SmoothScrew(attachingObj, referenceObj, attachRotationVector));
-							break;
-						case GeneralConstants.AttachTypes.StepScrew:
-							text += "Step Screw ";
-							primitives.AddRange(StepScrew(attachingObj, referenceObj, attachRotationVector));
-							break;
-						default:
-							primitives.AddRange(SmoothInstall(attachingObj, referenceObj));
-							break;
+						switch (objectMeta.AttachType)
+						{
+							case GeneralConstants.AttachTypes.SmoothInstall:
+								primitives.AddRange(SmoothInstall(attachingObj, referenceObj));
+								break;
+							case GeneralConstants.AttachTypes.StepInstall:
+								primitives.AddRange(StepInstall(attachingObj, referenceObj));
+								break;
+							case GeneralConstants.AttachTypes.SmoothScrew:
+								primitives.AddRange(SmoothScrew(attachingObj, referenceObj, attachRotationVector));
+								break;
+							case GeneralConstants.AttachTypes.StepScrew:
+								primitives.AddRange(StepScrew(attachingObj, referenceObj, attachRotationVector));
+								break;
+							default:
+								primitives.AddRange(SmoothInstall(attachingObj, referenceObj));
+								break;
+						}
 					}
-
-					text += attachingObj.name + delimiter + referenceObj.name;
-					if (ActionsText.text.Trim() == "")
-					{
-						ActionsText.text = "- " + text;
-					}
-					else
-					{
-						ActionsText.text += "\n" + text;
-					}
-
-					CurrentInstructionText.text = text;
-					
-					CurrentTaskText.text = _tasks.Keys.ToList()[_taskIndex];
 				}
 				else
 				{
-					primitives.AddRange(SmoothInstall(attachingObj, referenceObj));
+					if (shouldAddPrimitives)
+					{
+						primitives.AddRange(SmoothInstall(attachingObj, referenceObj));
+					}
 				}
 
-				primitives.Add(ChangeMaterialColor(attachingObj, GeneralConstants.AttachingObjectState.Completed));
-				primitives.Add(_robot.Stop(0.1f));
+				if (shouldAddPrimitives)
+				{
+					primitives.Add(ChangeMaterialColor(attachingObj, GeneralConstants.AttachingObjectState.Completed));
+					primitives.Add(_robot.Stop(0.1f));
+				}
 			}
 
 			Performer(primitives);
 
-			_subtaskIndex += 1;
+			_instructionIndex += 1;
 		}
 		else
 		{
 			Debug.Log("Some of objects were not found.");
+			StartCoroutine(SetCurrentAttachingObject(null));
 		}
 
 		yield return null;
+	}
+
+	private IEnumerator UpdateText(Text textElement, string value, bool alwaysRewrite = true)
+	{
+		if (alwaysRewrite)
+		{
+			textElement.text = value;
+		}
+		else
+		{
+			if (textElement.text.Trim() == "")
+			{
+				textElement.text = value;
+			}
+			else
+			{
+				textElement.text += "\n" + value;
+			}
+		}
+
+		if (scrollRect.isActiveAndEnabled)
+		{
+			Canvas.ForceUpdateCanvases();
+			scrollRect.verticalNormalizedPosition = 0;
+		}
+
+		yield return null;
+	}
+
+	private Vector3 GetMoveAwayVector(GameObject obj)
+	{
+		var objVectorUp = new Vector3(0, 1, 0);
+		var angle = Vector3.Angle(objVectorUp, Vector3.up);
+
+		if (angle < 95 && angle > 85)
+		{
+			objVectorUp = new Vector3(0, 0, 1);
+		}
+
+		if (angle < 185 && angle > 175)
+		{
+			objVectorUp = new Vector3(0, -1, 0);
+		}
+
+		return obj.transform.position + objVectorUp * _moveAwayOffset;
 	}
 
 	private List<IEnumerator> MoveObjectAwayFromTable(GameObject objA)
@@ -464,7 +566,7 @@ public class Testing : MonoBehaviour
 
 		var duration = _robot.GetMoveDuration();
 
-		var finalPosition = objA.transform.TransformPoint(objA.transform.up * _moveAwayOffset);
+		var finalPosition = GetMoveAwayVector(objA);
 		var finalCount = duration / Time.fixedDeltaTime;
 		var distance = Vector3.Distance(finalPosition, objA.transform.position);
 
@@ -497,7 +599,7 @@ public class Testing : MonoBehaviour
 				case GeneralConstants.AttachingObjectState.InProgress:
 					for (var i = 0; i < objRenderer.materials.Length; i++)
 					{
-						newMaterials[i] = InProgressMaterial;
+						newMaterials[i] = inProgressMaterial;
 					}
 
 					break;
@@ -506,7 +608,7 @@ public class Testing : MonoBehaviour
 						Random.Range(10, 200) / 255.0f, 1);
 					for (var i = 0; i < objRenderer.materials.Length; i++)
 					{
-						newMaterials[i] = Instantiate(CompletedMaterial);
+						newMaterials[i] = Instantiate(completedMaterial);
 						newMaterials[i].color = color;
 					}
 
@@ -587,7 +689,7 @@ public class Testing : MonoBehaviour
 		rfmReferenceObjA.transform.SetParent(previousParent);
 
 		var duration = _robot.GetMoveDuration();
-		var objAPosition = objA.transform.TransformPoint(objA.transform.up * _moveAwayOffset);
+		var objAPosition = GetMoveAwayVector(objA);
 		var rfmDistance = Vector3.Distance(objAPosition, rfmFinalPosition);
 		var rfmCount = duration / Time.fixedDeltaTime;
 
