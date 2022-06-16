@@ -2,73 +2,49 @@
 
 namespace Constants
 {
-	public class MLGRemovalTasks
+	public static class MLGRemovalTasks
 	{
-		public static Dictionary<string, Dictionary<string, dynamic>> tasks = new Dictionary<string, Dictionary<string, dynamic>>
+		public static readonly Dictionary<string, Dictionary<string, dynamic>> tasks = new Dictionary<string, Dictionary<string, dynamic>>
 		{
 			{
-				"TASK 32-11-61-400-801", new Dictionary<string, dynamic>
+				"TASK 32-11-61-000-801", new Dictionary<string, dynamic>
 				{
-					{"title", "Main Landing Gear Upper Side Strut Installation"},
+					{"title", "Main Landing Gear Upper Side Strut Removal"},
 					{
 						"subtasks", new Dictionary<string, Dictionary<string, dynamic>>
 						{
 							{
-								"SUBTASK 32-11-61-420-001", new Dictionary<string, dynamic>
+								"SUBTASK 32-11-61-020-002", new Dictionary<string, dynamic>
 								{
-									{"title", "SUBTASK 32-11-61-420-001"},
+									{"title", "SUBTASK 32-11-61-020-002"},
 									{"figureImage", "figure_upper_side_c"},
-									{"cameraLocationsRange", new List<int> {0, 5}},
+									{"cameraLocationsRange", new List<int> {0, 3}},
 									{
 										"instructions", new List<Action>
 										{
-											new Action {Name = "Attach", Components = new List<string> {"[3]", "[15]"}}, // 0
-											new Action {Name = "Attach", Components = new List<string> {"[22]", "[3]"}}, // 1
-											new Action {Name = "Attach", Components = new List<string> {"[21]", "[20]", "[22]"}}, // 2
-											new Action {Name = "Attach", Components = new List<string> {"[16]", "[22]"}}, // 3
-											new Action {Name = "Attach", Components = new List<string> {"[17]", "[18]", "[16]"}}, // 4
-											new Action {Name = "Attach", Components = new List<string> {"[19]", "[16]"}}, // 5
+											new Action {Name = "Detach", Components = new List<string> {"[6]", "[2]"}}, // 0
+											new Action {Name = "Detach", Components = new List<string> {"[5]", "[4]", "[2]"}}, // 1
+											new Action {Name = "Detach", Components = new List<string> {"[2]", "[1]"}}, // 2
+											new Action {Name = "Detach", Components = new List<string> {"[1]", "[3]"}}, // 3
 										}
 									}
 								}
 							},
 							{
-								"SUBTASK 32-11-61-420-002", new Dictionary<string, dynamic>
+								"SUBTASK 32-11-61-020-003", new Dictionary<string, dynamic>
 								{
-									{"title", "SUBTASK 32-11-61-420-002"},
-									{"figureImage", "figure_upper_side_b"},
-									{"cameraLocationsRange", new List<int> {6, 12}},
+									{"title", "SUBTASK 32-11-61-020-003"},
+									{"figureImage", "figure_upper_side_c"},
+									{"cameraLocationsRange", new List<int> {4, 5}},
 									{
 										"instructions", new List<Action>
 										{
-											new Action {Name = "Attach", Components = new List<string> {"[8]", "[3]"}}, // 6
-											new Action {Name = "Attach", Components = new List<string> {"[7]", "[8]"}}, // 7
-											new Action {Name = "Attach", Components = new List<string> {"[9]", "[7]"}}, // 8
-											new Action {Name = "Attach", Components = new List<string> {"[10]", "[7]"}}, // 9
-											new Action {Name = "Attach", Components = new List<string> {"[11]", "[7]"}}, // 10
-											new Action {Name = "Attach", Components = new List<string> {"[12]", "[14]", "[11]"}}, // 11
-											new Action {Name = "Attach", Components = new List<string> {"[13]", "[11]"}}, // 12
+											new Action {Name = "Detach", Components = new List<string> {"[13]", "[14]","12", "[11]"}}, // 4
+											new Action {Name = "Detach", Components = new List<string> {"[6]", "[2]"}}, // 4
 										}
 									}
 								}
 							},
-							{
-								"SUBTASK 32-11-61-420-003", new Dictionary<string, dynamic>
-								{
-									{"title", "SUBTASK 32-11-61-420-003"},
-									{"figureImage", "figure_upper_side_a"},
-									{"cameraLocationsRange", new List<int> {13, 16}},
-									{
-										"instructions", new List<Action>
-										{
-											new Action {Name = "Attach", Components = new List<string> {"[1]", "[3]"}}, // 13
-											new Action {Name = "Attach", Components = new List<string> {"[2]", "[1]"}}, // 14
-											new Action {Name = "Attach", Components = new List<string> {"[4]", "[5]", "[2]"}}, // 15
-											new Action {Name = "Attach", Components = new List<string> {"[6]", "[2]"}} // 16
-										}
-									}
-								}
-							}
 						}
 					},
 				}

@@ -11,7 +11,7 @@ using UnityEngine.UI;
 using Action = Constants.Action;
 using Random = UnityEngine.Random;
 
-public class TestingScriptExecutor : MonoBehaviour
+public class TestingScriptExecutorRemoval : MonoBehaviour
 {
 	[FormerlySerializedAs("InProgressMaterial")]
 	public Material inProgressMaterial;

@@ -2,9 +2,9 @@
 
 namespace Constants
 {
-	public class MLGInstallationTasks
+	public static class MLGInstallationTasks
 	{
-		public static Dictionary<string, Dictionary<string, dynamic>> tasks = new Dictionary<string, Dictionary<string, dynamic>>
+		public static readonly Dictionary<string, Dictionary<string, dynamic>> tasks = new Dictionary<string, Dictionary<string, dynamic>>
 		{
 			{
 				"TASK 32-11-61-400-801", new Dictionary<string, dynamic>

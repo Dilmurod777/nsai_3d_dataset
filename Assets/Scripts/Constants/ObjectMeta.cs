@@ -15,8 +15,7 @@ namespace Constants
 	public enum Status
 	{
 		Initial,
-		Attached,
-		Dettached
+		Completed
 	}
 
 	public class ObjectMeta : MonoBehaviour
