@@ -24,12 +24,13 @@ public class Annotation : MonoBehaviour
 	// Update is called once per frame
 	private void Update()
 	{
-		if (TestingScriptExecutor.CurrentAttachingObj != null)
+		var currentObj = TestingScriptExecutor.CurrentAttachingObj;
+		if (currentObj != null)
 		{
 			SetAnnotationVisibility(true);
 
 			var annotationWrapperTransform = transform;
-			var currentAttachingObjPosition = TestingScriptExecutor.CurrentAttachingObj.transform.position;
+			var currentAttachingObjPosition = currentObj.transform.position;
 			annotationWrapperTransform.position = currentAttachingObjPosition + _annotationWrapperOffset;
 			annotationLine.SetPosition(0, annotationLine.transform.InverseTransformPoint(currentAttachingObjPosition) + _annotationLineOffset);
 			if (Camera.main != null)
@@ -37,7 +38,7 @@ public class Annotation : MonoBehaviour
 				annotationWrapperTransform.rotation = Camera.main.transform.rotation;
 			}
 
-			annotationText.text = TestingScriptExecutor.CurrentAttachingObj.name;
+			annotationText.text = currentObj.name;
 		}
 		else
 		{

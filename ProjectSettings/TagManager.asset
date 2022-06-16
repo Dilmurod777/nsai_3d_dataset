@@ -8,6 +8,7 @@ TagManager:
   - Figure
   - CloneObject
   - ReferenceObject
+  - Table
   layers:
   - Default
   - TransparentFX

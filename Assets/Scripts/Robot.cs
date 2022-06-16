@@ -53,6 +53,13 @@ public class Robot
 		_rotateDegree = degree;
 		yield return null;
 	}
+	
+	public IEnumerator SetRotateDuration(float duration)
+	{
+		_rotateDuration = duration;
+		yield return null;
+	}
+
 
 	public IEnumerator Move(GameObject sourceObject, Vector3 finalPosition)
 	{

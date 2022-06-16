@@ -176,7 +176,7 @@ public class TestingScriptExecutor : MonoBehaviour
 		_subtaskIndex = 0;
 		_taskIndex = 0;
 
-		_tasks = MLGInstallationTasks.tasks;
+		_tasks = MLGInstallationTasks.Tasks;
 
 		var figureName = "MainLandingGear";
 		var figureRfmName = figureName + "-RFM";
@@ -240,30 +240,33 @@ public class TestingScriptExecutor : MonoBehaviour
 			}
 		}
 
-		var objects = GameObject.FindGameObjectsWithTag("Object");
-
-		foreach (var obj in objects)
+		StartCoroutine(DelayCoroutine(2.0f, () =>
 		{
-			var rb = obj.GetComponent<Rigidbody>();
+			var objects = GameObject.FindGameObjectsWithTag("Object");
 
-			if (rb == null)
+			foreach (var obj in objects)
 			{
-				rb = obj.AddComponent<Rigidbody>();
-				rb.mass = 1;
-				rb.drag = 0;
-				rb.useGravity = true;
-			}
+				var rb = obj.GetComponent<Rigidbody>();
 
-			var objCollider = obj.GetComponent<BoxCollider>();
+				if (rb == null)
+				{
+					rb = obj.AddComponent<Rigidbody>();
+					rb.mass = 1;
+					rb.drag = 0;
+					rb.useGravity = true;
+				}
 
-			if (objCollider == null)
-			{
-				obj.AddComponent<BoxCollider>();
+				var objCollider = obj.GetComponent<BoxCollider>();
+
+				if (objCollider == null)
+				{
+					obj.AddComponent<BoxCollider>();
+				}
 			}
-		}
+		}));
 
 		// make them stop falling
-		StartCoroutine(DelayCoroutine(2.0f, () =>
+		StartCoroutine(DelayCoroutine(4.0f, () =>
 		{
 			var objects = GameObject.FindGameObjectsWithTag("Object");
 
